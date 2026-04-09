@@ -1,6 +1,6 @@
 # green_city_sh
 
-
+```
 MyAutomationSolution/
 ├── MyProject.Tests/
 │   ├── PageObjects/             # Опис сторінок
@@ -25,3 +25,4 @@ MyAutomationSolution/
 │   │   └── testdata.json
 │   ├── appsettings.json         # Глобальні налаштування (URL, Browser)
 │   └── MyProject.Tests.csproj   # Файл проекту з NuGet залежностями
+```
