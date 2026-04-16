@@ -6,6 +6,7 @@ namespace green_city_sh.Tests.Pages;
 
 public class HomePage : BasePage
 {
+    public HeaderComponent Header => new HeaderComponent(driver, By.TagName("header"));
     public HomePage(IWebDriver driver) : base(driver)
     {
     }
