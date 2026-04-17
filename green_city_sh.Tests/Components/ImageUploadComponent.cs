@@ -3,15 +3,13 @@ using green_city_sh.Tests.Infrastructure;
 
 namespace green_city_sh.Tests.Components;
 
-public abstract class ImageUploadComponent : Base
+public abstract class ImageUploadComponent : BaseComponent
 {
-    protected IWebElement RootElement;
-    protected ImageUploadComponent(IWebDriver driver, By rootLocator) : base(driver)
+    protected ImageUploadComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
-        RootElement = driver.FindElement(rootLocator);
     }
-    protected ImageUploadComponent(IWebDriver driver, IWebElement componentRoot) : base(driver)
+
+    protected ImageUploadComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
-        RootElement = componentRoot;
     }
 }

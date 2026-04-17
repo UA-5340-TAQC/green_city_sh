@@ -3,15 +3,13 @@ using green_city_sh.Tests.Infrastructure;
 
 namespace green_city_sh.Tests.Components;
 
-public abstract class NewsFormComponent : Base
+public abstract class NewsFormComponent : BaseComponent
 {
-    protected IWebElement RootElement;
-    protected NewsFormComponent(IWebDriver driver, By rootLocator) : base(driver)
+    protected NewsFormComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
-        RootElement = driver.FindElement(rootLocator);
     }
-    protected NewsFormComponent(IWebDriver driver, IWebElement componentRoot) : base(driver)
+
+    protected NewsFormComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
-        RootElement = componentRoot;
     }
 }

@@ -3,15 +3,13 @@ using green_city_sh.Tests.Infrastructure;
 
 namespace green_city_sh.Tests.Components;
 
-public abstract class TagsComponent : Base
+public abstract class TagsComponent : BaseComponent
 {
-    protected IWebElement RootElement;
-    protected TagsComponent(IWebDriver driver, By rootLocator) : base(driver)
+    protected TagsComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
-        RootElement = driver.FindElement(rootLocator);
     }
-    protected TagsComponent(IWebDriver driver, IWebElement componentRoot) : base(driver)
+
+    protected TagsComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
-        RootElement = componentRoot;
     }
 }
