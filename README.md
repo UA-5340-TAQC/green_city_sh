@@ -117,13 +117,19 @@ dotnet test --filter "Category=Component"
 dotnet test --filter "FullyQualifiedName~HomePageTests.VerifyHomePageLoads"
 ```
 
-## 📦 NuGet Packages
+## 📦 Dependencies
 
-- **Selenium.WebDriver** (4.25.0) - WebDriver API
-- **Selenium.Support** (4.25.0) - Support classes
-- **WebDriverManager** (2.17.4) - Automatic driver management
-- **NUnit** (3.14.0) - Test framework
-- **NUnit3TestAdapter** (4.5.0) - Test adapter
+| Package | Version | Purpose |
+|---------|---------|---------|
+| **Selenium.WebDriver** | 4.25.0 | Core WebDriver API for browser automation |
+| **Selenium.Support** | 4.25.0 | Page Object support and utility classes |
+| **WebDriverManager** | 2.17.4 | Automatic browser driver management |
+| **DotNetSeleniumExtras.WaitHelpers** | 3.11.0 | ExpectedConditions for explicit waits |
+| **NUnit** | 3.14.0 | Testing framework |
+| **NUnit3TestAdapter** | 4.5.0 | Visual Studio Test Explorer integration |
+| **Microsoft.NET.Test.Sdk** | 17.8.0 | Test platform SDK |
+
+**All dependencies are automatically restored during build.**
 
 ## 🔧 Configuration
 
