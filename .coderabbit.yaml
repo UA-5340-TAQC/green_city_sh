@@ -1,0 +1,33 @@
+# CodeRabbit Configuration
+language: "en-US"
+tone_instruction: "Technical, concise, and focused on Selenium WebDriver best practices."
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poetic_summary: false
+  auto_review:
+    enabled: true
+    # Focus review on the main branch as requested
+    base_branches:
+      - "main"
+  
+  path_filters:
+    - "!**/bin/**"
+    - "!**/obj/**"
+    - "!*.sln"
+    - "!*.csproj"
+    - "**/*.cs" # Focus on C# files
+
+chat:
+  enabled: true
+
+instructions: >
+  You are an expert QA Automation Engineer reviewing a C# Selenium framework. 
+  Focus on:
+  1. Adherence to Page Object Model (POM) and Component Object Model (COM).
+  2. Proper usage of Selenium Waits (avoiding Thread.Sleep).
+  3. Correct NUnit assertions and test structure.
+  4. Efficiency of BasePage and BaseTest inheritance.
+  5. Clean code principles and C# naming conventions.
