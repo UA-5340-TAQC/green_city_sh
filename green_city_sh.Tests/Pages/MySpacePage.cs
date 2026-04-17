@@ -1,5 +1,4 @@
 using OpenQA.Selenium;
-using green_city_sh.Tests.Components;
 
 namespace green_city_sh.Tests.Pages;
 
