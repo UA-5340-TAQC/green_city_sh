@@ -33,8 +33,7 @@ green_city_sh.Tests/
 │   └── NavigationComponent.cs     # Navigation menu component
 │
 ├── Pages/
-│   ├── HomePage.cs                # Home page with integrated components
-│   └── LoginPage.cs               # Login page implementation
+│   └── HomePage.cs                # Home page with integrated components
 │
 └── Tests/
     ├── HomePageTests.cs           # Tests for Home page

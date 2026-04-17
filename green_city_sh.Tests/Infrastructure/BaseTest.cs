@@ -7,7 +7,7 @@ namespace green_city_sh.Tests.Infrastructure;
 public abstract class BaseTest
 {
     protected IWebDriver? Driver { get; private set; }
-    protected string BaseUrl { get; set; } = "https://www.greencity.cx.ua/#/greenCity";
+    protected string BaseUrl { get; set; } = Configuration.BaseUrl;
 
     [SetUp]
     public void Setup()
