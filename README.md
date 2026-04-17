@@ -864,6 +864,5 @@ dotnet test
 
 **Happy Testing!** 🧪
 
-*Last Updated: 2024*
 
 </div>
