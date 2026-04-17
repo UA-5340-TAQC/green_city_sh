@@ -1,7 +1,7 @@
 ﻿using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 
-namespace green_city_sh.Tests.Infrastructure;
+namespace green_city_sh.Tests.Pages;
 
 public class EventDetailsPage : BasePage
 {
