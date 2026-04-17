@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/root/">
+    <File Path=".coderabbit.yaml" />
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
