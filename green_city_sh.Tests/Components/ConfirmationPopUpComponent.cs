@@ -2,13 +2,13 @@
 
 namespace green_city_sh.Tests.Components;
 
-public class ConfirmationPop_UpComponent : BaseComponent
+public class ConfirmationPopUpComponent : BaseComponent
 {
-    public ConfirmationPop_UpComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
+    public ConfirmationPopUpComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
 
-    public ConfirmationPop_UpComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
+    public ConfirmationPopUpComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
 }
