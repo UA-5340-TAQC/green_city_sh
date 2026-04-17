@@ -2,13 +2,13 @@ using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Components;
 
-public class EditProfileBtnComponent: BaseComponent
+public class EditProfileButtonComponent: BaseComponent
 {
-    public EditProfileBtnComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
+    public EditProfileButtonComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
 
-    public EditProfileBtnComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
+    public EditProfileButtonComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
 }
