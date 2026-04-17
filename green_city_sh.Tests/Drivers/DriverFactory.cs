@@ -1,3 +1,4 @@
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
@@ -20,8 +21,8 @@ public static class DriverFactory
         };
 
         driver.Manage().Window.Maximize();
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-        driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(30);
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Configuration.DefaultTimeout);
+        driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Configuration.PageLoadTimeout);
 
         return driver;
     }
