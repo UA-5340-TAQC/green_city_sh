@@ -33,19 +33,18 @@ public class HeaderComponent: BaseComponent
     }
     public void MapsTo(string tabName)
     {
+        if (string.IsNullOrWhiteSpace(tabName))
+            throw new ArgumentException("Tab name must be provided.", nameof(tabName));
+
         var allLinks = RootElement.FindElements(NavigationLinks);
 
         var targetLink = allLinks.FirstOrDefault(link => 
-            link.Text.Trim().ToLower().Contains(tabName.ToLower()));
+            link.Text.Contains(tabName, StringComparison.OrdinalIgnoreCase));
 
         if (targetLink != null)
-        {
             targetLink.Click();
-        }
         else
-        {
             throw new NoSuchElementException($"Tab with name '{tabName}' was not found");
-        }
     }
 
     public void OpenSearch()
@@ -56,6 +55,9 @@ public class HeaderComponent: BaseComponent
 
     public void ChangeLanguage(string langCode)
     {
+        if (string.IsNullOrWhiteSpace(langCode))
+        throw new ArgumentException("Language code must be provided.", nameof(langCode));
+        
         var dropdown = RootElement.FindElement(LanguageDropdown);       
 
         dropdown.Click();
@@ -63,16 +65,12 @@ public class HeaderComponent: BaseComponent
         var options = RootElement.FindElements(LanguageDropdownOptions);
 
         var targetOption = options.FirstOrDefault(link => 
-            link.Text.Trim().ToLower().Contains(langCode.ToLower()));
+            link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
         if (targetOption != null)
-        {
             targetOption.Click();
-        }
         else
-        {
             throw new NoSuchElementException($"Language option '{langCode}' was not found");
-        }
     }
 
     public bool IsUserLoggedIn()
