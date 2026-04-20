@@ -101,7 +101,7 @@ public class MySpacePage : BasePage
         }
         return string.Empty; 
     }
-
+    
     public string GetFactOfTheDayText()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(_factOfTheDayDescription)).Text.Trim();
