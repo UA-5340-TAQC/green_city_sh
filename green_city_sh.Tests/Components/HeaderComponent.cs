@@ -76,16 +76,16 @@ public class HeaderComponent: BaseComponent
     }
 
     public bool IsUserLoggedIn()
-{
-    var signInButtons = RootElement.FindElements(SignInLink);
-
-    return signInButtons.Count == 0;
-}
+    {
+        var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
+        var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
+        return hasProfile && !hasSignIn;
+    }
     public void ClickSignIn()
     {
         if (IsUserLoggedIn())
         {
-            throw new InvalidOperationException("Impossible to sign in: user is already logged.");
+            throw new InvalidOperationException("Impossible to sign in: user is already logged in.");
         }
         var signInLink = RootElement.FindElement(SignInLink);
         signInLink.Click();
@@ -94,7 +94,7 @@ public class HeaderComponent: BaseComponent
     {
         if (IsUserLoggedIn())
         {
-            throw new InvalidOperationException("Impossible to sign up: user is already logged.");
+            throw new InvalidOperationException("Impossible to sign up: user is already logged in.");
         }
         var signUpLink = RootElement.FindElement(SignUpLink);
         signUpLink.Click();
@@ -103,7 +103,7 @@ public class HeaderComponent: BaseComponent
     {
         if (!IsUserLoggedIn())
         {
-            throw new InvalidOperationException("Impossible to open bookmarks: user is not logged.");
+            throw new InvalidOperationException("Impossible to open bookmarks: user is not logged in.");
         }
         var bookmarksBtn = RootElement.FindElement(BookmarkBtn);
         bookmarksBtn.Click();
@@ -112,7 +112,7 @@ public class HeaderComponent: BaseComponent
     {
         if (!IsUserLoggedIn())
         {
-            throw new InvalidOperationException("Impossible to open notifications: user is not logged.");
+            throw new InvalidOperationException("Impossible to open notifications: user is not logged in.");
         }
         var notificationsBtn = RootElement.FindElement(NotificationsBtn);
         notificationsBtn.Click();
@@ -121,7 +121,7 @@ public class HeaderComponent: BaseComponent
     {
         if (!IsUserLoggedIn())
         {
-            throw new InvalidOperationException("Impossible to open notifications tab: user is not logged.");
+            throw new InvalidOperationException("Impossible to open notifications tab: user is not logged in.");
         }
 
         RootElement.FindElement(UserProfileButton).Click();
@@ -133,7 +133,7 @@ public class HeaderComponent: BaseComponent
     {
         if (!IsUserLoggedIn())
         {
-            throw new InvalidOperationException("Impossible to open personal cabinet: user is not logged.");
+            throw new InvalidOperationException("Impossible to open personal cabinet: user is not logged in.");
         }
 
         RootElement.FindElement(UserProfileButton).Click();
@@ -145,7 +145,7 @@ public class HeaderComponent: BaseComponent
     {
         if (!IsUserLoggedIn())
         {
-            throw new InvalidOperationException("Impossible to sign out: user is not logged.");
+            throw new InvalidOperationException("Impossible to sign out: user is not logged in.");
         }
 
         RootElement.FindElement(UserProfileButton).Click();
