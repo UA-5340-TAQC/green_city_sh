@@ -13,6 +13,21 @@ public class BaseModal : Base
     }
     protected BaseModal(IWebDriver driver, By rootLocator) : base(driver)
     {
-        RootElement = driver.FindElement(rootLocator);
+        RootElement = wait.Until(d =>
+        {
+            try
+            {
+                var element = d.FindElement(rootLocator);
+                return element.Displayed ? element : null;
+            }
+            catch (NoSuchElementException)
+            {
+                return null;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return null;
+            }
+        }) ?? throw new InvalidOperationException();
     }
 }

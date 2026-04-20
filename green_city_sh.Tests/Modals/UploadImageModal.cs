@@ -22,6 +22,8 @@ public class UploadImageModal : BaseModal
     public UploadImageModal(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
+    private ImageUploadComponent UploadComponent =>
+        new ImageUploadComponent(driver, RootElement);
 
     public void ClickUploadButton() => 
         RootElement.FindElement(UploadImgButton).Click();   
@@ -43,4 +45,9 @@ public class UploadImageModal : BaseModal
     
     public string GetModalTitleText => 
         RootElement.FindElement(ModalTitle).Text;
+    
+    public void UploadImage(string imagePath)
+    {
+        UploadComponent.Upload(imagePath);
+    }
 }

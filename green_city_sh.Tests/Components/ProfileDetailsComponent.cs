@@ -26,7 +26,7 @@ public class ProfileDetailsComponent : BaseComponent
         public void EnterCityName(string name)
         {
                 WaitAndTypeText(CityNameField, name);
-                Wait.Until(d => d.FindElements(CityDropDownOptions).Count > 0);
+                wait.Until(d => d.FindElements(CityDropDownOptions).Count > 0);
                 var dropdown = new DropDownComponent(driver, By.TagName("body"));
                 dropdown.ClickDropDownOptionByPartialName(name);
         }

@@ -25,7 +25,7 @@ public class DropDownComponent : BaseComponent
     }
     //Return list of dropdown options
     private IList<IWebElement> GetOptionList() =>
-        Wait.Until(_ =>
+        wait.Until(_ =>
         {
             var elements = RootElement.FindElements(_searchLocator);
             return elements.Count > 0 ? elements : null;
@@ -33,6 +33,9 @@ public class DropDownComponent : BaseComponent
 
     private IWebElement GetDropDownOptionByPartialName(string partialName)
     {
+        if (string.IsNullOrWhiteSpace(partialName)) 
+            throw new ArgumentNullException("Option cannot be empty", nameof(partialName));
+        
         var options = GetOptionList();
 
         return options.FirstOrDefault(option => 

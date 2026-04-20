@@ -30,7 +30,8 @@ public class ProfileEditPage : BasePage
     
     public ProfileEditPage OpenProfileEditPage(int userId)
     {
-        Open($"/profile/{userId}/edit");
+        var profileEditUrl = new System.Uri(new System.Uri(driver.Url), $"/profile/{userId}/edit").ToString();
+        Open(profileEditUrl);
         return this; 
     }
 
@@ -92,7 +93,10 @@ public class ProfileEditPage : BasePage
 
     public ProfileEditPage UploadNewAvatar(string imagePath)
     {
-        //implement upload 
+        UploadAvatar.ClickEditImageBtn();
+        UploadModal.ClickUploadButton();
+        UploadModal.UploadImage(imagePath);
+        UploadModal.ClickSaveImgButton();
         return this; 
     }
 }
