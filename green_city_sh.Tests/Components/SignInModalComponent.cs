@@ -79,8 +79,21 @@ public class SignInModalComponent : BaseComponent
         var inputs = RootElement.FindElements(PasswordInputLocator);
         if (inputs.Count == 0)
             throw new NoSuchElementException("Password input was not found.");
-        inputs[0].Clear();
-        inputs[0].SendKeys(password);
+        IWebElement? passwordInput = null;
+        foreach (var input in inputs)
+        {
+            if (input.Displayed)
+            {
+                passwordInput = input;
+                break;
+            }
+        }
+        
+        if (passwordInput == null)
+            throw new NoSuchElementException("Visible password input was not found.");
+        
+        passwordInput.Click();
+        passwordInput.SendKeys(password);
     }
 
     /// <summary>
