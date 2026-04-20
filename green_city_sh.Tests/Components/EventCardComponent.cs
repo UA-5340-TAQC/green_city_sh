@@ -47,7 +47,6 @@ public class EventCardComponent : BaseComponent
 
     public string GetDateAndTime()
     {
-        // Since you separated Date and Time in your locators, we combine them here
         string date = RootElement.FindElement(DateLocator).Text.Trim();
         string time = RootElement.FindElement(TimeLocator).Text.Trim();
         return $"{date} {time}".Trim(); 
@@ -67,7 +66,7 @@ public class EventCardComponent : BaseComponent
 
     public void ClickBookmark() => RootElement.FindElement(BookmarkButtonLocator).Click();
 
-   public void ClickJoinEvent()
+    public void ClickJoinEvent()
     {
         var joinButtons = RootElement.FindElements(JoinButtonLocator);
 
