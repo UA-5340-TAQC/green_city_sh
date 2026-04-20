@@ -4,7 +4,7 @@ namespace green_city_sh.Tests.Components;
 
 public class NewsListComponent : BaseComponent
 {
-    private By AllNewsCards => By.CssSelector(".list-wrapper");
+    private By AllNewsCards => By.CssSelector("li.gallery-view-li-active");
     private By GridViewButton => By.CssSelector(".btn-tiles");
     private By ListViewButton => By.CssSelector(".btn-bars");
 

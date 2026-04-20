@@ -5,96 +5,47 @@ namespace green_city_sh.Tests.Pages;
 
 public class NewsPage : BasePage
 {
-    private By ItemsFoundText => By.CssSelector(".active-filter-container p");
+    public NewsTopBarComponent TopBar { get;}
+    public NewsFilterSelectionComponent Filters { get;  }
+    public NewsListComponent List { get;}
 
-    public NewsListComponent? NewsList { get; private set; }
-    public NewsTopBarComponent? TopBar { get; private set; }
-    public NewsFilterSelectionComponent? FilterSelection { get; private set; }
+    private By TopBarRoot => By.CssSelector(".main-header");
+    private By FilterRoot => By.CssSelector(".ul-eco-buttons");
+    private By ListRoot => By.CssSelector(".list-wrapper");
 
     public NewsPage(IWebDriver driver) : base(driver)
     {
-    }
-
-    public void SelectFilter(string filterName)
-    {
-        FilterSelection?.SelectFilter(filterName);
-        Thread.Sleep(500); 
-    }
-
-    public void SelectFilters(params string[] filterNames)
-    {
-        foreach (var name in filterNames)
-        {
-            SelectFilter(name);
-        }
-    }
-
-    public void SwitchToGridView()
-    {
-        NewsList?.SwitchToGridView();
-    }
-
-    public void SwitchToListView()
-    {
-        NewsList?.SwitchToListView();
-    }
-
-    public int GetNewsCardsCount()
-    {
-        return NewsList?.GetNewsCards() ?? 0;
-    }
-
-    public List<IWebElement> GetNewsCardElements()
-    {
-        return NewsList?.GetNewsCardElements() ?? new List<IWebElement>();
-    }
-
-    public void OpenNewsByIndex(int index)
-    {
-        NewsList?.OpenNewsByIndex(index);
-    }
-    
-    public void ClickCreateNews()
-    {
-        TopBar?.ClickCreateNews();
-    }
-    
-    public void OpenSearch()
-    {
-        TopBar?.OpenSearch();
-    }
-    
-    public void SearchNews(string searchTerm)
-    {
-        TopBar?.SearchNews(searchTerm);
-    }
-
-    
-    public void OpenSavedNews()
-    {
-        TopBar?.OpenSavedNews();
-    }
-
-    
-    public void OpenMyNewsFilter()
-    {
-        TopBar?.OpenMyNews();
-    }
-    
-    public bool IsFilterSelected(string filterName)
-    {
-        return FilterSelection?.IsFilterSelected(filterName) ?? false;
-    }
-
-    public void ClearAllFilters()
-    {
-        FilterSelection?.ClearAllFilters();
+        TopBar = new NewsTopBarComponent(driver, driver.FindElement(TopBarRoot));
+        Filters = new NewsFilterSelectionComponent(driver, driver.FindElement(FilterRoot));
+        List = new NewsListComponent(driver, driver.FindElement(ListRoot));
     }
 
 
-    public void ScrollToLoadMore()
+    public void FilterBy(string name)
     {
-        NewsList?.ScrolltoLoad();
+        Filters.SelectFilter(name);
     }
+
+    public void FilterBy(params string[] names)
+    {
+        foreach (var n in names)
+            Filters.SelectFilter(n);
+    }
+
+    public void SwitchToGrid() => List.SwitchToGridView();
+    public void SwitchToList() => List.SwitchToListView();
+
+    public void ScrollForMore() => List.ScrolltoLoad();
+
+    public bool IsFilterActive(string name)
+        => Filters.IsFilterSelected(name);
+
+    public void ClearFilters()
+        => Filters.ClearAllFilters();
+
+    public void Search(string text)
+        => TopBar.SearchNews(text);
+
+    public void OpenSaved()
+        => TopBar.OpenSavedNews();
 }
-
