@@ -5,6 +5,9 @@ namespace green_city_sh.Tests.Components;
 public class NewsListComponent : BaseComponent
 {
     private By AllNewsCars => By.CssSelector(".list-wrapper");
+    private By GridViewButton => By.CssSelector(".btn-tiles");
+    private By ListViewButton => By.CssSelector(".btn-bars");
+
     
     public NewsListComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
@@ -13,16 +16,21 @@ public class NewsListComponent : BaseComponent
     {
     }
     
-    public int GetNewsCardCount()
+    public int GetNewsCards()
     {
         return 1;
     }
 
     public void SwitchToGridView()
     {
-        
+
     }
     public void SwitchToListView()
     {
     }
+    public void OpenNewsByIndex(int index)
+    {
+    }
+    
+
 }
