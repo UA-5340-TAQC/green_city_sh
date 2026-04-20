@@ -24,9 +24,9 @@ public class SignInModalComponent : BaseComponent
     /// Waits up to 10 seconds for the sign-in modal to become visible,
     /// then returns a component bound to that exact DOM element
     /// </summary>
-    /// <param name="driver">The active WebDrive session.</param>
+    /// <param name="driver">The active WebDriver session.</param>
     /// <returns>a <see cref="SignInModalComponent"/> bound to the visible modal.</returns>
-    /// <exception cref="WebDriverTimeoutException">Thrown if no visible modal appear withing the timeout.</exception>
+    /// <exception cref="WebDriverTimeoutException">Thrown if no visible modal appears withing the timeout.</exception>
     public static SignInModalComponent WaitAndCreate(IWebDriver driver)
     {
         var modalRoot = new WebDriverWait(driver, TimeSpan.FromSeconds(10))
@@ -67,7 +67,7 @@ public class SignInModalComponent : BaseComponent
 
     /// <summary>
     /// Clears the password field and types the given password.
-    /// Matches both <c>type='password</c> and <c>type='text'</c> to handle
+    /// Matches both <c>type='password'</c> and <c>type='text'</c> to handle
     /// the state after <see cref="TogglePasswordVisibility"/> is called.
     /// </summary>
     /// <param name="password">Password to enter</param>
@@ -171,7 +171,7 @@ public class SignInModalComponent : BaseComponent
     }
     
     /// <summary>
-    /// Clicks the "Sign in with Google" button to initiate OAth flow.
+    /// Clicks the "Sign in with Google" button to initiate OAuth flow.
     /// </summary>
     public void ClickGoogleSignIn() => RootElement.FindElement(GoogleButtonLocator).Click();
 
