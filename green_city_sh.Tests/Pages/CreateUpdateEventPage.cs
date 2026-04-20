@@ -9,32 +9,32 @@ public class CreateUpdateEventPage : BasePage
     private By DurationDropdown => By.CssSelector("mat-select[formcontrolname='duration']"); // selector for event length
 
     // Initiative type buttons
-    private By InitiativeTypeButton(string type) => By.XPath($"//button[contains(text(), '{type}')]");
+    private By InitiativeTypeButton(string type) => By.XPath($"//button[contains(., '{type}')]");
 
-    private By EventTypeDropdown => By.CssSelector("mat-select[formcontrolname='isOpen']"); // dropdown Open/Closed
-    private By InviteDropdown => By.CssSelector("mat-select[formcontrolname='invite']"); // dropdown Invite
+    private By EventTypeDropdown => By.CssSelector("mat-select[formcontrolname='open']"); // dropdown Open/Closed
+    private By InviteDropdown => By.XPath("//mat-form-field[.//mat-label[contains(text(), 'Invite')]]//mat-select"); // dropdown Invite
 
     private By DescriptionEditor => By.CssSelector("textarea[formcontrolname='description'], .ql-editor"); // rich text description field
 
     // Upload images
     private By AddPictureButton => By.CssSelector("input[type='file']"); // + button for adding images
     private By UploadedImagePreview => By.CssSelector(".image-preview"); // preview of uploaded image
-    private By ClosePictureIcon => By.CssSelector(".close-icon"); // x icon to remove uploaded image
+    private By ClosePictureIcon => By.CssSelector(".selected-delete"); // x icon to remove uploaded image
     private By GreencityPictureItem(int index) => By.CssSelector($".images-container img:nth-child({index}), .gallery-item:nth-child({index})"); // a specific picture by index
 
     // Right Column (Schedule & Location)
-    private By DatePickerInput => By.CssSelector("input[matinput][formcontrolname='date']"); // date picker input field
+    private By DatePickerInput => By.CssSelector("input[matinput][formcontrolname='day']"); // date picker input field
     private By StartTimeInput => By.CssSelector("input[formcontrolname='startTime']"); // start time input field
-    private By EndTimeInput => By.CssSelector("input[formcontrolname='endTime']"); // end time input field
+    private By EndTimeInput => By.CssSelector("input[formcontrolname='finishTime']"); // end time input field
     private By AllDayCheckbox => By.CssSelector("mat-checkbox[formcontrolname='allDay']"); // checkbox All day
-    private By PlaceLocationCheckbox => By.XPath("//mat-checkbox[.//span[contains(text(), 'Place')]]"); // checkbox for physical location
-    private By OnlineLocationCheckbox => By.XPath("//mat-checkbox[.//span[contains(text(), 'Online')]]"); // checkbox for online location
+    private By PlaceLocationCheckbox => By.Id("mat-mdc-checkbox-2-input"); // checkbox for physical location
+    private By OnlineLocationCheckbox => By.Id("mat-mdc-checkbox-3-input"); // checkbox for online location
     private By OnlineLinkField => By.CssSelector("input[formcontrolname='onlineLink']"); // input field for online event link
 
     // Bottom Controls
-    private By CancelLink => By.CssSelector(".cancel-btn"); // Cancel button
-    private By PreviewButton => By.CssSelector(".preview-btn"); // Preview button
-    private By PublishButton => By.CssSelector(".submit-btn, .publish-btn"); // Publish button
+    private By CancelLink => By.CssSelector(".tertiary-global-button"); // Cancel button
+    private By PreviewButton => By.XPath("//button[contains(., 'Preview')]"); // Preview button
+    private By PublishButton => By.XPath("//button[contains(., 'Publish')]"); // Publish button
 
     public CreateUpdateEventPage(IWebDriver driver) : base(driver)
     {
