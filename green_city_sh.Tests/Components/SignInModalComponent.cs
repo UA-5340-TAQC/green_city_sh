@@ -6,26 +6,20 @@ namespace green_city_sh.Tests.Components;
 
 public class SignInModalComponent : BaseComponent
 {
-    private readonly IWebDriver _driver;
-    
     public static readonly By RootLocator = By.CssSelector("app-auth-modal");
     public SignInModalComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
-    {
-        _driver = driver;
-    }
+    { }
 
     public SignInModalComponent(IWebDriver driver, IWebElement rootElement)
         : base(driver, rootElement)
-    {
-        _driver = driver;
-    }
+    { }
     
     public static SignInModalComponent WaitAndCreate(IWebDriver driver)
     {
-        new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+        var modalRoot = new WebDriverWait(driver, TimeSpan.FromSeconds(10))
             .Until(ExpectedConditions.ElementIsVisible(RootLocator));
-        return new SignInModalComponent(driver, RootLocator);
+        return new SignInModalComponent(driver, modalRoot);
     }
     
     private static readonly By TitleLocator = By.CssSelector("h1");
@@ -56,7 +50,7 @@ public class SignInModalComponent : BaseComponent
 
     public void ClickSignIn()
     {
-        new WebDriverWait(_driver, TimeSpan.FromSeconds(5))
+        new WebDriverWait(driver, TimeSpan.FromSeconds(5))
             .Until(_ =>
             {
                 var btn = RootElement.FindElement(SignInButtonLocator);
@@ -71,7 +65,7 @@ public class SignInModalComponent : BaseComponent
     {
         RootElement.FindElement(CloseButtonLocator).Click();
         
-        new WebDriverWait(_driver, TimeSpan.FromSeconds(5))
+        new WebDriverWait(driver, TimeSpan.FromSeconds(5))
             .Until(ExpectedConditions.InvisibilityOfElementLocated(RootLocator));
     }
     
@@ -89,8 +83,7 @@ public class SignInModalComponent : BaseComponent
 
     public bool IsModalVisible()
     {
-        var elements = _driver.FindElements(RootLocator);
-        return elements.Count > 0 && elements[0].Displayed;
+        return driver.FindElements(RootLocator).Any(e => e.Displayed);
     }
     
     public void ClickGoogleSignIn() => RootElement.FindElement(GoogleButtonLocator).Click();
