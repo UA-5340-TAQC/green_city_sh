@@ -1,3 +1,4 @@
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -29,7 +30,7 @@ public class SignInModalComponent : BaseComponent
     /// <exception cref="WebDriverTimeoutException">Thrown if no visible modal appears withing the timeout.</exception>
     public static SignInModalComponent WaitAndCreate(IWebDriver driver)
     {
-        var modalRoot = new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+        var modalRoot = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(drv =>
             {
                 foreach (var modal in drv.FindElements(RootLocator))
@@ -107,7 +108,7 @@ public class SignInModalComponent : BaseComponent
     /// </summary>
     public void ClickSignIn()
     {
-        new WebDriverWait(driver, TimeSpan.FromSeconds(5))
+        wait
             .Until(_ =>
             {
                 var btn = RootElement.FindElement(SignInButtonLocator);
@@ -131,7 +132,7 @@ public class SignInModalComponent : BaseComponent
         var currentModal = RootElement;
         currentModal.FindElement(CloseButtonLocator).Click();
 
-        new WebDriverWait(driver, TimeSpan.FromSeconds(5))
+        wait
             .Until(_ =>
             {
                 try
