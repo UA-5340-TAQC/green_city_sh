@@ -1,9 +1,11 @@
-﻿using OpenQA.Selenium;
+﻿using green_city_sh.Tests.Components;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Modals;
 
 public class UploadImageModal : BaseModal
 {
+   
     private By CancelButton => By.CssSelector(".tertiary-global-button.m-btn"); 
     private By DeleteImgButton => By.CssSelector(".secondary-global-button.m-btn");
     private By UploadImgButton => By.CssSelector(".primary-global-button.m-btn");
@@ -12,6 +14,7 @@ public class UploadImageModal : BaseModal
     private By AvatarImg => By.XPath(".//img[contains(@class, 'ngx-ic-source-image')]");
     private By ModalTitle => By.XPath(".//p[@class= 'ng-star-inserted']");
     
+   
     public UploadImageModal(IWebDriver driver, IWebElement rootElement) : base(driver, rootElement)
     {
     }

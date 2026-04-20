@@ -25,7 +25,7 @@ public abstract class BaseComponent : Base
 
     protected void WaitAndClick(By locator)
     {
-        var element = Wait.Until(d => d.FindElement(locator));
+        var element = Wait.Until(d => RootElement.FindElement(locator));
         Wait.Until(ExpectedConditions.ElementToBeClickable(element));
         element.Click();
     }
@@ -43,7 +43,6 @@ public abstract class BaseComponent : Base
     {
         Wait.Until(d => RootElement.FindElement(locator).Displayed);
     }
-    public void WaitUntilPageLoads(By locator) => 
-        Wait.Until(d => d.FindElement(By.TagName("body")).Displayed);
+    
     
 }

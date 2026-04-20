@@ -4,7 +4,7 @@ namespace green_city_sh.Tests.Components;
 
 public class EditProfileButtonComponent: BaseComponent
 {
-    private By SaveBtn => By.XPath(".//button[contains(@class='primary-global-button')]");
+    private By SaveBtn => By.XPath(".//button[contains(@class, 'primary-global-button')]");
     private By CancelBtn => By.XPath(".//button[contains(@class, 'secondary-global-button')]");
     public EditProfileButtonComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {

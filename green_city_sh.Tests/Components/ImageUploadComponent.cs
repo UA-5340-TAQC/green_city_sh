@@ -9,11 +9,11 @@ public class ImageUploadComponent : BaseComponent
     private By ImageUploadLink => By.XPath(".//input[@type='file']");
     private By DropZone => By.XPath(".//*[contains(@class, 'dropzone')]"); 
     
-    protected ImageUploadComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
+    public ImageUploadComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
 
-    protected ImageUploadComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
+    public ImageUploadComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
     public ImageUploadComponent UploadImage(string imagePath) {
