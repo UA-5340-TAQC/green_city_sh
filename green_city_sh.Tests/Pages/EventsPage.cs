@@ -6,9 +6,13 @@ namespace green_city_sh.Tests.Pages;
 
 public class EventsPage : BasePage
 {
-    public EventsTopBarComponent Header { get; private set; }
-    public EventsFilterSectionComponent FilterSection { get; private set; }
-    public EventsListComponent EventList { get; private set; }
+    private EventsTopBarComponent? header;
+    private EventsFilterSectionComponent? filterSection;
+    private EventsListComponent? eventList;
+
+    public EventsTopBarComponent Header => header ??= new EventsTopBarComponent(driver, By.CssSelector(".event-header"));
+    public EventsFilterSectionComponent FilterSection => filterSection ??= new EventsFilterSectionComponent(driver, By.CssSelector(".filter-container"));
+    public EventsListComponent EventList => eventList ??= new EventsListComponent(driver, By.CssSelector(".event-list"));
 
     private By ItemsFoundText => By.CssSelector(".active-filter-container p"); //повертає текст, який відображає кількість знайдених заходів після застосування фільтрів (наприклад, "5 items found")
     private By GalleryViewButton => By.CssSelector(".gallery"); //повертає кнопку для перемикання на галерею (клік по якій змінює відображення заходів з списку на галерею)
@@ -16,16 +20,13 @@ public class EventsPage : BasePage
 
     public EventsPage(IWebDriver driver) : base(driver)
     {
-        Header = new EventsTopBarComponent(driver, By.CssSelector(".event-header"));
-        FilterSection = new EventsFilterSectionComponent(driver, By.CssSelector(".filter-container"));
-        EventList = new EventsListComponent(driver, By.CssSelector(".event-list"));
     }
 
-    //Перед відкриттям сторінки має бути логін (робить Тоня)
+    //Перед відкриттям сторінки користувач має бути залогінений
 
     public void OpenEventsPage()
     {
-        Open("/events");
+        Open($"{Configuration.BaseUrl.TrimEnd('/')}/events");
     }
 
     public string GetItemsFoundText()
@@ -59,7 +60,7 @@ public class EventsPage : BasePage
     public bool IsListViewActive()
     {
         //Перевірити, чи активний list view (до елемента картки додається клас .list-view)
-        return false;
+        return Driver.FindElements(By.CssSelector(".list-view")).Count > 0;
     }
 
     public void ApplyFilter(string category, string value)

@@ -21,24 +21,34 @@ public class EventsListComponent : BaseComponent
     public int GetEventCardsCount()
     {
         //Повернути кількість карток подій на сторінці
-        return 1;
+        return driver.FindElements(AllEventCards).Count;
     }
 
     public List<EventsCardComponent> GetAllEventCards()
     {
         //Повернути список всіх карток подій
-        return new List<EventsCardComponent>();
+        var eventCards = new List<EventsCardComponent>();
+        var eventCardsCount = GetEventCardsCount();
+
+        for (int i = 0; i < eventCardsCount; i++)
+        {
+            eventCards.Add(GetEventCardByIndex(i));
+        }
+
+        return eventCards;
     }
 
     public EventsCardComponent GetEventCardByIndex(int index)
     {
         //Повернути картку події за індексом
-        return new EventsCardComponent(driver, EventCardByIndex(index));
+        IWebElement eventCardRoot = RootElement.FindElement(EventCardByIndex(index));
+        return new EventsCardComponent(driver, eventCardRoot);
     }
 
     public bool IsEndPageMessageDisplayed()
     {
-        //Перевірити, чи відображається повідомлення "There are no more events for now"
-        return true;
+        //Перевірити, чи відображається повідомлення "You have reached the end of the page"
+        var endPageMessages = driver.FindElements(EndPageMessage);
+        return endPageMessages.Count > 0 && endPageMessages[0].Displayed;
     }
 }
