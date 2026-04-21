@@ -6,8 +6,9 @@ namespace green_city_sh.Tests.Pages;
 
 public class CreateNewsPage : BasePage
 {
-    public NewsFormComponent NewsForm => new(driver, By.CssSelector("form"));//форма створення/редагування новини
+    private NewsFormComponent? newsForm;
 
+    public NewsFormComponent NewsForm => newsForm ??= new(driver, By.CssSelector("form"));//форма створення/редагування новини
     public CreateNewsPage(IWebDriver driver) : base(driver)
     {
     }
@@ -15,7 +16,9 @@ public class CreateNewsPage : BasePage
     public void OpenCreateNewsPage()
     {
         
-        Open("/news/create-news");
+        string currentUrl = driver.Url;
+        Uri uri = new Uri(currentUrl);
+        driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/create-news");
     }
 
     public void EnterTitle(string title)

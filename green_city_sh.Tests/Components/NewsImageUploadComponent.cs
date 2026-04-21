@@ -68,6 +68,12 @@ public class NewsImageUploadComponent : ImageUploadComponent
     public string GetWarningMessage()
     {
         
-        return "";
+        var warningElements = Driver.FindElements(WarningMessage);
+        if (warningElements.Count == 0)
+        {
+            return "";
+        }
+
+        return warningElements[0].GetDomProperty("textContent")?.Trim() ?? "";
     }
 }
