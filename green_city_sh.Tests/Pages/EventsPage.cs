@@ -26,7 +26,9 @@ public class EventsPage : BasePage
 
     public void OpenEventsPage()
     {
-        Open($"{Configuration.BaseUrl.TrimEnd('/')}/events");
+        string currentUrl = driver.Url;
+        Uri uri = new Uri(currentUrl);
+        driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/events");
     }
 
     public string GetItemsFoundText()
@@ -60,7 +62,7 @@ public class EventsPage : BasePage
     public bool IsListViewActive()
     {
         //Перевірити, чи активний list view (до елемента картки додається клас .list-view)
-        return Driver.FindElements(By.CssSelector(".list-view")).Count > 0;
+        return driver.FindElements(By.CssSelector(".list-view")).Count > 0;
     }
 
     public void ApplyFilter(string category, string value)
