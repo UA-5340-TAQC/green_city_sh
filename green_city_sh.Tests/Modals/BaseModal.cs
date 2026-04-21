@@ -1,5 +1,6 @@
 ﻿using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Modals;
 
@@ -29,5 +30,12 @@ public class BaseModal : Base
                 return null;
             }
         }) ?? throw new InvalidOperationException();
+    }
+    
+    protected void WaitAndClick(By locator)
+    {
+        var element = wait.Until(d => RootElement.FindElement(locator));
+        wait.Until(ExpectedConditions.ElementToBeClickable(element));
+        element.Click();
     }
 }

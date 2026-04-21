@@ -20,8 +20,8 @@ public class HomePageTests : BaseTest
     {
         Assert.Multiple(() =>
         {
-            Assert.That(_homePage!.getTitle(), Is.Not.Empty, "Page title should not be empty");
-            Assert.That(_homePage!.getTitle(), Is.EqualTo("GreenCity — Build Eco-Friendly Habits Today"), "Page title should match the expected value");
+            Assert.That(_homePage!.GetTitle(), Is.Not.Empty, "Page title should not be empty");
+            Assert.That(_homePage!.GetTitle(), Is.EqualTo("GreenCity — Build Eco-Friendly Habits Today"), "Page title should match the expected value");
         });
     }
 }
