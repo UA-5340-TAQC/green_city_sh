@@ -3,13 +3,28 @@ using green_city_sh.Tests.Infrastructure;
 
 namespace green_city_sh.Tests.Components;
 
-public abstract class ImageUploadComponent : BaseComponent
+public class ImageUploadComponent : BaseComponent
 {
-    protected ImageUploadComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
+    private By ImageBrowseLink => By.XPath(".//span[normalize-space()='browse']");
+    private By ImageUploadInput => By.XPath(".//input[@type='file']");
+    private By DropZone => By.XPath(".//*[contains(@class, 'dropzone')]"); 
+    
+    public ImageUploadComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
 
-    protected ImageUploadComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
+    public ImageUploadComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
+    public void Upload(string imagePath)
+    {
+        var fullPath = Path.GetFullPath(imagePath);
+        FindElement(ImageUploadInput).SendKeys(fullPath);
+    }
+
+    public String GetImageBrowseLinkText() =>
+        FindElement(ImageBrowseLink).Text;
+
+    public bool IsDropZoneDisplayed =>
+        FindElement(DropZone).Displayed; 
 }

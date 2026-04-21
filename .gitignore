@@ -417,3 +417,7 @@ FodyWeavers.xsd
 *.msm
 *.msp
 .idea/
+
+# Mac System Files
+.DS_Store
+**/.DS_Store

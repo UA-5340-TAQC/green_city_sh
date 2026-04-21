@@ -1,11 +1,14 @@
 using OpenQA.Selenium;
 using green_city_sh.Tests.Infrastructure;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
 public abstract class BaseComponent : Base
 {
     protected IWebElement RootElement;
+    
     protected BaseComponent(IWebDriver driver, By rootLocator) : base(driver)
     {
         RootElement = driver.FindElement(rootLocator);
@@ -14,4 +17,29 @@ public abstract class BaseComponent : Base
     {
         RootElement = componentRoot;
     }
+    
+    protected IWebElement FindElement(By locator) => RootElement.FindElement(locator);
+    protected IList<IWebElement> FindElements(By locator) => RootElement.FindElements(locator);
+
+    protected void WaitAndClick(By locator)
+    {
+        var element = wait.Until(d => RootElement.FindElement(locator));
+        wait.Until(ExpectedConditions.ElementToBeClickable(element));
+        element.Click();
+    }
+
+    protected void WaitAndTypeText(By locator, string text)
+    {
+        var element = wait.Until(d => RootElement.FindElement(locator));
+        wait.Until(ExpectedConditions.ElementToBeClickable(element));
+        element.Clear();
+        element.SendKeys(text);
+    }
+
+    public void WaitUntilElementVisibleBy(By locator)
+    {
+        wait.Until(d => RootElement.FindElement(locator).Displayed);
+    }
+    
+    
 }
