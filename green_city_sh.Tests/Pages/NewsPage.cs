@@ -35,7 +35,7 @@ public class NewsPage : BasePage
     public void SwitchToGrid() => List.SwitchToGridView();
     public void SwitchToList() => List.SwitchToListView();
 
-    public void ScrollForMore() => List.ScrolltoLoad();
+    public void ScrollForMore() => List.ScrollToLoad();
 
     public bool IsFilterActive(string name)
         => Filters.IsFilterSelected(name);
