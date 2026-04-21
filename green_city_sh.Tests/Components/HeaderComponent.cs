@@ -57,7 +57,7 @@ public class HeaderComponent: BaseComponent
     {
         if (string.IsNullOrWhiteSpace(langCode))
         throw new ArgumentException("Language code must be provided.", nameof(langCode));
-        
+
         var dropdown = RootElement.FindElement(LanguageDropdown);       
 
         dropdown.Click();
@@ -123,7 +123,6 @@ public class HeaderComponent: BaseComponent
         }
 
         RootElement.FindElement(UserProfileButton).Click();
-        var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(driver, TimeSpan.FromSeconds(3));
         var notificationsBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(NotificationsOption));
         notificationsBtn.Click();
     }
@@ -135,7 +134,6 @@ public class HeaderComponent: BaseComponent
         }
 
         RootElement.FindElement(UserProfileButton).Click();
-        var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(driver, TimeSpan.FromSeconds(3));
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
@@ -147,7 +145,6 @@ public class HeaderComponent: BaseComponent
         }
 
         RootElement.FindElement(UserProfileButton).Click();
-        var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(driver, TimeSpan.FromSeconds(3));
         var signOutBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SignOutOption));
         signOutBtn.Click();
     }
