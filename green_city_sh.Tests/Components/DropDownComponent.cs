@@ -34,7 +34,7 @@ public class DropDownComponent : BaseComponent
     private IWebElement GetDropDownOptionByPartialName(string partialName)
     {
         if (string.IsNullOrWhiteSpace(partialName)) 
-            throw new ArgumentNullException("Option cannot be empty", nameof(partialName));
+            throw new ArgumentException("Option cannot be empty", nameof(partialName));
         
         var options = GetOptionList();
 

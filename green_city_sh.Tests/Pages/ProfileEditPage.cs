@@ -25,8 +25,6 @@ public class ProfileEditPage : BasePage
         new UploadAvatarComponent(driver,By.XPath("//div[@class='profile-avatar-wrapper']"));
     private UploadImageModal UploadModal => 
         new UploadImageModal(driver,By.XPath("//div[@class='main-container']"));
-    private ImageUploadComponent ImageUpload => 
-        new ImageUploadComponent(driver, By.XPath("//*[contains(@class, 'main-container')]"));
     
     public ProfileEditPage OpenProfileEditPage(int userId)
     {

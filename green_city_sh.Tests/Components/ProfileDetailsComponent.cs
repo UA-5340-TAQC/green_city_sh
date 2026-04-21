@@ -19,7 +19,6 @@ public class ProfileDetailsComponent : BaseComponent
         public void EnterName(string name)
         {
                 WaitAndTypeText(NameField, name);
-                //Enter a valid name
         }
 
         public void EnterCityName(string name)
@@ -32,6 +31,5 @@ public class ProfileDetailsComponent : BaseComponent
         public void EnterCredo(string credo)
         {
                 WaitAndTypeText(CredoField, credo);
-                //Enter a valid credo text 
         }
 }
