@@ -68,7 +68,7 @@ public class NewsListComponent : BaseComponent
         }
     }
 
-    public void ScrolltoLoad()
+    public void ScrollToLoad()
     {
         
     }
