@@ -10,7 +10,7 @@ public class DropDownComponent : BaseComponent
     
     //Default Locator For Angular dropdown options
     private static readonly By DefaultOptions =
-        By.XPath("//div[contains(@class,'cdk-overlay-pane')]//mat-option");
+        By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
 
     public DropDownComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
