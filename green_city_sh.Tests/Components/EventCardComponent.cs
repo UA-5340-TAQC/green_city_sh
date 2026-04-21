@@ -21,7 +21,7 @@ public class EventCardComponent : BaseComponent
     private By TitleLocator => By.CssSelector(".event-title");
 
     // Action Buttons
-    private By MoreButtonLocator => By.CssSelector(".btn-group .secondary-global-button");
+    private By MoreButtonLocator => By.XPath(".//button[contains(text(), 'More')]");
     private By JoinButtonLocator => By.CssSelector(".event-button");
 
     // Footer Stats
@@ -64,7 +64,19 @@ public class EventCardComponent : BaseComponent
 
     public void ClickMore() => RootElement.FindElement(MoreButtonLocator).Click();
 
-    public void ClickBookmark() => RootElement.FindElement(BookmarkButtonLocator).Click();
+    public void ClickBookmark()
+{
+    var bookmarkButtons = RootElement.FindElements(BookmarkButtonLocator);
+
+    if (bookmarkButtons.Count > 0)
+    {
+        bookmarkButtons[0].Click();
+    }
+    else
+    {
+        throw new NoSuchElementException("Cannot click bookmark: This specific event card does not have a bookmark button.");
+    }
+}
 
     public void ClickJoinEvent()
     {
