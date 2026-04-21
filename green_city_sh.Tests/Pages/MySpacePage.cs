@@ -17,13 +17,9 @@ public class MySpacePage : BasePage
     private readonly By _publishedNewsStat = By.XPath("//div[@class='chain']//p[contains(text(), 'published news')]/preceding-sibling::p");
     private readonly By _organizedEventsStat = By.XPath("//div[@class='chain']//p[contains(text(), 'organized and attended events')]/preceding-sibling::p");
 
-    private readonly By _myHabitsTab = By.XPath("//span[contains(@class, 'mdc-tab__text-label') and contains(text(), 'My habits')]");
-    private readonly By _myNewsTab = By.XPath("//span[contains(@class, 'mdc-tab__text-label') and contains(text(), 'My news')]");
-    private readonly By _myEventsTab = By.XPath("//span[contains(@class, 'mdc-tab__text-label') and contains(text(), 'My Events')]");
-
-    private readonly By _myHabitsContainer = By.Id("mat-tab-content-0-0");
-    private readonly By _myNewsContainer = By.Id("mat-tab-content-0-1");
-    private readonly By _myEventsContainer = By.Id("mat-tab-content-0-2");
+    private readonly By _myHabitsTab = By.XPath("//div[@role='tab' and .//span[contains(text(), 'My habits')]]");
+    private readonly By _myNewsTab = By.XPath("//div[@role='tab' and .//span[contains(text(), 'My news')]]");
+    private readonly By _myEventsTab = By.XPath("//div[@role='tab' and .//span[contains(text(), 'My Events')]]");
 
     private readonly By _addNewHabitButton = By.Id("create-button-new-habit");
     private readonly By _welcomeMessage = By.XPath("//*[contains(text(), 'Hi Eco Friend')]"); 
@@ -38,22 +34,44 @@ public class MySpacePage : BasePage
     {
     }
 
+    
     public MyHabitsTabComponent SwitchToMyHabits()
     {
-        wait.Until(ExpectedConditions.ElementToBeClickable(_myHabitsTab)).ClickWithRetry();
-        return new MyHabitsTabComponent(driver, _myHabitsContainer);
+        var tabElement = wait.Until(ExpectedConditions.ElementToBeClickable(_myHabitsTab));
+        tabElement.ClickWithRetry();
+        
+        string panelId = tabElement.GetAttribute("aria-controls");
+        By containerLocator = By.Id(panelId);
+        
+        wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
+        
+        return new MyHabitsTabComponent(driver, containerLocator);
     }
 
     public MyNewsTabComponent SwitchToMyNews()
     {
-        wait.Until(ExpectedConditions.ElementToBeClickable(_myNewsTab)).ClickWithRetry();
-        return new MyNewsTabComponent(driver, _myNewsContainer);
+        var tabElement = wait.Until(ExpectedConditions.ElementToBeClickable(_myNewsTab));
+        tabElement.ClickWithRetry();
+
+        string panelId = tabElement.GetAttribute("aria-controls");
+        By containerLocator = By.Id(panelId);
+        
+        wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
+
+        return new MyNewsTabComponent(driver, containerLocator);
     }
 
     public MyEventsTabComponent SwitchToMyEvents()
     {
-        wait.Until(ExpectedConditions.ElementToBeClickable(_myEventsTab)).ClickWithRetry();
-        return new MyEventsTabComponent(driver, _myEventsContainer);
+        var tabElement = wait.Until(ExpectedConditions.ElementToBeClickable(_myEventsTab));
+        tabElement.ClickWithRetry();
+
+        string panelId = tabElement.GetAttribute("aria-controls");
+        By containerLocator = By.Id(panelId);
+        
+        wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
+
+        return new MyEventsTabComponent(driver, containerLocator);
     }
 
     public string GetUserName()
@@ -101,7 +119,7 @@ public class MySpacePage : BasePage
         }
         return string.Empty; 
     }
-    
+
     public string GetFactOfTheDayText()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(_factOfTheDayDescription)).Text.Trim();
