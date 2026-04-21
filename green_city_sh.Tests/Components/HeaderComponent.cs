@@ -55,9 +55,6 @@ public class HeaderComponent: BaseComponent
 
     public void ChangeLanguage(string langCode)
     {
-        if (string.IsNullOrWhiteSpace(langCode))
-        throw new ArgumentException("Language code must be provided.", nameof(langCode));
-
         var dropdown = RootElement.FindElement(LanguageDropdown);       
 
         dropdown.Click();
@@ -67,10 +64,7 @@ public class HeaderComponent: BaseComponent
         var targetOption = options.FirstOrDefault(link => 
             link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
-        if (targetOption != null)
-            targetOption.Click();
-        else
-            throw new NoSuchElementException($"Language option '{langCode}' was not found");
+        targetOption?.Click();
     }
 
     public bool IsUserLoggedIn()
@@ -81,69 +75,38 @@ public class HeaderComponent: BaseComponent
     }
     public void ClickSignIn()
     {
-        if (IsUserLoggedIn())
-        {
-            throw new InvalidOperationException("Impossible to sign in: user is already logged in.");
-        }
         var signInLink = RootElement.FindElement(SignInLink);
         signInLink.Click();
     }
     public void ClickSignUp()
     {
-        if (IsUserLoggedIn())
-        {
-            throw new InvalidOperationException("Impossible to sign up: user is already logged in.");
-        }
         var signUpLink = RootElement.FindElement(SignUpLink);
         signUpLink.Click();
     }
     public void ClickBookmarks()
     {
-        if (!IsUserLoggedIn())
-        {
-            throw new InvalidOperationException("Impossible to open bookmarks: user is not logged in.");
-        }
         var bookmarksBtn = RootElement.FindElement(BookmarkBtn);
         bookmarksBtn.Click();
     }
     public void ClickNotifications()
     {
-        if (!IsUserLoggedIn())
-        {
-            throw new InvalidOperationException("Impossible to open notifications: user is not logged in.");
-        }
         var notificationsBtn = RootElement.FindElement(NotificationsBtn);
         notificationsBtn.Click();
     }
     public void OpenNotificationsTab()
     {
-        if (!IsUserLoggedIn())
-        {
-            throw new InvalidOperationException("Impossible to open notifications tab: user is not logged in.");
-        }
-
         RootElement.FindElement(UserProfileButton).Click();
         var notificationsBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(NotificationsOption));
         notificationsBtn.Click();
     }
     public void OpenPersonalCabinet()
     {
-        if (!IsUserLoggedIn())
-        {
-            throw new InvalidOperationException("Impossible to open personal cabinet: user is not logged in.");
-        }
-
         RootElement.FindElement(UserProfileButton).Click();
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
     public void SignOut()
     {
-        if (!IsUserLoggedIn())
-        {
-            throw new InvalidOperationException("Impossible to sign out: user is not logged in.");
-        }
-
         RootElement.FindElement(UserProfileButton).Click();
         var signOutBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SignOutOption));
         signOutBtn.Click();
