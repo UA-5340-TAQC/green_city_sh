@@ -17,7 +17,7 @@ public class NewsImageUploadComponent : ImageUploadComponent
 
     
     private By CancelButton => By.XPath(".//button[normalize-space()='Cancel']"); 
-    private By SubmitButton => By.XPath(".//button[normalize-space()='Submit']"); /
+    private By SubmitButton => By.XPath(".//button[normalize-space()='Submit']"); 
 
   
     private By WarningMessage => By.CssSelector(".warning"); 
@@ -68,7 +68,7 @@ public class NewsImageUploadComponent : ImageUploadComponent
     public string GetWarningMessage()
     {
         
-        var warningElements = Driver.FindElements(WarningMessage);
+        var warningElements = RootElement.FindElements(WarningMessage);
         if (warningElements.Count == 0)
         {
             return "";

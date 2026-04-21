@@ -5,7 +5,7 @@ namespace green_city_sh.Tests.Pages;
 public class CreateUpdateEventPage : BasePage
 {
     // Left column (General Info)
-    private By TitleField => By.CssSelector("input[formcontrolname='title']")
+    private By TitleField => By.CssSelector("input[formcontrolname='title']");
     private By DurationDropdown => By.CssSelector("mat-select[formcontrolname='duration']");
 
     private By InitiativeTypeButton(string type) => By.XPath($"//button[contains(., '{type}')]");
