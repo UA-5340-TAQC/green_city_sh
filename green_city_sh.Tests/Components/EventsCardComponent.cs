@@ -41,20 +41,17 @@ public class EventsCardComponent : BaseComponent
 
     public string GetEventTitle()
     {
-        //Повернути назву заходу
-        return "";
+        return RootElement.FindElement(EventTitle).Text.Trim();
     }
 
     public string GetEventDate()
     {
-        //Повернути дату проведення заходу
-        return "";
+        return RootElement.FindElement(EventDate).Text.Trim();
     }
 
     public string GetEventTime()
     {
-        //Повернути час проведення заходу
-        return "";
+        return RootElement.FindElement(EventTime).Text.Trim();
     }
 
     public string GetEventLocation()
@@ -95,7 +92,7 @@ public class EventsCardComponent : BaseComponent
 
     public void ClickFavouriteButton()
     {
-        //Додати захід в обране
+        RootElement.FindElement(FavouriteButton).Click();
     }
 
     public void ClickJoinButton()
@@ -125,8 +122,7 @@ public class EventsCardComponent : BaseComponent
 
     public string GetAuthorName()
     {
-        //Повернути ім'я автора заходу
-        return "";
+        return RootElement.FindElement(AuthorName).Text.Trim();
     }
 
 }

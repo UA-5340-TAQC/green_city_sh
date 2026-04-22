@@ -51,4 +51,25 @@ public class EventsListComponent : BaseComponent
         var endPageMessages = driver.FindElements(EndPageMessage);
         return endPageMessages.Count > 0 && endPageMessages[0].Displayed;
     }
+    public EventsCardComponent GetSavedEventCard(string targetKey)
+    {
+        var eventCards = GetAllEventCards();
+
+        foreach (var card in eventCards)
+        {
+            string title = card.GetEventTitle().Trim();
+            string date = card.GetEventDate().Trim();
+            string time = card.GetEventTime().Trim();
+            string author = card.GetAuthorName().Trim();
+
+            string currentCardKey = $"Title: {title}\nDate: {date} | {time}\nAuthor: {author}";
+
+            if (currentCardKey.Equals(targetKey, StringComparison.OrdinalIgnoreCase))
+            {
+                return card; 
+            }
+        }
+
+        throw new NoSuchElementException($"Event '{targetKey}' not found in the list of saved events.");
+    }
 }
