@@ -24,20 +24,19 @@ public class EventsListComponent : BaseComponent
         return driver.FindElements(AllEventCards).Count;
     }
 
-    public List<EventCardComponent> GetAllEventCards()
+    public List<EventsCardComponent> GetAllEventCards()
     {
         try
         {
             var elements = driver.FindElements(AllEventCards);
-            return elements.Select(e => new EventCardComponent(driver, e)).ToList();
+            return elements.Select(e => new EventsCardComponent(driver, e)).ToList();
         }
         catch (StaleElementReferenceException)
         {
             var elementsRetry = driver.FindElements(AllEventCards);
-            return elementsRetry.Select(e => new EventCardComponent(driver, e)).ToList();
+            return elementsRetry.Select(e => new EventsCardComponent(driver, e)).ToList();
         }
     }
-    
 
 
     public EventCardComponent GetEventCardByIndex(int index)
