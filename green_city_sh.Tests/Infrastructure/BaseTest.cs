@@ -1,5 +1,6 @@
 using OpenQA.Selenium;
 using green_city_sh.Tests.Drivers;
+using NUnit.Framework;
 
 namespace green_city_sh.Tests.Infrastructure;
 
