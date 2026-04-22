@@ -25,7 +25,7 @@ public class LoginTests : BaseTest
     [Category("Regression")]
     public void AttemptToLoginWithInvalidEmail()
     {
-        string invalidEmail = "invalidemail@invalid";
+        string invalidEmail = "invalid-email";
         string password = "asweQA5346!)";
         string expectedErrorMessage = "Please check that your e-mail address is indicated correctly";
 

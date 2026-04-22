@@ -21,7 +21,7 @@ public class SignInModalComponent : BaseComponent
     public SignInModalComponent(IWebDriver driver, IWebElement rootElement)
         : base(driver, rootElement)
     { }
-    
+
     /// <summary>
     /// Waits up to 10 seconds for the sign-in modal to become visible,
     /// then returns a component bound to that exact DOM element
