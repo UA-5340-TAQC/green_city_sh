@@ -30,12 +30,12 @@ public class NewsImageUploadComponent : ImageUploadComponent
     {
     }
 
-    public void Upload(string filePath)
+    public new void Upload(string filePath)
     {
         
     }
 
-    public bool IsDropZoneDisplayed()
+    public new bool IsDropZoneDisplayed()
     {
               return false;
     }
