@@ -54,7 +54,8 @@ public class SignInModalComponent : BaseComponent
     private static readonly By CloseButtonLocator = By.CssSelector("a.close-modal-window");
     private static readonly By ForgotPasswordLocator = By.XPath(".//a[contains(text(), 'Forgot password')]");
     private static readonly By SignUpLinkLocator = By.XPath(".//a[contains(text(), 'Sign up')]");
-    
+    private static readonly By ErrorMessageLocator = By.CssSelector(".alert-general-error");
+
     /// <summary>
     /// Clears the email field and types the given email address.
     /// </summary>
@@ -188,5 +189,14 @@ public class SignInModalComponent : BaseComponent
     /// Clicks the "Sign in with Google" button to initiate OAuth flow.
     /// </summary>
     public void ClickGoogleSignIn() => RootElement.FindElement(GoogleButtonLocator).Click();
+
+    /// <summary>
+    /// Returns the text content of the error message element.
+    /// </summary>
+    /// <returns></returns>
+    public string GetErrorMessage()
+    {
+        return driver.FindElement(ErrorMessageLocator).Text.Trim();
+    }
 
 }
