@@ -195,7 +195,8 @@ public class SignInModalComponent : BaseComponent
     /// </summary>
     public string GetEmailErrorMessage()
     {
-        return RootElement.FindElement(EmailErrorLocator).Text;
+        WaitUntilElementVisibleBy(EmailErrorLocator);
+        return RootElement.FindElement(EmailErrorLocator).Text.Trim();
     }
 
 }
