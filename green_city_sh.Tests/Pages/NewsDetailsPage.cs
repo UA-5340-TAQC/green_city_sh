@@ -6,6 +6,8 @@ namespace green_city_sh.Tests.Pages;
 
 public class NewsDetailsPage : BasePage
 {
+
+    private By CommentsLocator => By.XPath("//app-comments-list[@datatype='comment']/div");
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
     }
@@ -47,4 +49,15 @@ public class NewsDetailsPage : BasePage
     }
     public int GetCommentsCount() =>
         Comment.GetNumberCounter();
+    public IList<CommentComponent> GetComments() {
+        IList<IWebElement> commentsList = driver.FindElements(CommentsLocator);
+
+        IList<CommentComponent> comments = new List<CommentComponent>();
+        foreach (var comment in commentsList)
+        {
+            comments.Add(new CommentComponent(driver, comment));
+        }
+
+        return comments;
+    }
 }
