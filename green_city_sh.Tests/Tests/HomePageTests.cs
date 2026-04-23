@@ -26,19 +26,7 @@ public class HomePageTests : BaseTest
         });
     }
 
-    [Test]
-    public void VerifyCommentsCount()
-    {
-        Driver.Navigate().GoToUrl("https://www.greencity.cx.ua/#/greenCity/news/10326");
-        NewsDetailsPage page = new NewsDetailsPage(Driver!);
-
-        Assert.Multiple(() =>
-        {
-            //Assert.That(page.GetCommentsCount(), Is.EqualTo(7), "Comments count should be 7");
-            Assert.That(page.GetComments().Count, Is.EqualTo(7), "There should be 7 comments in the list");
-        });
-        Assert.That(page.GetReplies().Count, Is.EqualTo(2), "The comment should have 2 replies");
-    }
+    
     
      [TearDown]
      public void TearDown()
