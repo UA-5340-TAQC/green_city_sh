@@ -10,8 +10,10 @@ namespace green_city_sh.Tests.Tests;
 [TestFixture]
 public class TC001_AddCommentTests : BaseTest
 {
-    private const string TestEmail = "greencitytest69@hotmail.com";
-    private const string TestPassword = "asweQA5346!)";
+    private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
+        ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
+    private static string TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD") 
+                                                  ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
     private const string CommentText = "Cool!";
 
     private EventDetailsPage? eventDetailsPage;
@@ -28,10 +30,14 @@ public class TC001_AddCommentTests : BaseTest
             .WaitAndCreate(Driver!)
             .Login(TestEmail, TestPassword);
         
-        new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-            .Until(drv =>
+        var wait = new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
+            
+        wait.Until(drv =>
                 drv.FindElements(SignInModalComponent.RootLocator)
                     .All(e => !e.Displayed));
+
+        var headerComponent = new HeaderComponent(Driver!, HeaderComponent.RootLocator);
+        wait.Until(_ => headerComponent.IsUserLoggedIn());
 
         eventDetailsPage = new EventDetailsPage(Driver!);
         eventDetailsPage.Open();
@@ -64,6 +70,16 @@ public class TC001_AddCommentTests : BaseTest
     public void TC001_Step1_ClickCommentField_BecomesActive()
     {
         commentsComponent!.ClickCommentField();
+        
+        var wait = new WebDriverWait(
+            Driver!,
+            TimeSpan.FromSeconds(Configuration.DefaultTimeout));
+        wait.Until(_ => commentsComponent.IsCommentFieldFocus());
+        
+        Assert.That(
+            commentsComponent.IsCommentFieldFocus(),
+            Is.True,
+            "Cursor should be inside the comment field after click.");
     }
 
     [Test]
@@ -97,9 +113,12 @@ public class TC001_AddCommentTests : BaseTest
         new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(_ => commentsComponent.IsCommentVisible(CommentText));
 
-        new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-            .Until(_ => commentsComponent.GetCommentCount() == countBefore + 1);
+        var countAfter = commentsComponent.GetCommentCount();
         
+        new Actions(Driver!)
+            .ScrollToElement(Driver!.FindElement(By.CssSelector("div.counter")))
+            .Perform();
+
         Assert.That(commentsComponent.GetCommentCount(),
             Is.EqualTo(countBefore + 1),
             "Comment count should be increase by 1 after adding a comment.");

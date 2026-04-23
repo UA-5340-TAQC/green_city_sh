@@ -35,6 +35,13 @@ public class CommentsComponent : BaseComponent
         
         return new CommentsComponent(driver, root);
     }
+
+    public bool IsCommentFieldFocus()
+    {
+        var commentField = RootElement.FindElement(CommentInputLocator);
+        var activeElement = driver.SwitchTo().ActiveElement();
+        return commentField.Equals(activeElement);
+    }
     
     private static readonly By CommentInputLocator = 
         By.CssSelector("div.comment-textarea[contenteditable='true']");
@@ -43,7 +50,7 @@ public class CommentsComponent : BaseComponent
         By.XPath(".//button[contains(normalize-space(.), 'Comment')]");
     
     private static readonly By CommentCountLocator = 
-        By.CssSelector("div.counter");
+        By.CssSelector("span#total-count");
     
     private static readonly By CommentItemLocator = 
         By.CssSelector("div.comment-body-wrapper.wrapper-comment");
@@ -57,15 +64,18 @@ public class CommentsComponent : BaseComponent
     private static readonly By DeleteButtonLocator =
         By.XPath(".//button[contains(normalize-space(.), 'Delete')]");
 
+    private static readonly By ConfirmDeleteButtonLocator =
+        By.CssSelector("app-warning-pop-up .m-btn.primary-global-button");
+    
     public CommentsComponent ClickCommentField()
     {
-        driver.FindElement(CommentInputLocator).Click();
+        RootElement.FindElement(CommentInputLocator).Click();
         return this;
     }
 
     public CommentsComponent EnterComment(string text)
     {
-        var input = driver.FindElement(CommentInputLocator);
+        var input = RootElement.FindElement(CommentInputLocator);
         input.Click();
         input.Clear();
         input.SendKeys(text);
@@ -73,19 +83,19 @@ public class CommentsComponent : BaseComponent
     }
     
     public string GetCommentInputText()
-    => driver.FindElement(CommentInputLocator).Text;
+    => RootElement.FindElement(CommentInputLocator).Text;
 
     public void SubmitComment()
     {
-        new WebDriverWait(driver,
+        var submitButton = new WebDriverWait(driver,
             TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(_ =>
                 {
                     var btn = RootElement.FindElement(SubmitButtonLocator);
-                    return btn.Enabled && btn.Displayed;
+                    return btn.Enabled && btn.Displayed ? btn : null;
                 });
             
-        driver.FindElement(SubmitButtonLocator).Click();
+        submitButton!.Click();
     }
 
     public int GetCommentCount()
@@ -96,12 +106,8 @@ public class CommentsComponent : BaseComponent
         new Actions(driver)
             .ScrollToElement(elements[0])
             .Perform();
-
-        var raw = new string(elements[0].Text
-            .Where(char.IsDigit)
-            .ToArray());
         
-        return int.TryParse(raw, out var count) ? count : 0;
+        return int.TryParse(elements[0].Text.Trim(), out var count) ? count : 0;
     }
 
     public string GetFirtsCommentText()
@@ -141,8 +147,8 @@ public class CommentsComponent : BaseComponent
     {
         var comment = driver
             .FindElements(CommentItemLocator)
-            .FirstOrDefault(c => c.FindElements(CommentTextLocator)
-                .Any(t => t.Text.Contains(text)))
+            .FirstOrDefault(c => c.Displayed && c.FindElements(CommentTextLocator)
+                .Any(t => string.Equals(t.Text.Trim(), text, StringComparison.Ordinal)))
         ?? throw new NoSuchElementException(
             $"Comment with '{text}' was not found");
         
@@ -154,7 +160,14 @@ public class CommentsComponent : BaseComponent
         
         new WebDriverWait(driver,
                 TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(drv =>
+                drv.FindElements(By.CssSelector("app-warning-pop-up"))
+                    .Any(e => e.Displayed));
+        
+        driver.FindElement(ConfirmDeleteButtonLocator).Click();
+        
+        new WebDriverWait(driver,
+            TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(_ => !IsCommentVisible(text));
-
     }
 }

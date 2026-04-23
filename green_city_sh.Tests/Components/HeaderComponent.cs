@@ -4,6 +4,9 @@ namespace green_city_sh.Tests.Components;
 
 public class HeaderComponent: BaseComponent
 {
+    
+    public static readonly By RootLocator = By.CssSelector("header");
+
     private By HeaderLogo => By.CssSelector(".header_logo");
     private By NavigationLinks => By.CssSelector(".header_navigation-menu-left a");
     private By SearchBtn => By.CssSelector(".search-icon");
@@ -69,9 +72,20 @@ public class HeaderComponent: BaseComponent
 
     public bool IsUserLoggedIn()
     {
-        var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
-        var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
-        return hasProfile && !hasSignIn;
+        try
+        {
+            var header = driver.FindElement(RootLocator);
+            var hasSignIn = header.FindElements(SignInLink).Count > 0;
+            var hasProfile = header.FindElements(UserProfileButton).Count > 0;
+            return hasProfile && !hasSignIn;
+        }
+        catch (StaleElementReferenceException)
+        {
+            var header = driver.FindElement(RootLocator);
+            var hasSignIn = header.FindElements(SignInLink).Count > 0;
+            var hasProfile = header.FindElements(UserProfileButton).Count > 0;
+            return hasProfile && !hasSignIn;
+        }
     }
     public void ClickSignIn()
     {
