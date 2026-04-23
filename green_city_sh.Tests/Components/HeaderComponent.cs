@@ -72,6 +72,7 @@ public class HeaderComponent: BaseComponent
         var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
         var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
         return hasProfile && !hasSignIn;
+
     }
     public void ClickSignIn()
     {
@@ -112,3 +113,4 @@ public class HeaderComponent: BaseComponent
         signOutBtn.Click();
     }
 }
+
