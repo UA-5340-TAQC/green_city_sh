@@ -196,7 +196,14 @@ public class SignInModalComponent : BaseComponent
     /// <returns></returns>
     public string GetErrorMessage()
     {
-        return driver.FindElement(ErrorMessageLocator).Text.Trim();
+        var error = wait.Until(driver =>
+        {
+            var element = RootElement.FindElement(ErrorMessageLocator);
+            return element.Displayed ? element : null;
+        });
+
+        return error.Text.Trim();
     }
 
 }
+

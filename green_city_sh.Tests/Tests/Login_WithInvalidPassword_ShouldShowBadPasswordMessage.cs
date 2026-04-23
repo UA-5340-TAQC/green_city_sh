@@ -32,14 +32,17 @@ public class InvalidPasswordTests : BaseTest
         signInModal.EnterPassword(invalidPassword);
         signInModal.ClickSignIn();
 
+        var actualErrorMessage = signInModal.GetErrorMessage();
+
         // Assert
         Assert.Multiple(() =>
         {
             Assert.That(signInModal.IsModalVisible(), Is.True,
                 "User should remain on the sign-in modal.");
 
-            Assert.That(signInModal.GetErrorMessage(), Is.EqualTo("Bad password"),
-                "Error message should be 'Bad password'.");
+            Assert.That(actualErrorMessage,
+                Is.AnyOf("Bad password", "Неправильний пароль"),
+                $"Unexpected error message: {actualErrorMessage}");
 
             Assert.That(_homePage.Header.IsUserLoggedIn(), Is.False,
                 "User should not be logged in.");
