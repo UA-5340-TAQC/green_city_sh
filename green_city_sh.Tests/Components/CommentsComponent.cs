@@ -18,8 +18,9 @@ public class CommentsComponent : BaseComponent
 
     public static CommentsComponent WaitAndCreate(IWebDriver driver)
     {
-        ((IJavaScriptExecutor)driver)
-            .ExecuteScript("window.scrollTo(0, document.body.scrollHeight)");
+        new Actions(driver)
+            .ScrollToElement(driver.FindElement(CommentItemLocator))
+            .Perform();
 
         var root = new WebDriverWait(driver,
                            TimeSpan.FromSeconds(Configuration.DefaultTimeout))
@@ -122,12 +123,19 @@ public class CommentsComponent : BaseComponent
         
         return firstComment.FindElement(CommentAuthorLocator).Text;
     }
-    
+
     public bool IsCommentVisible(string text)
-    => driver
-        .FindElements(CommentItemLocator)
-        .Any(c => c.Displayed && c.FindElements(CommentTextLocator)
-            .Any(t => t.Text.Contains(text)));
+    {
+        new Actions(driver)
+            .ScrollToElement(driver.FindElement(CommentItemLocator))
+            .Perform();
+
+            return driver
+                .FindElements(CommentItemLocator)
+                .Any(c => c.Displayed && c.FindElements(CommentTextLocator)
+                    .Any(t => t.Text.Contains(text)));
+
+    }
 
     public void DeleteComment(string text)
     {
