@@ -10,11 +10,10 @@ public class TestEnvironmentSetup
     [OneTimeSetUp]
     public void LoadEnvironmentVariables()
     {
-        // TestDirectory = .../bin/Debug/netX.Y
         var envPath = Path.GetFullPath(
             Path.Combine(
                 TestContext.CurrentContext.TestDirectory,
-                "..", "..", "..", // піднялись до green_city_sh.Tests
+                "..", "..", "..",
                 ".env"
             )
         );
