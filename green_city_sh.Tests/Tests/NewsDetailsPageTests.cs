@@ -28,6 +28,21 @@ public class NewsDetailsPageTests : BaseTest
         signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
         _newsDetailsPage = new NewsDetailsPage(Driver);
     }
+    [Test]
+    [Order(1)]
+    [Category("Smoke")]
+    public void VerifyCommentsCount()
+    {
+        Driver.Navigate().GoToUrl("https://www.greencity.cx.ua/#/greenCity/news/10326");
+        NewsDetailsPage page = new NewsDetailsPage(Driver!);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(page.GetComments().Count, Is.EqualTo(7), "There should be 7 comments in the list");
+            Assert.That(page.GetReplies().Count, Is.EqualTo(2), "The comment should have 2 replies");
+        });
+        
+    }
 
     [Test]
     [Order(1)]
@@ -59,7 +74,7 @@ public class NewsDetailsPageTests : BaseTest
     [TearDown]
     public void TearDown()
     {
-        Driver?.Quit();
+        base.TearDown();
     }
 
 }
