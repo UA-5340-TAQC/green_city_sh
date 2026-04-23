@@ -37,8 +37,7 @@ public class HomePageTests : BaseTest
             //Assert.That(page.GetCommentsCount(), Is.EqualTo(7), "Comments count should be 7");
             Assert.That(page.GetComments().Count, Is.EqualTo(7), "There should be 7 comments in the list");
         });
-        CommentComponent comment = page.GetComments()[4];
-        Assert.That(comment.GetCommentCount(), Is.EqualTo(2), "The comment should have 2 replies");
+        Assert.That(page.GetReplies().Count, Is.EqualTo(2), "The comment should have 2 replies");
     }
     
      [TearDown]

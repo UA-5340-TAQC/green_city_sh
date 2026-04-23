@@ -34,8 +34,7 @@ public class BaseModal : Base
     
     protected void WaitAndClick(By locator)
     {
-        var element = wait.Until(d => RootElement.FindElement(locator));
-        wait.Until(ExpectedConditions.ElementToBeClickable(element));
+        var element = wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         element.Click();
     }
 }

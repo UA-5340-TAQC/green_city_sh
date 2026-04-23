@@ -6,16 +6,18 @@ namespace green_city_sh.Tests.Pages;
 
 public class NewsDetailsPage : BasePage
 {
-
-    private By CommentsLocator => By.XPath("//app-comments-list[@datatype='comment']/div");
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
     }
 
     private CommentComponent Comment => 
-        new CommentComponent(driver, By.XPath("//app-comments-container"));
+        new CommentComponent(driver, By.XPath("//app-comments-list/div"));
     private DeleteCommentModal DeleteCommentModal => 
         new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
+    private CommentInputComponent CommentInput => 
+        new CommentInputComponent(driver, By.XPath("//app-add-comment"));
+    private CommentSectionComponent CommentSection => 
+        new CommentSectionComponent(driver, By.XPath("//app-comments-container"));
     public void OpenNewsDetailsPage(int newsId)
     {
         var currentUrl = driver.Url;
@@ -25,14 +27,17 @@ public class NewsDetailsPage : BasePage
 
     public NewsDetailsPage AddComment(string text)
     {
-        Comment.EnterComment(text);
-        Comment.ClickSubmitCommentBtn();
+        CommentInput.EnterComment(text);
+        CommentInput.ClickSubmitCommentBtn();
+
+        wait.Until(_ => GetComments().Any(c => c.DoesTextContain(text)));
         return this;
     }
 
     public NewsDetailsPage DeleteComment()
     {
-        Comment.ClickDeleteCommentBtn();
+        var firstComment = GetComments().First();
+        firstComment.ClickDeleteCommentBtn();
         return this;
     }
 
@@ -45,19 +50,18 @@ public class NewsDetailsPage : BasePage
     public NewsDetailsPage ClickYesDelete()
     {
         DeleteCommentModal.ClickYesDeleteBtn();
+        WaitUntilPageLoads();
         return this;
     }
-    public int GetCommentsCount() =>
-        Comment.GetNumberCounter();
-    public IList<CommentComponent> GetComments() {
-        IList<IWebElement> commentsList = driver.FindElements(CommentsLocator);
 
-        IList<CommentComponent> comments = new List<CommentComponent>();
-        foreach (var comment in commentsList)
-        {
-            comments.Add(new CommentComponent(driver, comment));
-        }
+    public IList<CommentComponent> GetComments() =>
+        CommentSection.GetComments();
 
-        return comments;
-    }
+    public IList<CommentComponent> GetReplies() =>
+        CommentSection.GetReplyComments();
+
+    public int GetCounterNumber() =>
+        CommentSection.GetNumberCounter();
+
+
 }

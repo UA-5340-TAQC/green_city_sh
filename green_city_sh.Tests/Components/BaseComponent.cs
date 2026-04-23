@@ -28,15 +28,6 @@ public abstract class BaseComponent : Base
         element.Click();
     }
 
-    protected void WaitAndClickFirst(By locator)
-    {
-        var elements = wait.Until(d => 
-            {
-                return RootElement.FindElements(locator).FirstOrDefault(e => e.Displayed && e.Enabled);
-            });
-        elements.Click();
-    }
-
     protected void WaitAndTypeText(By locator, string text)
     {
         var element = wait.Until(d => RootElement.FindElement(locator));
