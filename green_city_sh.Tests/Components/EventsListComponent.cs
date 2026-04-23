@@ -1,4 +1,6 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
@@ -9,6 +11,8 @@ public class EventsListComponent : BaseComponent
     private By EventCardByIndex(int index) => By.CssSelector($".event-list-item:nth-of-type({index + 1})"); //повертає картку заходу за індексом
 
     private By EndPageMessage => By.CssSelector(".end-page-txt"); //повертає повідомлення "You have reached the end of the page", яке відображається, коли користувач прокрутив всі заходи на сторінці
+
+    private By LoadingSpinner => By.CssSelector(".mdc-circular-progress__spinner-layer");
 
     public EventsListComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
@@ -24,10 +28,16 @@ public class EventsListComponent : BaseComponent
         return driver.FindElements(AllEventCards).Count;
     }
 
-    public List<EventsCardComponent> GetAllEventCards()
+    public void WaitForCardsToLoad()
+    {
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+        wait.Until(ExpectedConditions.InvisibilityOfElementLocated(LoadingSpinner));
+    }
+
+    public List<EventCardComponent> GetAllEventCards()
     {
         //Повернути список всіх карток подій
-        var eventCards = new List<EventsCardComponent>();
+        var eventCards = new List<EventCardComponent>();
         var eventCardsCount = GetEventCardsCount();
 
         for (int i = 0; i < eventCardsCount; i++)
@@ -38,11 +48,11 @@ public class EventsListComponent : BaseComponent
         return eventCards;
     }
 
-    public EventsCardComponent GetEventCardByIndex(int index)
+    public EventCardComponent GetEventCardByIndex(int index)
     {
         //Повернути картку події за індексом
         IWebElement eventCardRoot = RootElement.FindElement(EventCardByIndex(index));
-        return new EventsCardComponent(driver, eventCardRoot);
+        return new EventCardComponent(driver, eventCardRoot);
     }
 
     public bool IsEndPageMessageDisplayed()
