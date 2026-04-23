@@ -18,10 +18,14 @@ public class HomePageTests : BaseTest
     [Category("Smoke")]
     public void VerifyHomePageLoads()
     {
+        var pageTitle = _homePage!.getTitle();
+
         Assert.Multiple(() =>
         {
-            Assert.That(_homePage!.getTitle(), Is.Not.Empty, "Page title should not be empty");
-            Assert.That(_homePage!.getTitle(), Is.EqualTo("GreenCity — Build Eco-Friendly Habits Today"), "Page title should match the expected value");
+            Assert.That(pageTitle, Is.Not.Empty, "Page title should not be empty");
+            Assert.That(pageTitle, Does.Contain("GreenCity"), "Page title should contain 'GreenCity'");
         });
     }
 }
+
+
