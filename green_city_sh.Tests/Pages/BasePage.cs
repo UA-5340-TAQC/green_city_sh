@@ -7,6 +7,9 @@ namespace green_city_sh.Tests.Pages;
 
 public abstract class BasePage : Base
 {
+    private HeaderComponent? globalHeader;
+    public HeaderComponent GlobalHeader => globalHeader ??= new HeaderComponent(driver, By.CssSelector("header"));
+
     protected BasePage(IWebDriver driver) : base(driver)
     {
     }

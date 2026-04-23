@@ -1,3 +1,4 @@
+using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 
@@ -12,10 +13,15 @@ public class EventsSearchTests : BaseTest
     [SetUp]
     public void SetUp()
     {
-        eventsPage = new EventsPage(Driver!);
-        eventsPage.OpenEventsPage();
+        NavigateToBaseUrl();
 
-        // Precondition 1 & 4: User is authorized and language is English
+        eventsPage = new EventsPage(Driver!);
+        eventsPage.GlobalHeader.ChangeLanguage("en");
+        eventsPage.GlobalHeader.ClickSignIn();
+        var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
+        signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
+        Thread.Sleep(2000); // Temporary solution before adding proper wait for login method
+        eventsPage.OpenEventsPage();
     }
 
     [Test]
@@ -24,8 +30,8 @@ public class EventsSearchTests : BaseTest
     {
         string searchKeyword = "2026";
 
-        eventsPage!.Header.ClickSearchIcon();
-        eventsPage.Header.FillSearchInputField(searchKeyword);
+        eventsPage!.EventsTopBar.ClickSearchIcon();
+        eventsPage.EventsTopBar.FillSearchInputField(searchKeyword);
         eventsPage.EventList.WaitForCardsToLoad(); 
 
         var searchResults = eventsPage.GetAllEventCards();
