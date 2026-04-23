@@ -1,6 +1,7 @@
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
@@ -116,6 +117,7 @@ public class SignInModalComponent : BaseComponent
                 return btn.Enabled && btn.Displayed;
             });
         RootElement.FindElement(SignInButtonLocator).Click();
+        wait.Until(ExpectedConditions.InvisibilityOfElementLocated(RootLocator));
     }
     
     /// <summary>

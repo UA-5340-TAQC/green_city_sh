@@ -1,5 +1,7 @@
-﻿using green_city_sh.Tests.Infrastructure;
+﻿using green_city_sh.Tests.Components;
+using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -12,31 +14,46 @@ public class NewsDetailsPageTests : BaseTest
     [SetUp]
     public void SetUp()
     {
-        _newsDetailsPage = new NewsDetailsPage(Driver!);
-        _newsDetailsPage.OpenNewsDetailsPage(51);
+        Driver!.Manage().Window.Maximize();
+
+        NavigateToBaseUrl();
+
+        var header = new HeaderComponent(Driver, Driver!.FindElement(By.CssSelector("header")));
+        
+        header.ChangeLanguage("En");
+        header.ClickSignIn();
+
+        var signInModal = SignInModalComponent.WaitAndCreate(Driver);
+
+        signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
+        _newsDetailsPage = new NewsDetailsPage(Driver);
     }
 
     [Test]
     [Order(1)]
     [Description("Verify that the user can delete their comment and the counter updates")]
-    [Retry(2)]
+    [Retry(1)]
     [Category("Smoke")]
     public void VerifyDeletingUserCommentAndCounterUpdates()
     {
-        _newsDetailsPage!.AddComment("Awesome");
-        var initialCount = _newsDetailsPage.GetCommentsCount();
-        _newsDetailsPage
-            .DeleteComment()
+        const string text = "Awesome";
+        Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
+        var initialCount = _newsDetailsPage.GetCounterNumber();
+        _newsDetailsPage.AddComment(text);
+        _newsDetailsPage.
+            DeleteComment()
             .ClickCancelDelete();
-        var afterCancel = _newsDetailsPage.GetCommentsCount();
-        Assert.That(afterCancel, Is.EqualTo(initialCount));
+        Assert.That(_newsDetailsPage.GetCounterNumber(), Is.EqualTo(initialCount + 1));
         _newsDetailsPage
             .DeleteComment()
             .ClickYesDelete();
-        var afterDelete = _newsDetailsPage.GetCommentsCount();
-        Driver!.Navigate().Refresh();
-        Assert.That(afterDelete, Is.EqualTo(initialCount - 1),
-            "Comment count should decrease by 1 after deletion");
+        Driver.Navigate().Refresh();
+        Assert.Multiple(() =>
+        {
+            Assert.That(_newsDetailsPage.GetComments().Count, Is.EqualTo(initialCount), "Comments should remain the same amount");
+            Assert.That(_newsDetailsPage.GetCounterNumber(), Is.EqualTo(initialCount), "Count should remain the same after deletion");
+        });
+        
     }
 
     [TearDown]

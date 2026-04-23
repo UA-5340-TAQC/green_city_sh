@@ -4,7 +4,6 @@ namespace green_city_sh.Tests.Components;
 
 public class CommentComponent : BaseComponent
 {
-    private By CommentField => By.XPath(".//div[@class='comment-textarea']");
     private By ReplyCommentField => By.XPath(".//div[contains(@class, 'comment-body-wrapper')]//div[@class='comment-textarea']"); 
     private By UploadImgBtn => By.XPath(".//button[contains(@class, 'image-upload-btn')]");
     private By EmojiBtn => By.XPath(".//*[contains(@class, 'emoji-picker-btn')]");
@@ -14,9 +13,11 @@ public class CommentComponent : BaseComponent
     private By EditCommentBtn => By.XPath(".//button[contains(@class, 'edit')]");   
     private By ReplyCommentBtn => By.XPath(".//button[contains(@class, 'reply')]");
     private By DateComment => By.XPath(".//*[contains(@class, 'comment-date-month')]");
-    private By CommentsItems => By.XPath(".//*[contains(@class, 'comment-body-wrapper')]");
     private By CommentText => By.XPath(".//*[@class='comment-text']");
-    private By CommentCounter => By.Id("total-count"); 
+    private By CancelEditBtn => By.XPath(".//button[contains(@class, 'cancel-edit')]");
+    private By SaveEditBtn => By.XPath(".//button[contains(@class, 'save-edit')]");
+    private By ViewRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
+    private By HideRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
     
     public CommentComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
@@ -25,65 +26,35 @@ public class CommentComponent : BaseComponent
     public CommentComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
-
-    public void EnterComment(string text) => 
-        WaitAndTypeText(CommentField, text); 
+    
     public void EnterReplyComment(string text) =>
         WaitAndTypeText(ReplyCommentField, text);
     public void ClickSubmitCommentBtn() =>
         WaitAndClick(SubmitCommentBtn);
     public void ClickDeleteCommentBtn() =>
-        WaitAndClickFirst(DeleteCommentBtn);
+        WaitAndClick(DeleteCommentBtn);
     public void ClickEditCommentBtn() =>
-        WaitAndClickFirst(EditCommentBtn);
+        WaitAndClick(EditCommentBtn);
     public void ClickReplyCommentBtn() =>
-        WaitAndClickFirst(ReplyCommentBtn);
+        WaitAndClick(ReplyCommentBtn);
     public void ClickUploadImgBtn() =>
         WaitAndClick(UploadImgBtn);
     public void ClickEmojiBtn() => 
         WaitAndClick(EmojiBtn);
+    public void ClickCancelEditBtn() =>
+        WaitAndClick(CancelEditBtn);
+    public void ClickSaveEditBtn() => 
+        WaitAndClick(SaveEditBtn);
+    public string GetDate() => 
+        RootElement.FindElement(DateComment).Text;
 
-    private IList<IWebElement> GetAllComments()
-    {
-        wait.Until(_ => RootElement.FindElements(CommentsItems).Any());
-        return RootElement.FindElements(CommentsItems);
-    } 
+    public string GetTextComment() =>
+        RootElement.FindElement(CommentText).Text;
+
+    public string GetAuthorName() =>
+        RootElement.FindElement(AuthorName).Text;
     
-    public CommentComponent GetFirstComment()
-    {
-        var element = GetAllComments().First();
-        return new CommentComponent(driver, element);
-    }
-
-    public string? GetFirstDate() => 
-        RootElement.FindElements(DateComment).FirstOrDefault()?.Text;
-
-    public string? GetFirstTextComment() =>
-        RootElement.FindElements(CommentText).FirstOrDefault()?.Text;
-    
-    public string? GetFirstAuthorName() =>
-        RootElement.FindElements(AuthorName).FirstOrDefault()?.Text;
-    
-    public int GetCommentCount() => 
-        GetAllComments().Count;
-
-    public int GetNumberCounter()
-    {
-        WaitUntilElementVisibleBy(CommentCounter);
-        var number = FindElement(CommentCounter).Text;
-        return int.Parse(new string(number.Where(char.IsDigit).ToArray()));
-    }
-
-    public void DeleteAllComments()
-    {
-        var i = 0;
-        while (FindElements(DeleteCommentBtn).Any() && i < 20)
-        {
-            WaitAndClickFirst(DeleteCommentBtn);
-            i++;
-        }
-    }
-    public bool IsCommentDisplayed(string commentText) => 
-        RootElement.FindElements(CommentText).Any(e => e.Text.Trim().Contains(commentText, StringComparison.OrdinalIgnoreCase));
+    public bool DoesTextContain(string text) =>
+        GetTextComment().Contains(text, StringComparison.OrdinalIgnoreCase);
     
 }
