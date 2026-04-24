@@ -5,7 +5,6 @@ using green_city_sh.Tests.Pages;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
-[Parallelizable(ParallelScope.Self)]
 public class EventsSearchTests : BaseTest
 {
     private EventsPage? eventsPage;
