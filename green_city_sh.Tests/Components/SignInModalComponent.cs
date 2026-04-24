@@ -206,6 +206,5 @@ public class SignInModalComponent : BaseComponent
 
         return error.Text.Trim();
     }
-
 }
 

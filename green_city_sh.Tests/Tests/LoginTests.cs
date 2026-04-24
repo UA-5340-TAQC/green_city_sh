@@ -12,12 +12,11 @@ public class LoginTests : BaseTest
     private HeaderComponent header = null!;
     private SignInModalComponent signInModal = null!;
 
-    [SetUp]
-    public void SetupTest()
+    protected override void OnSetup()
     {
         NavigateToBaseUrl();
         homePage = new HomePage(Driver);
-        header = new HeaderComponent(Driver, By.CssSelector("header[role='banner']"));
+        header = homePage.Header;
     }
 
     [Test]
@@ -30,7 +29,6 @@ public class LoginTests : BaseTest
         string expectedErrorMessage = "Please check that your e-mail address is indicated correctly";
 
         header.ChangeLanguage("En");
-
         header.ClickSignIn();
 
         signInModal = SignInModalComponent.WaitAndCreate(Driver);
@@ -38,7 +36,6 @@ public class LoginTests : BaseTest
         Assert.That(signInModal.IsModalVisible(), Is.True, "Sign in modal should be visible");
 
         signInModal.EnterEmail(invalidEmail);
-
         signInModal.EnterPassword(password);
 
         string errorMessage = signInModal.GetEmailErrorMessage();
