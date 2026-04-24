@@ -10,14 +10,13 @@ public class EventsSearchTests : BaseTest
 {
     private EventsPage? eventsPage;
 
-    [SetUp]
-    public void SetUp()
+    protected override void OnSetup()
     {
         NavigateToBaseUrl();
 
         eventsPage = new EventsPage(Driver!);
-        eventsPage.GlobalHeader.ChangeLanguage("en");
-        eventsPage.GlobalHeader.ClickSignIn();
+        eventsPage.Header.ChangeLanguage("en");
+        eventsPage.Header.ClickSignIn();
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
         signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
         eventsPage.OpenEventsPage();
