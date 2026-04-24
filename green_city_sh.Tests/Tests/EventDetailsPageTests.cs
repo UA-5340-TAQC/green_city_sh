@@ -50,10 +50,16 @@ public class EventDetailsPageTests : BaseTest
 
         eventDetailsCard.ClickSaveEvent();
 
+        Assert.IsTrue(eventDetailsCard.IsEventSaved(), "Event should be marked as saved after clicking save.");
+
         header.ClickBookmarks();
+
+        Assert.That(Driver.Url, Is.EqualTo(BaseUrl + "/news?isBookmark=true"), "URL should navigate to bookmarks page.");
 
         var bookmarkTab = new BookmarkTabComponent(Driver, Driver.FindElement(By.CssSelector(".tabs")));
         bookmarkTab.SwitchToTab("Events");
+
+        Assert.That(Driver.Url, Does.Contain("events"), "URL should contain 'events' after switching to Events tab.");
 
         var eventsList = new EventsListComponent(Driver, Driver.FindElement(By.CssSelector(".event-list")));
         var savedEventCard = eventsList.GetSavedEventCard(eventInfoText);
