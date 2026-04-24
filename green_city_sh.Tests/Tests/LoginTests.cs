@@ -8,9 +8,9 @@ namespace green_city_sh.Tests.Tests;
 [TestFixture]
 public class LoginTests : BaseTest
 {
-    private HomePage homePage;
-    private HeaderComponent header;
-    private SignInModalComponent signInModal;
+    private HomePage homePage = null!;
+    private HeaderComponent header = null!;
+    private SignInModalComponent signInModal = null!;
 
     [SetUp]
     public void SetupTest()
