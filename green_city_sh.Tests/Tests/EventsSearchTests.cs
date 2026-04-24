@@ -20,16 +20,14 @@ public class EventsSearchTests : BaseTest
         eventsPage.GlobalHeader.ClickSignIn();
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
         signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
-        Thread.Sleep(2000); // Temporary solution before adding proper wait for login method
         eventsPage.OpenEventsPage();
     }
 
     [Test]
     [Category("Smoke")]
-    public void SearchByKeywordReturnsMatchingEvents()
+    [TestCase("2026")]
+    public void SearchByKeywordReturnsMatchingEvents(string searchKeyword)
     {
-        string searchKeyword = "2026";
-
         eventsPage!.EventsTopBar.ClickSearchIcon();
         eventsPage.EventsTopBar.FillSearchInputField(searchKeyword);
         eventsPage.EventList.WaitForCardsToLoad(); 
@@ -41,9 +39,8 @@ public class EventsSearchTests : BaseTest
 
         foreach (var card in searchResults)
         {
-            string title = card.GetTitle().ToLower();
-            
-            bool isRelevant = title.Contains(searchKeyword.ToLower());
+            string title = card.GetTitle();
+            bool isRelevant = title.Contains(searchKeyword, StringComparison.OrdinalIgnoreCase );
 
             Assert.That(isRelevant, Is.True, 
                 $"Event card '{title}' did not contain the search keyword '{searchKeyword}'.");
