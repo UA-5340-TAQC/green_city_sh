@@ -43,7 +43,8 @@ public class LoginTests : BaseTest
 
         string errorMessage = signInModal.GetEmailErrorMessage();
 
-        Assert.IsTrue(errorMessage.Contains(expectedErrorMessage));
+        Assert.That(errorMessage, Does.Contain(expectedErrorMessage),
+            $"Expected email validation message to contain '{expectedErrorMessage}', but was '{errorMessage}'.");
 
         Assert.That(signInModal.IsSignInButtonEnabled(), Is.False,
             "Sign In button should be disabled when email format is invalid");
