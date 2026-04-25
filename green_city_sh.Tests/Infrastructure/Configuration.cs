@@ -16,12 +16,17 @@ public static class Configuration
     public static bool HeadlessMode => bool.TryParse(Environment.GetEnvironmentVariable("HEADLESS"), out var headless) 
         && headless;
 
-    public static string TestEmail => Environment.GetEnvironmentVariable("TEST_EMAIL")
-        ?? throw new InvalidOperationException("TEST_EMAIL environment variable is missing!");
-    
-    public static string TestPassword => Environment.GetEnvironmentVariable("TEST_PASSWORD") 
-        ?? throw new InvalidOperationException("TEST_PASSWORD environment variable is missing!");
+    private static string GetRequiredEnv(string name)
+    {
+        var value = Environment.GetEnvironmentVariable(name);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new InvalidOperationException($"{name} environment variable is missing or empty! Please check your .runsettings file.");
+        }
+        return value;
+    }
 
-    public static string SmokeSearchKeyword => Environment.GetEnvironmentVariable("SMOKE_SEARCH_KEYWORD")
-        ?? throw new InvalidOperationException("SMOKE_SEARCH_KEYWORD environment variable is missing!");
+    public static string TestEmail => GetRequiredEnv("TEST_EMAIL");
+    public static string TestPassword => GetRequiredEnv("TEST_PASSWORD");
+    public static string SmokeSearchKeyword => GetRequiredEnv("SMOKE_SEARCH_KEYWORD");
 }
