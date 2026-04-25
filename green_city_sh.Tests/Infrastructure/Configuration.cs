@@ -15,4 +15,9 @@ public static class Configuration
 
     public static bool HeadlessMode => bool.TryParse(Environment.GetEnvironmentVariable("HEADLESS"), out var headless) 
         && headless;
+
+    public static string TestEmail => Environment.GetEnvironmentVariable("TEST_EMAIL") ?? "greencitytest69@hotmail.com";
+    
+    public static string TestPassword => Environment.GetEnvironmentVariable("TEST_PASSWORD") 
+        ?? throw new InvalidOperationException("TEST_PASSWORD environment variable is missing!");
 }

@@ -421,3 +421,6 @@ FodyWeavers.xsd
 # Mac System Files
 .DS_Store
 **/.DS_Store
+
+# Ignore local test settings and passwords
+*.runsettings

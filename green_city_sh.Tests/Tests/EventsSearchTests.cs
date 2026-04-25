@@ -17,7 +17,7 @@ public class EventsSearchTests : BaseTest
         eventsPage.Header.ChangeLanguage("en");
         eventsPage.Header.ClickSignIn();
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
-        signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
+        signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
         eventsPage.OpenEventsPage();
     }
 
