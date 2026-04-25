@@ -23,9 +23,10 @@ public class EventsSearchTests : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [TestCase("2026")]
-    public void SearchByKeywordReturnsMatchingEvents(string searchKeyword)
+    public void SearchByKeywordReturnsMatchingEvents()
     {
+        string searchKeyword = Configuration.SmokeSearchKeyword;
+
         eventsPage!.EventsTopBar.ClickSearchIcon();
         eventsPage.EventsTopBar.FillSearchInputField(searchKeyword);
         eventsPage.EventList.WaitForCardsToLoad(); 
