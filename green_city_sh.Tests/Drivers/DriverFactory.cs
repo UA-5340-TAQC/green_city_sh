@@ -29,8 +29,9 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
-        new DriverManager().SetUpDriver(new ChromeConfig());
+        new DriverManager().SetUpDriver(new ChromeConfig(), WebDriverManager.Helpers.VersionResolveStrategy.MatchingBrowser);
         var options = new ChromeOptions();
+        options.BinaryLocation = "/usr/bin/google-chrome-stable";
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
         options.AddArgument("--disable-popup-blocking");

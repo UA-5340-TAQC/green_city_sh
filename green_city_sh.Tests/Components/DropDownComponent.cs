@@ -1,16 +1,16 @@
 ﻿using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
 public class DropDownComponent : BaseComponent
 {
     private const string OptionNameNotFound = "Dropdown option not found";
-    private readonly By _searchLocator;
     
-    //Default Locator For Angular dropdown options
-    private static readonly By DefaultOptions =
-        By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
+      private readonly By _searchLocator;
+    private static readonly By DefaultOptions = By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
+    private readonly By _selectedValueLocator = By.CssSelector(".mat-mdc-select-value-text");
 
     public DropDownComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
@@ -23,7 +23,13 @@ public class DropDownComponent : BaseComponent
     {
         _searchLocator = DefaultOptions;
     }
-    //Return list of dropdown options
+
+    public string GetSelectedOptionText()
+    {
+        var selectedValueElement = wait.Until(_ => RootElement.FindElement(_selectedValueLocator));
+        return selectedValueElement.Text.Trim();
+    }
+
     private IList<IWebElement> GetOptionList() =>
         wait.Until(_ =>
         {
