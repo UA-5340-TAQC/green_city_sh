@@ -68,4 +68,25 @@ public class EventDetailsPageTests : BaseTest
 
         savedEventCard.ClickFavouriteButton();
     }
+
+    [Test]
+    [Order(1)]
+    [Description("Verify that the user cannot submit a comment with an uploaded image only")]
+    [Retry(2)]
+    [Category("Smoke")]
+    public void VerifyCommentSubmissionWithImageOnly()
+    {
+        Driver!.Navigate().GoToUrl(BaseUrl + "/events/36");
+
+        var commentComponent= new CommentComponent(Driver, Driver.FindElement(By.XPath("//app-comments-container[.//div[contains(@class, 'counter')]]")));
+
+        Assert.IsTrue(commentComponent.IsCommentFieldEmpty(), "Comment field should be empty initially.");
+
+        commentComponent.ClickUploadImgBtn();
+        commentComponent.UploadImage("test_image.jpg");
+
+        Assert.IsTrue(commentComponent.IsImagePreviewDisplayed(), "Image preview should be displayed after uploading an image.");
+
+        Assert.IsTrue(commentComponent.IsCommentButtonDisabled(), "Submit button should be disabled when only an image is uploaded without text.");
+    }
 }
