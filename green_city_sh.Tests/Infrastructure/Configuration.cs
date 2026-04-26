@@ -1,8 +1,16 @@
+using DotNetEnv;
+
 namespace green_city_sh.Tests.Infrastructure;
 
 public static class Configuration
 {
-    public static string BaseUrl => Environment.GetEnvironmentVariable("BASE_URL") ?? "https://www.greencity.cx.ua/#/greenCity";
+    static Configuration()
+    {
+        Env.Load();
+    }
+
+    public static string BaseUrl =>
+        Environment.GetEnvironmentVariable("BASE_URL") ?? "https://www.greencity.cx.ua/#/greenCity";
 
     public static string Browser => Environment.GetEnvironmentVariable("BROWSER") ?? "Chrome";
 
@@ -13,6 +21,9 @@ public static class Configuration
         ? timeout 
         : 30;
 
-    public static bool HeadlessMode => bool.TryParse(Environment.GetEnvironmentVariable("HEADLESS"), out var headless) 
-        && headless;
+    public static bool HeadlessMode => bool.TryParse(Environment.GetEnvironmentVariable("HEADLESS"), out var headless) && headless;
+
+    public static string TestEmail => Environment.GetEnvironmentVariable("TEST_EMAIL");
+    public static string TestPassword => Environment.GetEnvironmentVariable("TEST_PASSWORD");
 }
+

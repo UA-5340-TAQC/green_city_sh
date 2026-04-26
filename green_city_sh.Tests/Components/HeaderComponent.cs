@@ -9,7 +9,7 @@ public class HeaderComponent: BaseComponent
     private By SearchBtn => By.CssSelector(".search-icon");
     private By LanguageDropdown => By.CssSelector(".header_lang-switcher-wrp");
     private By LanguageDropdownOptions => By.CssSelector(".header_lang-switcher-wrp li");
-    private By SignInLink => By.CssSelector(".header_sign-in-link");
+    private By SignInLink => By.CssSelector(".ubs-header-sing-in-img");
     private By SignUpLink => By.CssSelector(".header_sign-up-btn");
     private By BookmarkBtn => By.CssSelector(".bookmark-icon");
     private By NotificationsBtn => By.CssSelector(".notification-icon");
