@@ -12,10 +12,18 @@ namespace green_city_sh.Tests.Tests;
 public class CreateEventTests : BaseTest
 {
     // --- Auth Data ---
-    private static readonly string TestEmail = Environment.GetEnvironmentVariable("GC_TEST_EMAIL") 
-        ?? throw new InvalidOperationException("GC_TEST_EMAIL environment variable is missing.");
-    private static readonly string TestPassword = Environment.GetEnvironmentVariable("GC_TEST_PASSWORD") 
-        ?? throw new InvalidOperationException("GC_TEST_PASSWORD environment variable is missing.");
+    private static string GetRequiredEnv(string key)
+    {
+        var value = Environment.GetEnvironmentVariable(key);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new InvalidOperationException($"Environment variable '{key}' is missing or empty.");
+        }
+        return value;
+    }
+
+    private static readonly string TestEmail = GetRequiredEnv("GC_TEST_EMAIL");
+    private static readonly string TestPassword = GetRequiredEnv("GC_TEST_PASSWORD");
 
     // --- Test Data & Constants ---
     private const string EventTitle = "Eco Meetup 2026";
@@ -154,21 +162,27 @@ public class CreateEventTests : BaseTest
             "Step 15 Failed: The 'Publish' button did not become active.");
 
         // Step 16: Click the "Publish" button
+        var prePublishUrl = Driver!.Url;
         eventPage.PublishButton.Click();
 
-        // Wait for the redirection to execute fully using encapsulated wait
-        bool isRedirected = eventPage.WaitForUrlToContain(ExpectedEventsUrlSubstring);
+        // Properly wait for the URL to change first, THEN ensure it contains the expected substring
+        bool isRedirected = eventPage.WaitForUrlToChange(prePublishUrl) && 
+                            eventPage.WaitForUrlToContain(ExpectedEventsUrlSubstring);
         
         Assert.Multiple(() =>
         {
             Assert.That(isRedirected, Is.True, 
                 "Step 16 Failed: The user was not redirected to the Events page within the given timeout period.");
+            
+            // Explicitly verify the URL is no longer the pre-publish URL
+            Assert.That(Driver!.Url, Is.Not.EqualTo(prePublishUrl).IgnoreCase, 
+                "Step 16 Failed: The URL did not change after clicking Publish.");
+                
             Assert.That(eventPage.SuccessSnackBar.Displayed, Is.True, 
                 "Step 16 Failed: The success message toast is not displayed.");
+                
             Assert.That(Driver!.Url, Does.Contain(ExpectedEventsUrlSubstring), 
                 "Step 16 Failed: The URL does not contain the expected events substring.");
         });
     }
 }
-
-// test windows push

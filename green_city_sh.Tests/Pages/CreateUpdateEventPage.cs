@@ -73,6 +73,18 @@ public class CreateUpdateEventPage : BasePage
         }
     }
 
+    public bool WaitForUrlToChange(string previousUrl)
+    {
+        try
+        {
+            return wait.Until(driver => !string.Equals(driver.Url, previousUrl, StringComparison.OrdinalIgnoreCase));
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
+    }
+
     public void NavigateToCreateEventPageFromProfile()
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(_myEventsTabLocator)).Click();
