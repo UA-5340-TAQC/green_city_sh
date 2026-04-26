@@ -1,3 +1,4 @@
+using System;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -29,11 +30,18 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
-        new DriverManager().SetUpDriver(new ChromeConfig());
+        new DriverManager().SetUpDriver(new ChromeConfig(), WebDriverManager.Helpers.VersionResolveStrategy.MatchingBrowser);
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
         options.AddArgument("--disable-popup-blocking");
+
+        var chromeBinary = Environment.GetEnvironmentVariable("CHROME_BINARY_PATH");
+        if (!string.IsNullOrWhiteSpace(chromeBinary))
+        {
+            options.BinaryLocation = chromeBinary;
+        }
+
         return new ChromeDriver(options);
     }
 

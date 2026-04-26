@@ -1,99 +1,183 @@
 using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
+using green_city_sh.Tests.Components;
 
 namespace green_city_sh.Tests.Pages;
 
 public class CreateUpdateEventPage : BasePage
 {
-    // Left column (General Info)
-    private By TitleField => By.CssSelector("input[formcontrolname='title']");
-    private By DurationDropdown => By.CssSelector("mat-select[formcontrolname='duration']");
+    // --- Constants for Dynamic Locators and Class Names ---
+    // Updated to use exact normalized-text matching to prevent false positive chip selections
+    private const string InitiativeTypeXPathFormat = "//mat-chip-option[.//span[normalize-space(text()) = '{0}']]";
+    private const string GreencityPictureItemCssFormat = ".images-def-wrapper .img-container:nth-child({0}) img";
+    private const string ActiveInitiativeTypeClass = "mat-mdc-chip-selected";
+    private const string ClassAttribute = "class";
+    private const string CreateEventUrlSubstring = "/events/create-update-event";
 
-    private By InitiativeTypeButton(string type) => By.XPath($"//button[contains(., '{type}')]");
-
-    private By EventTypeDropdown => By.CssSelector("mat-select[formcontrolname='open']");
-    private By InviteDropdown => By.XPath("//mat-form-field[.//mat-label[contains(text(), 'Invite')]]//mat-select"); 
-
-    private By DescriptionEditor => By.CssSelector("textarea[formcontrolname='description'], .ql-editor"); 
-
-    private By AddPictureButton => By.CssSelector("input[type='file']"); 
-    private By UploadedImagePreview => By.CssSelector(".image-preview");
-    private By ClosePictureIcon => By.CssSelector(".selected-delete");
-    private By GreencityPictureItem(int index) => By.CssSelector($".images-container img:nth-child({index}), .gallery-item:nth-child({index})"); // a specific picture by index
-
-    // Right Column (Schedule & Location)
-    private By DatePickerInput => By.CssSelector("input[matinput][formcontrolname='day']");
-    private By StartTimeInput => By.CssSelector("input[formcontrolname='startTime']");
-    private By EndTimeInput => By.CssSelector("input[formcontrolname='finishTime']");
-    private By AllDayCheckbox => By.CssSelector("mat-checkbox[formcontrolname='allDay']");
-    private By PlaceLocationCheckbox => By.Id("mat-mdc-checkbox-2-input");
-    private By OnlineLocationCheckbox => By.Id("mat-mdc-checkbox-3-input");
-    private By OnlineLinkField => By.CssSelector("input[formcontrolname='onlineLink']");
-
-    private By CancelLink => By.CssSelector(".tertiary-global-button");
-    private By PreviewButton => By.XPath("//button[contains(., 'Preview')]");
-    private By PublishButton => By.XPath("//button[contains(., 'Publish')]");
+    // --- Locators ---
+    private readonly By _headerSignInButtonLocator = By.XPath("//*[contains(@class, 'sign-in') or contains(text(), 'Sign in')]");
+    private readonly By _myEventsTabLocator = By.XPath("//div[@role='tab' and .//span[contains(text(), 'My Events')]]");
+    private readonly By _addEventButtonLocator = By.Id("create-button-event");
+    
+    private readonly By _titleFieldLocator = By.CssSelector("input[formcontrolname='title']");
+    private readonly By _durationDropdownLocator = By.CssSelector("mat-select[formcontrolname='duration']");
+    private readonly By _eventTypeDropdownLocator = By.CssSelector("mat-select[formcontrolname='open']");
+    private readonly By _inviteDropdownLocator = By.XPath("//mat-form-field[.//mat-label[contains(text(), 'Invite')]]//mat-select");
+    private readonly By _descriptionEditorLocator = By.CssSelector("quill-editor[formcontrolname='description'] .ql-editor");
+    private readonly By _addPictureButtonLocator = By.CssSelector("input[type='file']");
+    private readonly By _uploadedImagePreviewLocator = By.CssSelector(".input-image-wrapper.selected img");
+    private readonly By _closePictureIconLocator = By.CssSelector(".selected-delete");
+    //Precise locator targeting the specific mat-label inside the Picture section header
+    private readonly By _pictureCounterLocator = By.XPath("//div[contains(@class, 'justify-content-between') and .//mat-label[normalize-space()='Picture']]//mat-label[contains(@class, 'xs-text')]");
+    private readonly By _mainBadgeLocator = By.CssSelector(".selected-text");
+    
+    private readonly By _datePickerLocator = By.XPath("//div[contains(@class, 'mat-mdc-text-field-wrapper') and .//input[@formcontrolname='day']]");
+    private readonly By _startTimeInputLocator = By.CssSelector("input[formcontrolname='startTime']");
+    private readonly By _endTimeInputLocator = By.CssSelector("input[formcontrolname='finishTime']");
+    private readonly By _allDayCheckboxLocator = By.CssSelector("mat-checkbox[formcontrolname='allDay']");
+    private readonly By _applyToAllDaysCheckboxLocator = By.XPath("//mat-checkbox[contains(., 'Apply to all days')]");
+    private readonly By _placeLocationCheckboxLocator = By.XPath("//mat-checkbox[contains(., 'Place')]");
+    private readonly By _onlineLocationCheckboxLocator = By.XPath("//mat-checkbox[contains(., 'Online')]");
+    private readonly By _onlineLinkFieldLocator = By.CssSelector("input[formcontrolname='onlineLink']");
+    
+    private readonly By _cancelLinkLocator = By.CssSelector("button.tertiary-global-button");
+    private readonly By _previewButtonLocator = By.XPath("//button[contains(., 'Preview')]");
+    private readonly By _publishButtonLocator = By.XPath("//button[contains(., 'Publish')]");
+    private readonly By _successSnackBarLocator = By.CssSelector("snack-bar-container, mat-snack-bar-container, .mat-mdc-snack-bar-container");
 
     public CreateUpdateEventPage(IWebDriver driver) : base(driver)
     {
     }
 
+    // --- Wait Encapsulations & Navigation Methods ---
 
-    public void SetTitle(string title)
+    public void ClickHeaderSignInButton()
     {
-        if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("Title cannot be null or empty.", nameof(title));
+        wait.Until(ExpectedConditions.ElementToBeClickable(_headerSignInButtonLocator)).Click();
     }
 
-    public void SelectInitiativeTypes(params string[] types)
+    public void WaitForLoginModalToDisappear()
     {
-        if (types == null || types.Length == 0)
-            throw new ArgumentException("At least one initiative type must be provided.", nameof(types));
+        wait.Until(ExpectedConditions.InvisibilityOfElementLocated(SignInModalComponent.RootLocator));
     }
 
-    public void SetDescription(string text)
+    public bool WaitForUrlToContain(string urlSubstring)
     {
-        if (string.IsNullOrWhiteSpace(text))
-            throw new ArgumentException("Description text cannot be null or empty.", nameof(text));
+        try
+        {
+            return wait.Until(ExpectedConditions.UrlContains(urlSubstring));
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
     }
 
-    public void UploadImage(string path)
+    public bool WaitForUrlToChange(string previousUrl)
     {
+        try
+        {
+            return wait.Until(driver => !string.Equals(driver.Url, previousUrl, StringComparison.OrdinalIgnoreCase));
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
     }
 
-    public void SelectGreencityPicture(int index)
+    public void NavigateToCreateEventPageFromProfile()
     {
-        if (index <= 0)
-            throw new ArgumentException("Index must be greater than zero.", nameof(index));
-        // click on the gallery button and select a picture by index
+        wait.Until(ExpectedConditions.ElementToBeClickable(_myEventsTabLocator)).Click();
+        wait.Until(ExpectedConditions.ElementToBeClickable(_addEventButtonLocator)).Click();
+        wait.Until(ExpectedConditions.UrlContains(CreateEventUrlSubstring));
     }
 
-    public void SetDate(string date)
+    // --- Left Column (General Info) ---
+
+    public IWebElement TitleField => wait.Until(ExpectedConditions.ElementIsVisible(_titleFieldLocator));
+
+    public DropDownComponent DurationDropdown => new(driver, _durationDropdownLocator);
+
+    public IWebElement InitiativeTypeButton(string type)
     {
-        if (string.IsNullOrWhiteSpace(date))
-            throw new ArgumentException("Date cannot be null or empty.", nameof(date));
+        By locator = By.XPath(string.Format(InitiativeTypeXPathFormat, type));
+        return wait.Until(ExpectedConditions.ElementToBeClickable(locator));
     }
 
-    public void SetTime(string start, string end)
+    public bool IsInitiativeTypeActive(string type)
     {
-        if (string.IsNullOrWhiteSpace(start) || string.IsNullOrWhiteSpace(end))
-            throw new ArgumentException("Start and End times must be provided.");
+        By locator = By.XPath(string.Format(InitiativeTypeXPathFormat, type));
+        IWebElement element = wait.Until(ExpectedConditions.ElementIsVisible(locator));
+        return element.GetAttribute(ClassAttribute).Contains(ActiveInitiativeTypeClass);
     }
 
-    public void SelectOnlineLocation(string url)
+    public DropDownComponent EventTypeDropdown => new(driver, _eventTypeDropdownLocator);
+
+    public DropDownComponent InviteDropdown => new(driver, _inviteDropdownLocator);
+
+    public IWebElement DescriptionEditor => wait.Until(ExpectedConditions.ElementIsVisible(_descriptionEditorLocator));
+
+    public IWebElement AddPictureButton => wait.Until(ExpectedConditions.ElementExists(_addPictureButtonLocator));
+
+    public IWebElement UploadedImagePreview => wait.Until(ExpectedConditions.ElementIsVisible(_uploadedImagePreviewLocator));
+
+    public IWebElement ClosePictureIcon => wait.Until(ExpectedConditions.ElementToBeClickable(_closePictureIconLocator));
+
+    public IWebElement PictureCounter => wait.Until(ExpectedConditions.ElementIsVisible(_pictureCounterLocator));
+
+    public IWebElement MainBadge => wait.Until(ExpectedConditions.ElementIsVisible(_mainBadgeLocator));
+
+    public IWebElement GreencityPictureItem(int index)
     {
-        if (string.IsNullOrWhiteSpace(url))
-            throw new ArgumentException("URL must be provided for online location.", nameof(url));
+        By locator = By.CssSelector(string.Format(GreencityPictureItemCssFormat, index));
+        return wait.Until(ExpectedConditions.ElementToBeClickable(locator));
     }
 
-    public void ClickPublish()
-    {
-    }
+    // --- Right Column (Schedule & Location) ---
 
-    public void ClickPreview()
-    {
-    }
+    public DateTimePickerComponent DatePicker => new(driver, _datePickerLocator);
 
-    public void ClickCancel()
+    public IWebElement StartTimeInput => wait.Until(ExpectedConditions.ElementIsVisible(_startTimeInputLocator));
+
+    public IWebElement EndTimeInput => wait.Until(ExpectedConditions.ElementIsVisible(_endTimeInputLocator));
+
+    public MaterialCheckboxComponent AllDayCheckbox => new(driver, _allDayCheckboxLocator);
+
+    public MaterialCheckboxComponent ApplyToAllDaysCheckbox => new(driver, _applyToAllDaysCheckboxLocator);
+
+    public MaterialCheckboxComponent PlaceLocationCheckbox => new(driver, _placeLocationCheckboxLocator);
+
+    public MaterialCheckboxComponent OnlineLocationCheckbox => new(driver, _onlineLocationCheckboxLocator);
+
+    public IWebElement OnlineLinkField => wait.Until(ExpectedConditions.ElementIsVisible(_onlineLinkFieldLocator));
+
+    // --- Actions / Notifications ---
+
+    public IWebElement CancelLink => wait.Until(ExpectedConditions.ElementToBeClickable(_cancelLinkLocator));
+
+    public IWebElement PreviewButton => wait.Until(ExpectedConditions.ElementToBeClickable(_previewButtonLocator));
+
+    public IWebElement PublishButton => wait.Until(ExpectedConditions.ElementToBeClickable(_publishButtonLocator));
+
+    public IWebElement SuccessSnackBar => wait.Until(ExpectedConditions.ElementIsVisible(_successSnackBarLocator));
+
+    public void SetTimeByJS(IWebElement timeInput, string timeValue)
     {
+        // Ensure the element is ready for interaction
+        wait.Until(ExpectedConditions.ElementToBeClickable(timeInput));
+
+        var jsExecutor = (IJavaScriptExecutor)driver;
+        
+        // JavaScript to set the value and trigger Angular's formControl listeners
+        string script = @"
+            var element = arguments[0];
+            var value = arguments[1];
+            element.value = value;
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+            element.dispatchEvent(new Event('change', { bubbles: true }));
+            element.dispatchEvent(new Event('blur'));
+        ";
+
+        jsExecutor.ExecuteScript(script, timeInput, timeValue);
     }
 }
