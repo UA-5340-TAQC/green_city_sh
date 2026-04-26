@@ -34,7 +34,7 @@ public class CreateEventTests : BaseTest
     {
         NavigateToBaseUrl();
 
-        // 1. Wait for and click the Header Sign In button using encapsulated wait logic
+        // 1. Wait and click the Header Sign In button using encapsulated wait logic
         page.ClickHeaderSignInButton();
 
         // 2. Instantiate the modal using the static factory method
@@ -172,3 +172,5 @@ public class CreateEventTests : BaseTest
         });
     }
 }
+
+// test windows push
