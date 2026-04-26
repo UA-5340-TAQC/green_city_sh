@@ -1,4 +1,6 @@
+using System;
 using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 using green_city_sh.Tests.Infrastructure;
 
 namespace green_city_sh.Tests.Components;
@@ -23,7 +25,14 @@ public class DateTimePickerComponent : BaseComponent
         if (string.IsNullOrWhiteSpace(date))
             throw new ArgumentException("Date cannot be null or empty.", nameof(date));
 
-        WaitAndTypeText(_inputLocator, date);
+        var element = wait.Until(d => RootElement.FindElement(_inputLocator));
+        wait.Until(ExpectedConditions.ElementToBeClickable(element));
+
+        element.SendKeys(Keys.Control + "a");
+        element.SendKeys(Keys.Backspace);
+
+        // Enter the new date
+        element.SendKeys(date);
     }
 
     public void OpenCalendar()

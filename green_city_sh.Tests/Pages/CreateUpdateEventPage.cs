@@ -61,7 +61,14 @@ public class CreateUpdateEventPage : BasePage
 
     public bool WaitForUrlToContain(string urlSubstring)
     {
-        return wait.Until(ExpectedConditions.UrlContains(urlSubstring));
+        try
+        {
+            return wait.Until(ExpectedConditions.UrlContains(urlSubstring));
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
     }
 
     public void NavigateToCreateEventPageFromProfile()

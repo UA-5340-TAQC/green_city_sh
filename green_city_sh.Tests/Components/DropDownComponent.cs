@@ -8,8 +8,8 @@ public class DropDownComponent : BaseComponent
 {
     private const string OptionNameNotFound = "Dropdown option not found";
     
-      private readonly By _searchLocator;
-    private static readonly By DefaultOptions = By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
+    private readonly By _searchLocator;
+    private static readonly By DefaultOptions = By.XPath("//div[contains(@class,'cdk-overlay-pane')]//mat-option");
     private readonly By _selectedValueLocator = By.CssSelector(".mat-mdc-select-value-text");
 
     public DropDownComponent(IWebDriver driver, By rootLocator)
@@ -33,7 +33,7 @@ public class DropDownComponent : BaseComponent
     private IList<IWebElement> GetOptionList() =>
         wait.Until(_ =>
         {
-            var elements = RootElement.FindElements(_searchLocator);
+            var elements = driver.FindElements(_searchLocator);
             return elements.Count > 0 ? elements : null;
         })!;
 
@@ -55,5 +55,10 @@ public class DropDownComponent : BaseComponent
     public void ClickDropDownOptionByPartialName(string partialName)
     {
         GetDropDownOptionByPartialName(partialName).Click();
+    }
+
+    public void Click()
+    {
+        wait.Until(ExpectedConditions.ElementToBeClickable(RootElement)).Click();
     }
 }

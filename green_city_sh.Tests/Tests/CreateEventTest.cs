@@ -12,8 +12,10 @@ namespace green_city_sh.Tests.Tests;
 public class CreateEventTests : BaseTest
 {
     // --- Auth Data ---
-    private const string TestEmail = "greencitytest69@hotmail.com";
-    private const string TestPassword = "asweQA5346!)";
+    private static readonly string TestEmail = Environment.GetEnvironmentVariable("GC_TEST_EMAIL") 
+        ?? throw new InvalidOperationException("GC_TEST_EMAIL environment variable is missing.");
+    private static readonly string TestPassword = Environment.GetEnvironmentVariable("GC_TEST_PASSWORD") 
+        ?? throw new InvalidOperationException("GC_TEST_PASSWORD environment variable is missing.");
 
     // --- Test Data & Constants ---
     private const string EventTitle = "Eco Meetup 2026";
@@ -50,7 +52,7 @@ public class CreateEventTests : BaseTest
     public void CreateOneDayOnlineEvent_WithMandatoryFieldsAndPicture_Successfully()
     {
         // --- Arrange ---
-        // Dynamically generating tomorrow's date formatted to exactly match the expected input (e.g. "April 9, 2026")
+        // Dynamically generating tomorrow's date formatted to exactly match the expected input (e.g. "April 26, 2026")
         string dynamicDateValue = DateTime.Today.AddDays(1).ToString("MMMM d, yyyy", new CultureInfo("en-US"));
         
         var eventPage = new CreateUpdateEventPage(Driver!);
@@ -65,7 +67,6 @@ public class CreateEventTests : BaseTest
         // --- Act & Assert ---
 
         // Step 1: Click on the "Title" field and enter the event name
-        eventPage.TitleField.Click();
         eventPage.TitleField.Clear();
         eventPage.TitleField.SendKeys(EventTitle);
         Assert.That(eventPage.TitleField.GetAttribute("value"), Is.EqualTo(EventTitle), 
@@ -82,17 +83,18 @@ public class CreateEventTests : BaseTest
             $"Step 3 Failed: The '{InitiativeTypeValue}' button did not become active.");
 
         // Step 4: Select an option from the "Event type" dropdown
+        eventPage.EventTypeDropdown.Click();
         eventPage.EventTypeDropdown.ClickDropDownOptionByPartialName(EventTypeValue);
         Assert.That(eventPage.EventTypeDropdown.GetSelectedOptionText(), Is.EqualTo(EventTypeValue), 
             $"Step 4 Failed: '{EventTypeValue}' is not displayed as the selected option.");
 
         // Step 5: Select an option from the mandatory dropdown next to Event type (Invite)
+        eventPage.InviteDropdown.Click();
         eventPage.InviteDropdown.ClickDropDownOptionByPartialName(InviteValue);
         Assert.That(eventPage.InviteDropdown.GetSelectedOptionText(), Is.EqualTo(InviteValue), 
             $"Step 5 Failed: '{InviteValue}' is not displayed as the selected option in the Invite dropdown.");
 
         // Step 6: Enter valid text into the "Events Description" field
-        eventPage.DescriptionEditor.Click();
         eventPage.DescriptionEditor.Clear();
         eventPage.DescriptionEditor.SendKeys(DescriptionValue);
         Assert.That(eventPage.DescriptionEditor.Text, Does.Contain(DescriptionValue), 
@@ -104,14 +106,12 @@ public class CreateEventTests : BaseTest
             "Step 7 Failed: The selected date is not displayed correctly in the field.");
 
         // Step 8: Enter the start time in the "Start Time" field
-        eventPage.StartTimeInput.Click();
         eventPage.StartTimeInput.Clear();
         eventPage.StartTimeInput.SendKeys(StartTimeValue);
         Assert.That(eventPage.StartTimeInput.GetAttribute("value"), Is.EqualTo(StartTimeValue), 
             "Step 8 Failed: The start time was not set correctly.");
 
         // Step 9: Enter the end time in the "End Time" field
-        eventPage.EndTimeInput.Click();
         eventPage.EndTimeInput.Clear();
         eventPage.EndTimeInput.SendKeys(EndTimeValue);
         Assert.That(eventPage.EndTimeInput.GetAttribute("value"), Is.EqualTo(EndTimeValue), 
@@ -123,7 +123,6 @@ public class CreateEventTests : BaseTest
             "Step 10 Failed: The 'Online' checkbox is not ticked.");
 
         // Step 11: Click on the "Online link" field and enter the link
-        eventPage.OnlineLinkField.Click();
         eventPage.OnlineLinkField.Clear();
         eventPage.OnlineLinkField.SendKeys(OnlineLinkValue);
         Assert.That(eventPage.OnlineLinkField.GetAttribute("value"), Is.EqualTo(OnlineLinkValue), 
