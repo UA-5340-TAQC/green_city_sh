@@ -1,3 +1,4 @@
+using System;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using green_city_sh.Tests.Infrastructure;
@@ -23,9 +24,14 @@ public class MaterialCheckboxComponent : BaseComponent
             ? RootElement
             : RootElement.FindElement(_inputLocator);
 
-    public bool IsChecked()
+public bool IsChecked()
     {
-        return NativeInput.Selected;
+        string classAttribute = RootElement.GetAttribute("class") ?? string.Empty;
+        
+        // Modern MDC-based Angular Material applies "mat-mdc-checkbox-checked", 
+        // while older versions apply "mat-checkbox-checked" directly to the host element.
+        return classAttribute.Contains("mat-mdc-checkbox-checked") || 
+               classAttribute.Contains("mat-checkbox-checked");
     }
 
     public void Check()
@@ -33,6 +39,8 @@ public class MaterialCheckboxComponent : BaseComponent
         if (!IsChecked())
         {
             Toggle();
+            // Explicitly wait for Angular's state update and animation to complete
+            wait.Until(_ => IsChecked());
         }
     }
 
@@ -41,12 +49,17 @@ public class MaterialCheckboxComponent : BaseComponent
         if (IsChecked())
         {
             Toggle();
+            // Explicitly wait for Angular's state update and animation to complete
+            wait.Until(_ => !IsChecked());
         }
     }
 
     public void Toggle()
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(RootElement));
-        RootElement.Click();
+
+        // Use JS-click on the hidden native input to trigger Angular's internal state correctly
+        var js = (IJavaScriptExecutor)driver;
+        js.ExecuteScript("arguments[0].click();", NativeInput);
     }
 }

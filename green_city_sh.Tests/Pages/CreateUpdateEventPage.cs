@@ -7,7 +7,8 @@ namespace green_city_sh.Tests.Pages;
 public class CreateUpdateEventPage : BasePage
 {
     // --- Constants for Dynamic Locators and Class Names ---
-    private const string InitiativeTypeXPathFormat = "//mat-chip-option[.//span[contains(text(), '{0}')]]";
+    // Updated to use exact normalized-text matching to prevent false positive chip selections
+    private const string InitiativeTypeXPathFormat = "//mat-chip-option[.//span[normalize-space(text()) = '{0}']]";
     private const string GreencityPictureItemCssFormat = ".images-def-wrapper .img-container:nth-child({0}) img";
     private const string ActiveInitiativeTypeClass = "mat-mdc-chip-selected";
     private const string ClassAttribute = "class";
@@ -26,7 +27,8 @@ public class CreateUpdateEventPage : BasePage
     private readonly By _addPictureButtonLocator = By.CssSelector("input[type='file']");
     private readonly By _uploadedImagePreviewLocator = By.CssSelector(".input-image-wrapper.selected img");
     private readonly By _closePictureIconLocator = By.CssSelector(".selected-delete");
-    private readonly By _pictureCounterLocator = By.XPath("//*[contains(text(), '/5')]");
+    //Precise locator targeting the specific mat-label inside the Picture section header
+    private readonly By _pictureCounterLocator = By.XPath("//div[contains(@class, 'justify-content-between') and .//mat-label[normalize-space()='Picture']]//mat-label[contains(@class, 'xs-text')]");
     private readonly By _mainBadgeLocator = By.CssSelector(".selected-text");
     
     private readonly By _datePickerLocator = By.XPath("//div[contains(@class, 'mat-mdc-text-field-wrapper') and .//input[@formcontrolname='day']]");
@@ -41,7 +43,7 @@ public class CreateUpdateEventPage : BasePage
     private readonly By _cancelLinkLocator = By.CssSelector("button.tertiary-global-button");
     private readonly By _previewButtonLocator = By.XPath("//button[contains(., 'Preview')]");
     private readonly By _publishButtonLocator = By.XPath("//button[contains(., 'Publish')]");
-    private readonly By _successSnackBarLocator = By.CssSelector("snack-bar-container");
+    private readonly By _successSnackBarLocator = By.CssSelector("snack-bar-container, mat-snack-bar-container, .mat-mdc-snack-bar-container");
 
     public CreateUpdateEventPage(IWebDriver driver) : base(driver)
     {
@@ -146,4 +148,24 @@ public class CreateUpdateEventPage : BasePage
     public IWebElement PublishButton => wait.Until(ExpectedConditions.ElementToBeClickable(_publishButtonLocator));
 
     public IWebElement SuccessSnackBar => wait.Until(ExpectedConditions.ElementIsVisible(_successSnackBarLocator));
+
+    public void SetTimeByJS(IWebElement timeInput, string timeValue)
+    {
+        // Ensure the element is ready for interaction
+        wait.Until(ExpectedConditions.ElementToBeClickable(timeInput));
+
+        var jsExecutor = (IJavaScriptExecutor)driver;
+        
+        // JavaScript to set the value and trigger Angular's formControl listeners
+        string script = @"
+            var element = arguments[0];
+            var value = arguments[1];
+            element.value = value;
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+            element.dispatchEvent(new Event('change', { bubbles: true }));
+            element.dispatchEvent(new Event('blur'));
+        ";
+
+        jsExecutor.ExecuteScript(script, timeInput, timeValue);
+    }
 }

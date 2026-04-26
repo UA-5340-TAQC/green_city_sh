@@ -1,4 +1,7 @@
-﻿using green_city_sh.Tests.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 
@@ -9,6 +12,7 @@ public class DropDownComponent : BaseComponent
     private const string OptionNameNotFound = "Dropdown option not found";
     
     private readonly By _searchLocator;
+    // Updated to global scope (removed leading dot)
     private static readonly By DefaultOptions = By.XPath("//div[contains(@class,'cdk-overlay-pane')]//mat-option");
     private readonly By _selectedValueLocator = By.CssSelector(".mat-mdc-select-value-text");
 
@@ -26,15 +30,38 @@ public class DropDownComponent : BaseComponent
 
     public string GetSelectedOptionText()
     {
-        var selectedValueElement = wait.Until(_ => RootElement.FindElement(_selectedValueLocator));
-        return selectedValueElement.Text.Trim();
+        // Polling the element until Angular populates the text (prevents empty string assertions)
+        var selectedValueElement = wait.Until(driver => 
+        {
+            try
+            {
+                var el = RootElement.FindElement(_selectedValueLocator);
+                return !string.IsNullOrWhiteSpace(el.Text) ? el : null;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return null; // Ignore stale elements and keep polling
+            }
+        });
+        
+        return selectedValueElement!.Text.Trim();
     }
 
     private IList<IWebElement> GetOptionList() =>
-        wait.Until(_ =>
+        wait.Until(drv =>
         {
-            var elements = driver.FindElements(_searchLocator);
-            return elements.Count > 0 ? elements : null;
+            try
+            {
+                // Search globally and filter for interactable options
+                var elements = drv.FindElements(_searchLocator)
+                                  .Where(e => e.Displayed && e.Enabled)
+                                  .ToList();
+                return elements.Count > 0 ? elements : null;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return null; // Implicit protection against DOM changes during filtering
+            }
         })!;
 
     private IWebElement GetDropDownOptionByPartialName(string partialName)

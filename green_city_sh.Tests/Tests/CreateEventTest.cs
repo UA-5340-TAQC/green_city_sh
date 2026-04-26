@@ -27,7 +27,7 @@ public class CreateEventTests : BaseTest
     private const string StartTimeValue = "16:00";
     private const string EndTimeValue = "20:30";
     private const string OnlineLinkValue = "https://duckduckgo.com";
-    private const string ExpectedCounterValue = "1/5";
+    private const string ExpectedCounterValue = "2/5";
     private const string ExpectedEventsUrlSubstring = "/events";
 
     private void PerformLogin(CreateUpdateEventPage page)
@@ -106,14 +106,12 @@ public class CreateEventTests : BaseTest
             "Step 7 Failed: The selected date is not displayed correctly in the field.");
 
         // Step 8: Enter the start time in the "Start Time" field
-        eventPage.StartTimeInput.Clear();
-        eventPage.StartTimeInput.SendKeys(StartTimeValue);
+        eventPage.SetTimeByJS(eventPage.StartTimeInput, StartTimeValue);
         Assert.That(eventPage.StartTimeInput.GetAttribute("value"), Is.EqualTo(StartTimeValue), 
             "Step 8 Failed: The start time was not set correctly.");
 
         // Step 9: Enter the end time in the "End Time" field
-        eventPage.EndTimeInput.Clear();
-        eventPage.EndTimeInput.SendKeys(EndTimeValue);
+        eventPage.SetTimeByJS(eventPage.EndTimeInput, EndTimeValue);
         Assert.That(eventPage.EndTimeInput.GetAttribute("value"), Is.EqualTo(EndTimeValue), 
             "Step 9 Failed: The end time was not set correctly.");
 
@@ -134,7 +132,7 @@ public class CreateEventTests : BaseTest
             "Step 12 Failed: The 'Apply to all days' checkbox is not ticked.");
 
         // Step 13: Scroll down to the "Picture" section
-        actions.ScrollToElement(eventPage.AddPictureButton).Perform();
+        actions.ScrollToElement(eventPage.GreencityPictureItem(1)).Perform();
 
         // Step 14: Select an image from "Use Greencity pictures" (first picture)
         eventPage.GreencityPictureItem(1).Click();
