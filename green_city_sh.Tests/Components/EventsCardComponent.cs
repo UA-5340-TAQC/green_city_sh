@@ -102,7 +102,7 @@ public class EventsCardComponent : BaseComponent
 
     public void ClickMoreButton()
     {
-        //Відкрити додаткові опції
+        RootElement.FindElement(MoreButton).Click();
     }
 
     public void ClickLikeButton()

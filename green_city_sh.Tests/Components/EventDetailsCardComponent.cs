@@ -18,12 +18,29 @@ public class EventDetailsCardComponent : BaseComponent
 
     private By JoinEventButton => By.CssSelector("div.save-join-event-block button.primary-global-button");
 
+    private By BackToEventsButton => By.XPath(".//div[@class='button-text']");
+
     public bool IsEventSaved()
     {
         var btn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SaveEventButton));
         string btnText = btn.Text.Trim().ToLower();
 
         return btnText.Contains("unsave") || btnText.Contains("відмінити");
+    }
+
+    public bool IsJoinRequestSent()
+    {
+            var cancelBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(CancelRequestButton));
+            return cancelBtn.Displayed;
+    }
+    public bool IsJoinEventButtonVisible()
+    {
+            var joinBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(JoinEventButton));
+            return joinBtn.Displayed;
+    }
+    public bool IsJoinRequestCancelled()
+    {
+            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(CancelRequestButton));
     }
     public void ClickSaveEvent()
     {
@@ -54,4 +71,12 @@ public class EventDetailsCardComponent : BaseComponent
         var cancelButton = RootElement.FindElement(CancelRequestButton);
         cancelButton.Click();
     }
+
+    public void ClickBackToEvents()
+{
+    var backButton = RootElement.FindElement(BackToEventsButton);
+    
+    IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+    js.ExecuteScript("arguments[0].click();", backButton);
+}
 }

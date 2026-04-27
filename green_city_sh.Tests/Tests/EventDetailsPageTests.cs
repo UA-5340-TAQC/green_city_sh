@@ -1,8 +1,7 @@
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
-using green_city_sh.Tests.Pages;
+using green_city_sh.Tests.Modals;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -70,7 +69,7 @@ public class EventDetailsPageTests : BaseTest
     }
 
     [Test]
-    [Order(1)]
+    [Order(2)]
     [Description("Verify that the user cannot submit a comment with an uploaded image only")]
     [Retry(2)]
     [Category("Smoke")]
@@ -88,5 +87,29 @@ public class EventDetailsPageTests : BaseTest
         Assert.IsTrue(commentComponent.IsImagePreviewDisplayed(), "Image preview should be displayed after uploading an image.");
 
         Assert.IsTrue(commentComponent.IsCommentButtonDisabled(), "Submit button should be disabled when only an image is uploaded without text.");
+    }
+
+    [Test]
+    [Order(3)]
+    [Description("Verify that the user can cancel joining an event")]
+    [Retry(2)]
+    [Category("Smoke")]
+    public void VerifyCancelJoiningEvent()
+    {
+        Driver!.Navigate().GoToUrl(BaseUrl + "/events/42");
+
+        var eventDetailsCard = new EventDetailsCardComponent(Driver, Driver.FindElement(By.CssSelector(".event-main")));
+        Assert.IsTrue(eventDetailsCard.IsJoinRequestCancelled(), "Join request should not be sent initially.");
+
+        eventDetailsCard.ClickJoinEvent();
+        Assert.IsTrue(eventDetailsCard.IsJoinRequestSent(), "Join request should be sent after clicking Join Event.");
+
+        eventDetailsCard.ClickCancelRequest();
+
+        var cancelModal = new CancelJoiningEventModal(Driver, Driver.FindElement(By.XPath(".//app-warning-pop-up[@class='ng-star-inserted']")));
+        cancelModal.ClickYesButton();
+
+        Assert.IsTrue(eventDetailsCard.IsJoinRequestCancelled(), "Join request should be cancelled after confirming cancellation.");
+
     }
 }
