@@ -14,10 +14,10 @@ public class NewsDetailsPage : BasePage
     private NewsInfoComponent? newsInfo;
     
     
-    private By CommentsLocator => By.XPath(".//div[contains(@class, 'comment-body-wrapper')]");
-    private By RepliesLocator => By.XPath(".//div[contains(@class, 'wrapper-reply')]");
-    private By ViewRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
-    private By HideRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
+    private By CommentsLocator => By.XPath("//div[contains(@class, 'wrapper-comment')]");
+    private By RepliesLocator => By.XPath("//div[contains(@class, 'wrapper-reply')]");
+    private By ViewRepliesBtn => By.XPath("//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
+    private By HideRepliesBtn => By.XPath("//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
     private By CommentCounter => By.Id("total-count"); 
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
@@ -69,6 +69,7 @@ public class NewsDetailsPage : BasePage
         Comment.ClickReplyCommentBtn();
         Comment.EnterReplyComment(text);
         Comment.ClickSubmitReplyBtn();
+        Thread.Sleep(1000);
         return this;
     }
     
@@ -77,6 +78,19 @@ public class NewsDetailsPage : BasePage
     {
         DeleteCommentModal.ClickYesDeleteBtn();
         WaitUntilPageLoads();
+        return this;
+    }
+
+    public NewsDetailsPage ClickViewReplies()
+    {
+        Comment.ClickViewRepliesBtn();
+        return this;
+    }
+
+    public NewsDetailsPage ClickHideReplies()
+    {
+        Thread.Sleep(1000);
+        Comment.ClickHideRepliesBtn();
         return this;
     }
 
@@ -91,39 +105,44 @@ public class NewsDetailsPage : BasePage
 
         return comments;
     }
-    
+
     public IList<CommentComponent> GetReplies()
     {
-        bool hasMoreButtons = true;
-        while (hasMoreButtons)
+        var allReplies = new List<CommentComponent>();
+        var clickedButtons = new HashSet<IWebElement>();
+        var hasClicked = false;
+
+        while (!hasClicked)
         {
             var replyButtons = driver.FindElements(ViewRepliesBtn);
-            var unclickedButton = replyButtons
-                .FirstOrDefault(btn => btn.Displayed && btn.Enabled);
-
+            var unclickedButton = replyButtons.FirstOrDefault(btn => btn.Displayed && btn.Enabled && !clickedButtons.Contains(btn));
             if (unclickedButton == null)
-            {
-                hasMoreButtons = false;
-            }
-            else
-            {
-                unclickedButton.Click();
-                //i'll fix it
-                Thread.Sleep(300);
-            }
-        }
-        
-        wait.Until(d => driver.FindElements(RepliesLocator).Count > 0);
-        var replyElements = driver.FindElements(RepliesLocator);
+                break;
 
-        IList<CommentComponent> replies = new List<CommentComponent>();
-        foreach (var reply in replyElements)
+            clickedButtons.Add(unclickedButton);
+            unclickedButton.Click();
+
+            var newReplies = driver.FindElements(RepliesLocator)
+                .Where(r => r.Displayed)
+                .Select(r => new CommentComponent(driver, r))
+                .ToList();
+            allReplies.AddRange(newReplies);
+        }
+
+        return allReplies;
+    } 
+
+    public IList<CommentComponent> GetAllCommentsWithReplies()
+    {
+        var allComments = GetComments().ToList();
+        if (driver.FindElements(RepliesLocator).Any())
         {
-            replies.Add(new CommentComponent(driver, reply));
+            var replies = GetReplies();
+            allComments.AddRange(replies);
         }
-        return replies;
+        return allComments;
     }
-
+    
     public int WaitForCommentCounterVisible()
     {
         wait.Until(ExpectedConditions.ElementIsVisible(CommentCounter));
@@ -178,7 +197,14 @@ public class NewsDetailsPage : BasePage
 
     public string GetDateText() => 
         NewsInfo.GetDateText();
+    
+    public bool IsViewReplyBtnDisplayed() => 
+        Comment.IsViewBtnDisplayed();
+    
+    public bool IsHideReplyBtnDisplayed() => 
+        Comment.IsHideBtnDisplayed();
 
-
-
+    public string GetAttributeReplyButton =>
+        Comment.GetReplyButtonAttribute;
+    
 }
