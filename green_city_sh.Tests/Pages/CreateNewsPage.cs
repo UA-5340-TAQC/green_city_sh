@@ -8,7 +8,7 @@ public class CreateNewsPage : BasePage
 {
     private NewsFormComponent? newsForm;
 
-    public NewsFormComponent NewsForm => newsForm ??= new(driver, By.CssSelector("form"));//форма створення/редагування новини
+    public NewsFormComponent NewsForm => newsForm ??= new(driver, By.CssSelector("form"));
     public CreateNewsPage(IWebDriver driver) : base(driver)
     {
     }

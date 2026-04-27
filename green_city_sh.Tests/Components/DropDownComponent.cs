@@ -8,9 +8,10 @@ public class DropDownComponent : BaseComponent
     private const string OptionNameNotFound = "Dropdown option not found";
     private readonly By _searchLocator;
     
-    //Default Locator For Angular dropdown options
+    
     private static readonly By DefaultOptions =
-        By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
+    By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option | .//div[contains(@class,'pac-container')]//div[contains(@class,'pac-item')]");
+
 
     public DropDownComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
@@ -23,25 +24,47 @@ public class DropDownComponent : BaseComponent
     {
         _searchLocator = DefaultOptions;
     }
-    //Return list of dropdown options
-    private IList<IWebElement> GetOptionList() =>
-        wait.Until(_ =>
+
+
+    private IList<IWebElement> GetOptionList()
+    {
+        return wait.Until(_ =>
         {
-            var elements = RootElement.FindElements(_searchLocator);
+            var elements = RootElement
+                .FindElements(_searchLocator)
+                .Where(option =>
+                {
+                    try
+                    {
+                        return option.Displayed && !string.IsNullOrWhiteSpace(option.Text);
+                    }
+                    catch (StaleElementReferenceException)
+                    {
+                        return false;
+                    }
+                })
+                .ToList();
+
             return elements.Count > 0 ? elements : null;
         })!;
+    }
 
     private IWebElement GetDropDownOptionByPartialName(string partialName)
     {
-        if (string.IsNullOrWhiteSpace(partialName)) 
+        if (string.IsNullOrWhiteSpace(partialName))
             throw new ArgumentException("Option cannot be empty", nameof(partialName));
-        
+
         var options = GetOptionList();
 
-        return options.FirstOrDefault(option => 
+        var optionTexts = string.Join(", ", options.Select(o => o.Text.Trim()));
+        TestContext.WriteLine($"Dropdown options: {optionTexts}");
+
+        return options.FirstOrDefault(option =>
                    option.Text.Contains(partialName, StringComparison.OrdinalIgnoreCase))
                ?? throw new NoSuchElementException($"{OptionNameNotFound}: {partialName}");
     }
+
+
 
     public IList<string> GetListOptionsText() =>
         GetOptionList().Select(e => e.Text.Trim()).ToList();
@@ -50,4 +73,6 @@ public class DropDownComponent : BaseComponent
     {
         GetDropDownOptionByPartialName(partialName).Click();
     }
+
+
 }

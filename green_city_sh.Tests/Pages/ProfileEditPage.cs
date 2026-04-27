@@ -25,13 +25,16 @@ public class ProfileEditPage : BasePage
         new UploadAvatarComponent(driver,By.XPath("//div[@class='profile-avatar-wrapper']"));
     private UploadImageModal UploadModal => 
         new UploadImageModal(driver,By.XPath("//div[@class='main-container']"));
-    
+    private By SuccessMessage =>
+    By.CssSelector("mat-snack-bar-container.success-snackbar");
+
+
     public ProfileEditPage OpenProfileEditPage(int userId)
     {
-        var profileEditUrl = new System.Uri(new System.Uri(driver.Url), $"/profile/{userId}/edit").ToString();
-        Open(profileEditUrl);
-        return this; 
+        driver.Navigate().GoToUrl($"https://www.greencity.cx.ua/#/greenCity/profile/{userId}/edit");
+        return this;
     }
+
 
     public ProfileEditPage EnterName(string name)
     {
@@ -97,4 +100,63 @@ public class ProfileEditPage : BasePage
         UploadModal.ClickSaveImgButton();
         return this; 
     }
+
+    public string GetName()
+    {
+        return ProfileDetails.GetName();
+    }
+
+    public string GetCityName()
+    {
+        return ProfileDetails.GetCityName();
+    }
+
+    public string GetCredo()
+    {
+        return ProfileDetails.GetCredo();
+    }
+
+    public string GetSelectedPrivacyValue(string category)
+    {
+        return ProfilePrivacy.GetSelectedPrivacyValue(category);
+    }
+    public bool IsSaveButtonEnabled()
+    {
+        return FormActionButtons.IsSaveBtnEnabled();
+    }
+    public ProfileEditPage ToggleAllNotifications(bool enabled)
+    {
+        var types = new[]
+        {
+        "Receive system notifications",
+        "Receive notifications for likes",
+        "Receive notifications for comments",
+        "Receive notifications for invites",
+        "Receive notifications for places"
+    };
+
+        foreach (var type in types)
+        {
+            EmailNotifications.ToggleNotificationFrequency(type, enabled);
+        }
+
+        return this;
+    }
+
+    public ProfileEditPage WaitUntilLoaded()
+    {
+        wait.Until(_ => driver.FindElements(By.Id("name")).Any(e => e.Displayed));
+        return this;
+    }
+
+    public IWebElement? GetSuccessMessage()
+    {
+        return wait.Until(driver =>
+            driver.FindElements(SuccessMessage)
+                .FirstOrDefault(e => e.Displayed));
+    }
+
+
 }
+
+

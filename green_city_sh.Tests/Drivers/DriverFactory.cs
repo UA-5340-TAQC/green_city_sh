@@ -29,7 +29,8 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
-        new DriverManager().SetUpDriver(new ChromeConfig());
+       new DriverManager().SetUpDriver(new ChromeConfig(), "147.0.7727.117");
+
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
