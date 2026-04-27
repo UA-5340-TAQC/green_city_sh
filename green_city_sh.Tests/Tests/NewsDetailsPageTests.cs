@@ -39,7 +39,8 @@ public class NewsDetailsPageTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(newsDetailsPage.GetComments().Count, Is.EqualTo(7), "There should be 7 comments in the list");
-            Assert.That(newsDetailsPage.GetReplies().Count, Is.EqualTo(2), "The comment should have 2 replies");
+            Assert.That(newsDetailsPage.GetReplies().Count, Is.EqualTo(3), "The comment should have 3 replies");
+            Assert.That(newsDetailsPage.GetAllCommentsWithReplies().Count, Is.EqualTo(10), "The comment should have 11 comments including replies");
         });
     }
 
@@ -70,7 +71,7 @@ public class NewsDetailsPageTests : BaseTest
         
         Assert.Multiple(() =>
         {
-            Assert.That(newsDetailsPage.GetComments().Count, Is.EqualTo(initialCount),
+            Assert.That(newsDetailsPage.GetAllCommentsWithReplies().Count, Is.EqualTo(initialCount),
                 "Comments list count should match initial after deletion");
             Assert.That(afterDelete, Is.EqualTo(initialCount),
                 "Counter should return to initial value after deletion");
@@ -95,8 +96,8 @@ public class NewsDetailsPageTests : BaseTest
             .AddComment(addText)
             .EditComment(editText);
         
-        Assert.That(newsDetailsPage.GetLastComment(), Is.EqualTo(editText));
-        Assert.That(newsDetailsPage.IsEditedLabelDisplayed(), Is.True);
+        Assert.That(newsDetailsPage.GetLastComment(), Is.EqualTo(editText), "The last comment should have the edited text");
+        Assert.That(newsDetailsPage.IsEditedLabelDisplayed(), Is.True, "The label edited should be displayed after editing");
         newsDetailsPage
             .DeleteComment()
             .ClickYesDelete();
@@ -117,10 +118,29 @@ public class NewsDetailsPageTests : BaseTest
         newsDetailsPage
             .AddComment(addText)
             .ReplyComment(replyText);
-        Assert.That(newsDetailsPage.GetLastReplyComment(), Is.EqualTo(replyText));
-        newsDetailsPage
-            .DeleteComment()
-            .ClickYesDelete();
+        try
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(newsDetailsPage.GetLastReplyComment(), Is.EqualTo(replyText), 
+                    "The last replied comment should match");
+                Assert.That(newsDetailsPage.GetAttributeReplyButton.Contains("reply-active"), Is.True, 
+                    "The reply button should be active");
+                Assert.That(newsDetailsPage.IsHideReplyBtnDisplayed(), Is.True, "Hide reply button should be displayed");
+            });
+
+            newsDetailsPage
+                .ClickHideReplies();
+            Assert.That(newsDetailsPage.IsViewReplyBtnDisplayed, Is.True, "View reply button should be displayed");
+            newsDetailsPage
+                .ClickViewReplies();
+        }
+        finally
+        {
+            newsDetailsPage
+                .DeleteComment()
+                .ClickYesDelete();
+        }
     }
     
     [Test]
@@ -155,5 +175,5 @@ public class NewsDetailsPageTests : BaseTest
         Assert.That(regexUk.IsMatch(dateUk), Is.True,
             "Date should be displayed in Ukrainian format");
     }
-
+    
 }
