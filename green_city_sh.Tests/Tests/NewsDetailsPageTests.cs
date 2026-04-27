@@ -40,7 +40,7 @@ public class NewsDetailsPageTests : BaseTest
         {
             Assert.That(newsDetailsPage.GetComments().Count, Is.EqualTo(7), "There should be 7 comments in the list");
             Assert.That(newsDetailsPage.GetReplies().Count, Is.EqualTo(3), "The comment should have 3 replies");
-            Assert.That(newsDetailsPage.GetAllCommentsWithReplies().Count, Is.EqualTo(10), "The comment should have 11 comments including replies");
+            Assert.That(newsDetailsPage.GetAllCommentsWithReplies().Count, Is.EqualTo(10), "The comment section should have 11 comments including replies");
         });
     }
 
@@ -131,7 +131,7 @@ public class NewsDetailsPageTests : BaseTest
 
             newsDetailsPage
                 .ClickHideReplies();
-            Assert.That(newsDetailsPage.IsViewReplyBtnDisplayed, Is.True, "View reply button should be displayed");
+            Assert.That(newsDetailsPage.IsViewReplyBtnDisplayed(), Is.True, "View reply button should be displayed");
             newsDetailsPage
                 .ClickViewReplies();
         }
