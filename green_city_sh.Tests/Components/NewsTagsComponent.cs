@@ -26,7 +26,7 @@ public class NewsTagsComponent : TagsComponent
     {
         var tagButton = RootElement.FindElement(TagButtonByName(name));
         tagButton.Click();
-        Thread.Sleep(500);
+        wait.Until(driver => tagButton.GetAttribute("class").Contains("global-tag-clicked"));
     }
 
     public void SelectTags(params string[] tags)
@@ -61,8 +61,6 @@ public class NewsTagsComponent : TagsComponent
                .ClickAndHold()
                .Release()
                .Perform();
-
-        Thread.Sleep(1000);
     }
 
     public bool IsTagSelected(string name)
@@ -78,10 +76,14 @@ public class NewsTagsComponent : TagsComponent
 
     public void ClearAllFilters()
     {
-        var selectedTags = RootElement.FindElements(SelectedTags);
-        foreach (var tag in selectedTags)
+        while (true)
         {
-            tag.Click();
+            var selectedTags = RootElement.FindElements(SelectedTags);
+            if (selectedTags.Count == 0) break;
+
+            selectedTags[0].Click();
+            wait.Until(driver =>
+                RootElement.FindElements(SelectedTags).Count < selectedTags.Count);
         }
     }
 

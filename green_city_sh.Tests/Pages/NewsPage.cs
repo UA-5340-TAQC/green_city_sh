@@ -20,7 +20,7 @@ public class NewsPage : BasePage
     public NewsPage(IWebDriver driver) : base(driver)
     {
         TopBar = new NewsTopBarComponent(driver, driver.FindElement(TopBarRoot));
-        TagsFilter = new NewsTagsComponent(driver, By.CssSelector(".wrapper"));
+        TagsFilter = new NewsTagsComponent(driver, By.CssSelector("app-tag-filter"));
         Filters = new NewsFilterSelectionComponent(driver, driver.FindElement(FilterRoot));
         List = new NewsListComponent(driver, driver.FindElement(ListRoot));
     }
