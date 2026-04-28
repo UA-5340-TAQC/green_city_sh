@@ -69,7 +69,6 @@ public class NewsDetailsPage : BasePage
         Comment.ClickReplyCommentBtn();
         Comment.EnterReplyComment(text);
         Comment.ClickSubmitReplyBtn();
-        Thread.Sleep(1000);
         return this;
     }
     
@@ -89,7 +88,6 @@ public class NewsDetailsPage : BasePage
 
     public NewsDetailsPage ClickHideReplies()
     {
-        Thread.Sleep(1000);
         Comment.ClickHideRepliesBtn();
         return this;
     }
@@ -204,7 +202,7 @@ public class NewsDetailsPage : BasePage
     public bool IsHideReplyBtnDisplayed() => 
         Comment.IsHideBtnDisplayed();
 
-    public string GetAttributeReplyButton =>
+    public string GetAttributeReplyButton() =>
         Comment.GetReplyButtonAttribute;
     
 }

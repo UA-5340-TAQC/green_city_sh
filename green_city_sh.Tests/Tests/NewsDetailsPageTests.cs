@@ -124,7 +124,7 @@ public class NewsDetailsPageTests : BaseTest
             {
                 Assert.That(newsDetailsPage.GetLastReplyComment(), Is.EqualTo(replyText), 
                     "The last replied comment should match");
-                Assert.That(newsDetailsPage.GetAttributeReplyButton.Contains("reply-active"), Is.True, 
+                Assert.That(newsDetailsPage.GetAttributeReplyButton().Contains("reply-active"), Is.True, 
                     "The reply button should be active");
                 Assert.That(newsDetailsPage.IsHideReplyBtnDisplayed(), Is.True, "Hide reply button should be displayed");
             });
