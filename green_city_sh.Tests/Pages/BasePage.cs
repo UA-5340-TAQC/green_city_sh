@@ -15,14 +15,17 @@ public abstract class BasePage : Base
     {
         driver.Navigate().GoToUrl(url);
     }
-    public string getTitle()
+    public string GetTitle()
     {
         return driver.Title;
     }
-    public string getUrl()
+    public string GetUrl()
     {
         return driver.Url;
     }
+    
+    public void Refresh() => 
+        driver.Navigate().Refresh();
     
     public void WaitUntilPageLoads() =>
         wait.Until(d =>

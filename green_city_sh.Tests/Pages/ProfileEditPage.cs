@@ -26,13 +26,13 @@ public class ProfileEditPage : BasePage
     private UploadImageModal UploadModal => 
         new UploadImageModal(driver,By.XPath("//div[@class='main-container']"));
     private By SuccessMessage =>
-    By.CssSelector("mat-snack-bar-container.success-snackbar");
-
-
-    public ProfileEditPage OpenProfileEditPage(int userId)
+        By.CssSelector("mat-snack-bar-container.success-snackbar");
+    
+    public void OpenProfileEditPage(int userId)
     {
-        driver.Navigate().GoToUrl($"https://www.greencity.cx.ua/#/greenCity/profile/{userId}/edit");
-        return this;
+        var currentUrl = driver.Url;
+        var uri = new Uri(currentUrl);
+        driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/profile/{userId}/edit");
     }
 
 
