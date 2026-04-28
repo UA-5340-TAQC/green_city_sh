@@ -25,16 +25,9 @@ public class EventsListComponent : BaseComponent
         return driver.FindElements(AllEventCards).Count;
     }
     
-    public List<EventsCardComponent> GetAllEventCards()
-    {
         try
         {
             var elements = driver.FindElements(AllEventCards);
-
-            if (elements.Count == 0)
-            {
-            return new List<EventsCardComponent> ();
-            }
             return elements.Select(e => new EventsCardComponent(driver, e)).ToList();
         }
         catch (StaleElementReferenceException)
