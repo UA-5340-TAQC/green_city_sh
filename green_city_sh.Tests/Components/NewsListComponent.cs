@@ -73,5 +73,19 @@ public class NewsListComponent : BaseComponent
         
     }
 
+    /// <summary>
+    /// Returns all news cards as a list of NewsCardComponent components.
+    /// </summary>
+    public List<NewsCardComponent> GetAllNewsCardsAsComponents()
+    {
+        var cardElements = GetNewsCardElements();
+        var cards = new List<NewsCardComponent>();
 
+        foreach (var cardElement in cardElements)
+        {
+            cards.Add(new NewsCardComponent(driver, cardElement));
+        }
+
+        return cards;
+    }
 }
