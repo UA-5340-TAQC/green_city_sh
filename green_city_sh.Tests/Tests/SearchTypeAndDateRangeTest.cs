@@ -59,8 +59,8 @@ public class SearchTypeAndDateRangeTest : BaseTest
         Assert.That(eventsPage.FilterSection.IsDateRangeEnabled(), "the Date Range filter isn't enabled");
         eventsPage.FilterSection.ClickDateRangeDropdown();
         
-        var currentDate = DateTime.Now;
-        var nextDay = DateTime.Now.AddDays(7);
+        var currentDate = DateTime.Today;
+        var nextDay = currentDate.AddDays(7);
 
         eventsPage.FilterSection.SelectDateRange(currentDate, nextDay);
         var filteredResults = eventsPage.EventList.GetAllEventCards();
