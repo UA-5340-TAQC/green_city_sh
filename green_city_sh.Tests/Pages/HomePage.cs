@@ -8,7 +8,6 @@ public class HomePage : BasePage
 {
     private HeaderComponent? header;
 
-    public HeaderComponent Header => header ??= new HeaderComponent(driver, By.TagName("header"));
     public HomePage(IWebDriver driver) : base(driver)
     {
     }

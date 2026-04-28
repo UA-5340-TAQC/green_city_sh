@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
@@ -23,20 +24,26 @@ public class EventsListComponent : BaseComponent
         //Повернути кількість карток подій на сторінці
         return driver.FindElements(AllEventCards).Count;
     }
-
+    
     public List<EventsCardComponent> GetAllEventCards()
     {
-        //Повернути список всіх карток подій
-        var eventCards = new List<EventsCardComponent>();
-        var eventCardsCount = GetEventCardsCount();
-
-        for (int i = 0; i < eventCardsCount; i++)
+        try
         {
-            eventCards.Add(GetEventCardByIndex(i));
-        }
+            var elements = driver.FindElements(AllEventCards);
 
-        return eventCards;
+            if (elements.Count == 0)
+            {
+                Assert.Fail("Search results should be displayed more, than 0. But the list is missing.");
+            }
+            return elements.Select(e => new EventsCardComponent(driver, e)).ToList();
+        }
+        catch (StaleElementReferenceException)
+        {
+            var elementsRetry = driver.FindElements(AllEventCards);
+            return elementsRetry.Select(e => new EventsCardComponent(driver, e)).ToList();
+        }
     }
+    
 
     public EventsCardComponent GetEventCardByIndex(int index)
     {

@@ -41,8 +41,7 @@ public class EventsCardComponent : BaseComponent
 
     public string GetEventTitle()
     {
-        //Повернути назву заходу
-        return "";
+        return RootElement.FindElement(EventTitle).Text;
     }
 
     public string GetEventDate()
@@ -71,8 +70,7 @@ public class EventsCardComponent : BaseComponent
 
     public List<string> GetEventTags()
     {
-        //Повернути список тегів заходу (ECONOMIC, ENVIRONMENTAL, SOCIAL)
-        return new List<string>();
+        return RootElement.FindElements(EventTags).Select(tag => tag.Text).ToList();
     }
 
     public int GetParticipantsCount()
