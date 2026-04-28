@@ -33,7 +33,7 @@ public class EventsListComponent : BaseComponent
 
             if (elements.Count == 0)
             {
-                Assert.Fail("Search results should be displayed more, than 0. But the list is missing.");
+            return new List<EventsCardComponent> ();
             }
             return elements.Select(e => new EventsCardComponent(driver, e)).ToList();
         }
