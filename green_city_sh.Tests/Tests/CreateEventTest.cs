@@ -22,8 +22,9 @@ public class CreateEventTests : BaseTest
         return value;
     }
 
-    private static readonly string TestEmail = GetRequiredEnv("GC_TEST_EMAIL");
-    private static readonly string TestPassword = GetRequiredEnv("GC_TEST_PASSWORD");
+    // Evaluated at runtime using '=>', guaranteeing .env is loaded first
+    private static string TestEmail => GetRequiredEnv("GC_TEST_EMAIL");
+    private static string TestPassword => GetRequiredEnv("GC_TEST_PASSWORD");
 
     // --- Test Data & Constants ---
     private const string EventTitle = "Eco Meetup 2026";
