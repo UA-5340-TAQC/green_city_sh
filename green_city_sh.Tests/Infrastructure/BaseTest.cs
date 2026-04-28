@@ -16,34 +16,24 @@ public abstract class BaseTest
         OnSetup();
     }
 
-
     [TearDown]
     public void TearDown()
     {
-        try
-        {
-            OnTearDown();
+        OnTearDown();
 
-            if (Driver != null &&
-                TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
-            {
-                TakeScreenshot(TestContext.CurrentContext.Test.Name);
-            }
-        }
-        finally
+        if (TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
         {
-            TestContext.WriteLine("Closing browser...");
-            Driver?.Quit();
-            Driver?.Dispose();
+            TakeScreenshot(TestContext.CurrentContext.Test.Name);
         }
+
+        Driver?.Quit();
+        Driver?.Dispose();
     }
-
 
     protected virtual void OnSetup()
     {
         // Override this method in derived test classes for custom setup
     }
-
 
     protected virtual void OnTearDown()
     {
@@ -74,7 +64,4 @@ public abstract class BaseTest
             TestContext.WriteLine($"Failed to take screenshot: {ex.Message}");
         }
     }
-
-    
 }
-

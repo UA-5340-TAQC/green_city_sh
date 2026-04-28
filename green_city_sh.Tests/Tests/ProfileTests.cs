@@ -25,9 +25,6 @@ public class ProfileTests : BaseTest
     [Category("Profile")]
     public void EditProfile_ShouldSaveAndRevertChanges()
     {
-        const string email = "greencitytest69@hotmail.com";
-        const string password = "asweQA5346!)";
-        const int userId = 1205;
 
         const string updatedName = "TestA";
         const string updatedCity = "Kyiv";
@@ -44,14 +41,14 @@ public class ProfileTests : BaseTest
         _homePage!.Header.ClickSignIn();
 
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
-        signInModal.Login(email, password);
+        signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
 
         Driver!.Navigate().GoToUrl($"{BaseUrl}/profile");
 
         wait.Until(driver => driver.Url.Contains("/profile"));
 
         var editPage = new ProfileEditPage(Driver!)
-            .OpenProfileEditPage(userId)
+            .OpenProfileEditPage(Configuration.TestUserId)
             .WaitUntilLoaded();
 
         editPage.EnterName(updatedName);
@@ -69,7 +66,7 @@ public class ProfileTests : BaseTest
         TestContext.WriteLine("Updated profile saved");
 
         editPage = new ProfileEditPage(Driver!)
-            .OpenProfileEditPage(userId)
+            .OpenProfileEditPage(Configuration.TestUserId)
             .WaitUntilLoaded();
 
 

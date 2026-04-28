@@ -28,11 +28,12 @@ public class ProfileEditPage : BasePage
     private By SuccessMessage =>
         By.CssSelector("mat-snack-bar-container.success-snackbar");
     
-    public void OpenProfileEditPage(int userId)
+    public ProfileEditPage OpenProfileEditPage(int userId)
     {
         var currentUrl = driver.Url;
         var uri = new Uri(currentUrl);
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/profile/{userId}/edit");
+        return new ProfileEditPage(driver);
     }
 
 

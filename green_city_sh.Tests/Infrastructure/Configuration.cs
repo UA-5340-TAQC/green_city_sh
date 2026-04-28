@@ -14,7 +14,7 @@ public static class Configuration
 
     public static int DefaultTimeout => int.TryParse(Environment.GetEnvironmentVariable("DEFAULT_TIMEOUT"), out var timeout) 
         ? timeout 
-        : 30;
+        : 15;
     public static int PageLoadTimeout => int.TryParse(Environment.GetEnvironmentVariable("PAGE_LOAD_TIMEOUT"), out var timeout) 
         ? timeout 
         : 30;
@@ -27,5 +27,7 @@ public static class Configuration
 
     public static string TestPassword =>
         Environment.GetEnvironmentVariable("TEST_PASSWORD");
+    public static int TestUserId =>
+        int.Parse(Environment.GetEnvironmentVariable("TEST_USER_ID")!);
 
 }
