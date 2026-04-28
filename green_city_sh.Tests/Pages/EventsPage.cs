@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -31,6 +32,19 @@ public class EventsPage : BasePage
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/events");
     }
 
+    public void WaitForFirstCardVisible()
+    {
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(drv => drv.FindElements(By.CssSelector("app-events-list-item:first-child"))
+                .Any(e => e.Displayed));
+    }
+
+    public EventCardComponent GetFirstEventCard()
+    {
+        var card = driver.FindElement(By.CssSelector("app-events-list-item:first-child"));
+        return new EventCardComponent(driver, card);
+    }
+    
     public string GetItemsFoundText()
     {
         //Повернути текст з кількістю знайдених заходів (наприклад, "5 items found")

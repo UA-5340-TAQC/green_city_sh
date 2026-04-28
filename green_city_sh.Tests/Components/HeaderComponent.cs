@@ -6,9 +6,6 @@ namespace green_city_sh.Tests.Components;
 
 public class HeaderComponent: BaseComponent
 {
-    
-    public static readonly By RootLocator = By.CssSelector("header");
-
     private By HeaderLogo => By.CssSelector(".header_logo");
     private By NavigationLinks => By.CssSelector(".header_navigation-menu-left a");
     private By SearchBtn => By.CssSelector(".search-icon");
@@ -22,7 +19,8 @@ public class HeaderComponent: BaseComponent
     private By NotificationsOption => By.CssSelector("[aria-label='notifications']");
     private By CabinetOption => By.CssSelector("a[href*='/ubs/user/orders']");
     private By SignOutOption => By.CssSelector("[aria-label='sign-out']");
-    
+    public static By RootLocator { get; set; } = By.CssSelector("app-root app-header");
+
     public HeaderComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
