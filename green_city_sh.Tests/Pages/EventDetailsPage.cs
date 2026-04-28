@@ -73,4 +73,10 @@ public class EventDetailsPage : BasePage
     public CommentsComponent GetCommentsComponent()
         => CommentsComponent.WaitAndCreate(driver);
     
+    
+    public EventDetailsPage RefreshPage()
+    {
+        driver.Navigate().Refresh();
+        return this;
+    }
 }

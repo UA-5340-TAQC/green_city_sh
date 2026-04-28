@@ -15,6 +15,13 @@ public class CommentsComponent : BaseComponent
     public CommentsComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
+    
+    public CommentsComponent ScrollToCounter()
+    {
+        var counter = driver.FindElement(By.CssSelector("div.counter"));
+        new Actions(driver).ScrollToElement(counter).Perform();
+        return this;
+    }
 
     public static CommentsComponent WaitAndCreate(IWebDriver driver)
     {
@@ -34,6 +41,13 @@ public class CommentsComponent : BaseComponent
                    ?? throw new WebDriverTimeoutException("Comments section did not become visible");
         
         return new CommentsComponent(driver, root);
+    }
+
+    public CommentsComponent WaitForCommentVisible(string text)
+    {
+        new WebDriverWait(driver,TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(_ => IsCommentVisible(text));
+        return this;
     }
 
     public bool IsCommentFieldFocus()

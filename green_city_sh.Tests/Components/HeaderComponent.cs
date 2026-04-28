@@ -1,4 +1,6 @@
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
@@ -86,6 +88,12 @@ public class HeaderComponent: BaseComponent
             var hasProfile = header.FindElements(UserProfileButton).Count > 0;
             return hasProfile && !hasSignIn;
         }
+    }
+    
+    public void WaitForUserLoggedIn()
+    {
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(_ => IsUserLoggedIn());
     }
     public void ClickSignIn()
     {

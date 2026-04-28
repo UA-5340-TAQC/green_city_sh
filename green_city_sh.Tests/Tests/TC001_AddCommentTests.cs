@@ -1,9 +1,6 @@
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -24,20 +21,13 @@ public class TC001_AddCommentTests : BaseTest
         NavigateToBaseUrl();
         var header = new HeaderComponent(Driver!, HeaderComponent.RootLocator);
         header.ChangeLanguage("En");
-
         header.ClickSignIn();
+        
         SignInModalComponent
             .WaitAndCreate(Driver!)
             .Login(TestEmail, TestPassword);
-        
-        var wait = new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
-            
-        wait.Until(drv =>
-                drv.FindElements(SignInModalComponent.RootLocator)
-                    .All(e => !e.Displayed));
 
-        var headerComponent = new HeaderComponent(Driver!, HeaderComponent.RootLocator);
-        wait.Until(_ => headerComponent.IsUserLoggedIn());
+        header.WaitForUserLoggedIn();
 
         eventDetailsPage = new EventDetailsPage(Driver!);
         eventDetailsPage.Open();
@@ -71,11 +61,6 @@ public class TC001_AddCommentTests : BaseTest
     {
         commentsComponent!.ClickCommentField();
         
-        var wait = new WebDriverWait(
-            Driver!,
-            TimeSpan.FromSeconds(Configuration.DefaultTimeout));
-        wait.Until(_ => commentsComponent.IsCommentFieldFocus());
-        
         Assert.That(
             commentsComponent.IsCommentFieldFocus(),
             Is.True,
@@ -99,25 +84,18 @@ public class TC001_AddCommentTests : BaseTest
     [Category("Smoke")]
     public void TC001_Step3_SubmitsComment_CountIncreasedByOne()
     {
-        new Actions(Driver!).ScrollToElement(
-            Driver!.FindElement(By.CssSelector("div.counter"))
-        ).Perform();
+        commentsComponent!.ScrollToCounter();
 
-        var countBefore = commentsComponent!.GetCommentCount();
-        
+        var countBefore = commentsComponent.GetCommentCount();
+
         commentsComponent
             .ClickCommentField()
             .EnterComment(CommentText)
             .SubmitComment();
         
-        new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-            .Until(_ => commentsComponent.IsCommentVisible(CommentText));
-
-        var countAfter = commentsComponent.GetCommentCount();
+        commentsComponent.WaitForCommentVisible(CommentText);
         
-        new Actions(Driver!)
-            .ScrollToElement(Driver!.FindElement(By.CssSelector("div.counter")))
-            .Perform();
+        commentsComponent.ScrollToCounter();
 
         Assert.That(commentsComponent.GetCommentCount(),
             Is.EqualTo(countBefore + 1),
@@ -132,9 +110,11 @@ public class TC001_AddCommentTests : BaseTest
             .ClickCommentField()
             .EnterComment(CommentText)
             .SubmitComment();
-        
-        Driver!.Navigate().Refresh();
-        commentsComponent = eventDetailsPage!.GetCommentsComponent();
+
+
+        eventDetailsPage!.RefreshPage();
+        commentsComponent = eventDetailsPage.GetCommentsComponent();
+
         
         Assert.That(commentsComponent.IsCommentVisible(CommentText),
             Is.True,
