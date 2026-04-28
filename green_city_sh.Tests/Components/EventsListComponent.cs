@@ -24,10 +24,10 @@ public class EventsListComponent : BaseComponent
         return driver.FindElements(AllEventCards).Count;
     }
 
-    public List<EventsCardComponent> GetAllEventCards()
+    public List<EventCardComponent> GetAllEventCards()
     {
         //Повернути список всіх карток подій
-        var eventCards = new List<EventsCardComponent>();
+        var eventCards = new List<EventCardComponent>();
         var eventCardsCount = GetEventCardsCount();
 
         for (int i = 0; i < eventCardsCount; i++)
@@ -38,11 +38,11 @@ public class EventsListComponent : BaseComponent
         return eventCards;
     }
 
-    public EventsCardComponent GetEventCardByIndex(int index)
+    public EventCardComponent GetEventCardByIndex(int index)
     {
         //Повернути картку події за індексом
         IWebElement eventCardRoot = RootElement.FindElement(EventCardByIndex(index));
-        return new EventsCardComponent(driver, eventCardRoot);
+        return new EventCardComponent(driver, eventCardRoot);
     }
 
     public bool IsEndPageMessageDisplayed()
