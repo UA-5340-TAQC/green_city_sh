@@ -51,7 +51,7 @@ public class EventsTopBarComponent : BaseComponent
     
     public void ClickCreateEventButton()
     {
-        driver.FindElement(CreateEventButton).Click();
+        RootElement.FindElement(CreateEventButton).Click();
     }
 
     public void FillSearchInputField(string searchText)
