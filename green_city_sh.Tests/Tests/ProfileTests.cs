@@ -19,7 +19,7 @@ public class ProfileTests : BaseTest
         _homePage.Header.ChangeLanguage("EN");
     }
 
-  
+
 
     [Test]
     [Category("Profile")]

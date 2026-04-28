@@ -296,6 +296,7 @@ DEFAULT_TIMEOUT=15
 HEADLESS=false
 TEST_EMAIL=test@hotmail.com
 TEST_PASSWORD=password123
+TEST_USER_ID=12345
 ```
 
 ### Configuration Class

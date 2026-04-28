@@ -7,8 +7,8 @@ public class DropDownComponent : BaseComponent
 {
     private const string OptionNameNotFound = "Dropdown option not found";
     private readonly By _searchLocator;
-    
-    
+
+
     private static readonly By DefaultOptions =
     By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option | .//div[contains(@class,'pac-container')]//div[contains(@class,'pac-item')]");
 
