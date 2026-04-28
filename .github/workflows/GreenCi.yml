@@ -1,0 +1,161 @@
+﻿name: CI for the GreenCity project C#
+
+on: 
+  workflow_dispatch:
+  push: 
+    branches: 
+      - main
+  pull_request: 
+    branches:
+      - main
+permissions: 
+          pull-requests: write
+          contents: write 
+          issues: write
+          checks: write 
+jobs:
+  build: 
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET  
+        uses: actions/setup-dotnet@v4
+        with: 
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies 
+        run: dotnet restore 
+
+      - name: Build project
+        run: dotnet build --no-restore --configuration Release 
+
+      - name: Lint
+        run: dotnet format --verify-no-changes
+
+      - name: Build
+        run: echo "Building..."
+
+  tests:
+    name: Run tests
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with: 
+          dotnet-version: '8.0.x'
+          
+      - name: Install Chrome 
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run tests
+        id: run-tests
+        run: | 
+          set +e 
+          dotnet test
+          EXIT_CODE=$? 
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+          exit 0 
+        env: 
+          BASE_URL: ${{ secrets.BASE_URL }} 
+          BROWSER: ${{ secrets.BROWSER }}
+          DEFAULT_TIMEOUT: ${{ secrets.DEFAULT_TIMEOUT }}
+          HEADLESS: ${{ secrets.HEADLESS }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          TEST_USER_ID: ${{ secrets.TEST_USER_ID }}
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with: 
+          name: allure-results
+          path: allure-results
+      - name: Test 
+        run: echo "Testing..."
+
+  report: 
+    name: Allure reporting
+    runs-on: ubuntu-latest
+    needs: [build, tests]
+    if: always()
+
+    steps:
+      - name: Checkout repo 
+        uses: actions/checkout@v4 
+
+      - name: Download Allure 
+        uses: actions/download-artifact@v4
+        with: 
+          path: allure-results-merged
+
+      - name: Merge Allure results
+        run: |
+          mkdir -p allure-results
+          find allure-results-merged -type f \( -name "*.json" -o -name "*.png" \) -exec cp {} allure-results \;
+          
+      - name: Get Allure history
+        uses: actions/checkout@v4
+        with: 
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true 
+        
+      - name: Generate Allure report
+        id: allure-report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+          subfolder: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || 'main' }}
+          
+      - name: Generate index.html
+        run: |
+          REPORT_DIR="allure-history"
+          INDEX_FILE="$REPORT_DIR/index.html"
+      
+          mkdir -p $REPORT_DIR
+      
+          echo "<html><body><h1>Allure Reports</h1><ul>" > $INDEX_FILE
+      
+          if [ -d "$REPORT_DIR/main" ]; then
+            echo "<li><a href='./main/'>main</a></li>" >> $INDEX_FILE
+          fi
+      
+          for dir in $(find "$REPORT_DIR" -maxdepth 1 -type d -name "pr-*"); do
+            name=$(basename "$dir")
+            echo "<li><a href='./$name/'>$name</a></li>" >> $INDEX_FILE
+          done
+      
+          echo "</ul></body></html>" >> $INDEX_FILE
+          
+      - name: Fix ownership 
+        run: sudo chown -R $USER:$USER allure-history
+
+      - name: Deploy to GitHub pages
+        uses: peaceiris/actions-gh-pages@v4
+        with: 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history 
+      
+      - name: Comment PR 
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            **Allure report for PR-${{ github.event.number }}**
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.number }}/
+          comment_tag: test-report-link
+                  
+                  
+    
+    
