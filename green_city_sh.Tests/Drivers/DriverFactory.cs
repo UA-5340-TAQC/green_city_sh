@@ -35,6 +35,11 @@ public static class DriverFactory
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
         options.AddArgument("--disable-popup-blocking");
+        if (Configuration.HeadlessMode)
+        {
+            options.AddArgument("--headless");
+            options.AddArgument("--window-size=1920,1080");
+        }
         return new ChromeDriver(options);
     }
 
