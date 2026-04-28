@@ -28,7 +28,7 @@ public class EventsTopBarComponent : BaseComponent
     {
         return RootElement.FindElement(SearchIcon).Displayed;
     }
-    public bool IsSearchIconVEnabled()
+    public bool IsSearchIconEnabled()
     {
         var elements = RootElement.FindElements(SearchIcon);
         return elements.Count > 0 && elements[0].Enabled;
