@@ -24,10 +24,7 @@ public class EventsTopBarComponent : BaseComponent
         return "";
     }
 
-    public void ClickSearchIcon()
-    {
-        //Реалізувати клік по іконці пошуку
-    }
+    public void ClickSearchIcon() => RootElement.FindElement(SearchIcon).Click();
 
     public void ClickBookmarkIcon()
     {
@@ -46,6 +43,9 @@ public class EventsTopBarComponent : BaseComponent
 
     public void FillSearchInputField(string searchText)
     {
-        //Реалізувати введення тексту в поле пошуку
+        var searchInput = RootElement.FindElement(SearchInputField);
+        searchInput.Clear();
+        searchInput.SendKeys(searchText);
+        searchInput.SendKeys(Keys.Enter);
     }
 }

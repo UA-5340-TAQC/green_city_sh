@@ -30,6 +30,7 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
+        new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
