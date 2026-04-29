@@ -421,6 +421,5 @@ FodyWeavers.xsd
 # Mac System Files
 .DS_Store
 **/.DS_Store
-
-# Environment files
+#env
 .env

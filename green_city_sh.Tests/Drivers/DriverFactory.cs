@@ -64,4 +64,3 @@ public enum BrowserType
     Firefox,
     Edge
 }
-

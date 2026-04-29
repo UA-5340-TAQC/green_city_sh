@@ -22,7 +22,7 @@ public static class Configuration
     public static bool HeadlessMode => bool.TryParse(Environment.GetEnvironmentVariable("HEADLESS"), out var headless)
         && headless;
 
-    public static string TestEmail => 
+    public static string TestEmail =>
         Environment.GetEnvironmentVariable("TEST_EMAIL");
 
     public static string TestPassword =>

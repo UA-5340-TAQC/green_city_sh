@@ -93,15 +93,21 @@ public class HeaderComponent: BaseComponent
         var notificationsBtn = RootElement.FindElement(NotificationsBtn);
         notificationsBtn.Click();
     }
+    public HeaderComponent UserProfileButtonClick()
+    {
+        var userProfileBtn = FindElement(UserProfileButton);
+        userProfileBtn.Click();
+        return this;
+    }
     public void OpenNotificationsTab()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var notificationsBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(NotificationsOption));
         notificationsBtn.Click();
     }
     public void OpenPersonalCabinet()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
