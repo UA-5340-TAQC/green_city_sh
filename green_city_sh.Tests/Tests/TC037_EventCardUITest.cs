@@ -13,10 +13,9 @@ namespace green_city_sh.Tests.Tests;
 [TestFixture]
 public class TC037_EventCardUITest : BaseTest
 {
-    private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
-                                      ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
-    private static string TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD") 
-                                         ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
+    private string TestEmail = null!;
+    private string TestPassword = null!;
+
     
     private static readonly HashSet<string> AllowedCategories =
         new(StringComparer.OrdinalIgnoreCase) { "Environmental", "Social", "Economic" };
@@ -34,6 +33,10 @@ public class TC037_EventCardUITest : BaseTest
 
     protected override void OnSetup()
     {
+        TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
+                                          ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
+        TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD") 
+                                             ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
         NavigateToBaseUrl();
         
         var header = new HeaderComponent(Driver!, HeaderComponent.RootLocator);
