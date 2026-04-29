@@ -16,6 +16,31 @@ public class CommentsComponent : BaseComponent
     {
     }
     
+    
+    private static readonly By CommentInputLocator = 
+        By.CssSelector("div.comment-textarea[contenteditable='true']");
+    
+    private static readonly By SubmitButtonLocator =
+        By.XPath(".//button[contains(normalize-space(.), 'Comment')]");
+    
+    private static readonly By CommentCountLocator = 
+        By.CssSelector("span#total-count");
+    
+    private static readonly By CommentItemLocator = 
+        By.CssSelector("div.comment-body-wrapper.wrapper-comment");
+    
+    private static readonly By CommentTextLocator =
+        By.CssSelector("div.comment-text");
+
+    private static readonly By CommentAuthorLocator =
+        By.CssSelector("span.author-name");
+    
+    private static readonly By DeleteButtonLocator =
+        By.XPath(".//button[contains(normalize-space(.), 'Delete')]");
+
+    private static readonly By ConfirmDeleteButtonLocator =
+        By.CssSelector("app-warning-pop-up .m-btn.primary-global-button");
+    
     public CommentsComponent ScrollToCounter()
     {
         var counter = driver.FindElement(By.CssSelector("div.counter"));
@@ -56,31 +81,6 @@ public class CommentsComponent : BaseComponent
         var activeElement = driver.SwitchTo().ActiveElement();
         return commentField.Equals(activeElement);
     }
-    
-    private static readonly By CommentInputLocator = 
-        By.CssSelector("div.comment-textarea[contenteditable='true']");
-    
-    private static readonly By SubmitButtonLocator =
-        By.XPath(".//button[contains(normalize-space(.), 'Comment')]");
-    
-    private static readonly By CommentCountLocator = 
-        By.CssSelector("span#total-count");
-    
-    private static readonly By CommentItemLocator = 
-        By.CssSelector("div.comment-body-wrapper.wrapper-comment");
-    
-    private static readonly By CommentTextLocator =
-        By.CssSelector("div.comment-text");
-
-    private static readonly By CommentAuthorLocator =
-        By.CssSelector("span.author-name");
-    
-    private static readonly By DeleteButtonLocator =
-        By.XPath(".//button[contains(normalize-space(.), 'Delete')]");
-
-    private static readonly By ConfirmDeleteButtonLocator =
-        By.CssSelector("app-warning-pop-up .m-btn.primary-global-button");
-    
     public CommentsComponent ClickCommentField()
     {
         RootElement.FindElement(CommentInputLocator).Click();
@@ -132,7 +132,7 @@ public class CommentsComponent : BaseComponent
         return int.TryParse(elements[0].Text.Trim(), out var count) ? count : 0;
     }
 
-    public string GetFirtsCommentText()
+    public string GetFirstCommentText()
     {
         var firstComment =  driver
             .FindElements(CommentItemLocator)
@@ -170,7 +170,8 @@ public class CommentsComponent : BaseComponent
         var comment = driver
             .FindElements(CommentItemLocator)
             .FirstOrDefault(c => c.Displayed && c.FindElements(CommentTextLocator)
-                .Any(t => string.Equals(t.Text.Trim(), text, StringComparison.Ordinal)))
+                .Any(t => string.Equals(t.Text.Trim(), text, StringComparison.Ordinal))
+            && c.FindElements(DeleteButtonLocator).Any())
         ?? throw new NoSuchElementException(
             $"Comment with '{text}' was not found");
         
