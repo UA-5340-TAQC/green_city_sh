@@ -18,21 +18,21 @@ public class NewsFormComponent : BaseComponent
     private By TouchedInvalidTitleTextarea => By.CssSelector("textarea[formcontrolname='title'].ng-invalid.ng-touched");
 
     // ===== Source =====
-    private By SourceBlock => By.CssSelector(".source-block");
-    private By SourceWrapper => By.CssSelector(".source-block .title-wrapper"); //обгортка заголовка поля та підказки
-    private By SourceInput => By.CssSelector("input[formcontrolname='source']"); //поле для посилання на зовнішнє джерело
-    private By SourceFieldInfo => By.CssSelector(".source-block .field-info"); //текст-підказка для поля Source
+    private By SourceBlock => By.CssSelector(".source-block"); 
+    private By SourceWrapper => By.CssSelector(".source-block .title-wrapper");
+    private By SourceInput => By.CssSelector("input[formcontrolname='source']");
+    private By SourceFieldInfo => By.CssSelector(".source-block .field-info");
 
     // ===== Buttons =====
-    private By SubmitButtonsBlock => By.CssSelector(".submit-buttons"); //контейнер кнопок форми
-    private By CancelButton => By.CssSelector(".submit-buttons .tertiary-global-button"); //кнопка Cancel
-    private By PreviewButton => By.CssSelector(".submit-buttons .secondary-global-button"); //кнопка Preview
-    private By PublishButton => By.CssSelector(".submit-buttons .primary-global-button[type='submit']"); //кнопка Publish
+    private By SubmitButtonsBlock => By.CssSelector(".submit-buttons");
+    private By CancelButton => By.CssSelector(".submit-buttons .tertiary-global-button");
+    private By PreviewButton => By.CssSelector(".submit-buttons .secondary-global-button");
+    private By PublishButton => By.CssSelector(".submit-buttons .primary-global-button[type='submit']");
 
     // ===== Metadata =====
-    private By MetadataBlock => By.CssSelector(".date"); //блок з датою та автором
-    private By DateLabel => By.XPath(".//p[.//span[normalize-space()='Date:']]/span[2]"); //значення дати
-    private By AuthorLabel => By.XPath(".//p[.//span[normalize-space()='Author:']]/span[2]"); //значення автора
+    private By MetadataBlock => By.CssSelector(".date");
+    private By DateLabel => By.XPath(".//p[.//span[normalize-space()='Date:']]/span[2]");
+    private By AuthorLabel => By.XPath(".//p[.//span[normalize-space()='Author:']]/span[2]");
 
     public NewsFormComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
