@@ -28,7 +28,7 @@ public class SearchTypeAndDateRangeTest : BaseTest
         Assert.That(eventsPage.EventsTopBar.IsSearchIconEnabled(), "Search button should be visible on the events page.");
         eventsPage!.ClickSearchButton();
         eventsPage.EventsTopBar.FillSearchInputField("Community");
-        var searchResults=new List<EventsCardComponent>();
+        var searchResults=new List<EventCardComponent>();
         if (eventsPage.EventsTopBar.IsSearchIconEnabled())
         {
             searchResults = eventsPage.EventList.GetAllEventCards();
@@ -39,7 +39,7 @@ public class SearchTypeAndDateRangeTest : BaseTest
         {
             foreach (var card in searchResults)
             {
-                string title = card.GetEventTitle();
+                string title = card.GetTitle();
                 bool isRelevant = title.Contains("Community", StringComparison.OrdinalIgnoreCase);
 
                 Assert.That(isRelevant, Is.True,

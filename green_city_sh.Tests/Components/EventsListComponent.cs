@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
@@ -24,25 +23,28 @@ public class EventsListComponent : BaseComponent
         //Повернути кількість карток подій на сторінці
         return driver.FindElements(AllEventCards).Count;
     }
-    
+
+    public List<EventCardComponent> GetAllEventCards()
+    {
         try
         {
             var elements = driver.FindElements(AllEventCards);
-            return elements.Select(e => new EventsCardComponent(driver, e)).ToList();
+            return elements.Select(e => new EventCardComponent(driver, e)).ToList();
         }
         catch (StaleElementReferenceException)
         {
             var elementsRetry = driver.FindElements(AllEventCards);
-            return elementsRetry.Select(e => new EventsCardComponent(driver, e)).ToList();
+            return elementsRetry.Select(e => new EventCardComponent(driver, e)).ToList();
         }
     }
     
 
-    public EventsCardComponent GetEventCardByIndex(int index)
+
+    public EventCardComponent GetEventCardByIndex(int index)
     {
         //Повернути картку події за індексом
         IWebElement eventCardRoot = RootElement.FindElement(EventCardByIndex(index));
-        return new EventsCardComponent(driver, eventCardRoot);
+        return new EventCardComponent(driver, eventCardRoot);
     }
 
     public bool IsEndPageMessageDisplayed()
