@@ -18,7 +18,7 @@ public class NewsFormComponent : BaseComponent
     private By TouchedInvalidTitleTextarea => By.CssSelector("textarea[formcontrolname='title'].ng-invalid.ng-touched");
 
     // ===== Source =====
-    private By SourceBlock => By.CssSelector(".source-block"); 
+    private By SourceBlock => By.CssSelector(".source-block");
     private By SourceWrapper => By.CssSelector(".source-block .title-wrapper");
     private By SourceInput => By.CssSelector("input[formcontrolname='source']");
     private By SourceFieldInfo => By.CssSelector(".source-block .field-info");

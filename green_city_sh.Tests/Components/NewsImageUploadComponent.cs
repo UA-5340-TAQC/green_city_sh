@@ -32,12 +32,12 @@ public class NewsImageUploadComponent : ImageUploadComponent
 
     public bool IsDropZoneDisplayed()
     {
-              return this.FindElement(DropZone).Displayed;
+        return this.FindElement(DropZone).Displayed;
     }
 
     public bool IsBrowseDisplayed()
     {
-              return this.FindElement(BrowseLabel).Displayed;
+        return this.FindElement(BrowseLabel).Displayed;
     }
 
     public bool IsCropperDisplayed()

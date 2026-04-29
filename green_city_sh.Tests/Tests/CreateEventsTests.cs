@@ -26,7 +26,7 @@ public class CreateEventsTests : BaseTest
         signInHeaderBtn.Click();
 
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
-        
+
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
 
         Driver!.FindElement(By.CssSelector("a[href='#/greenCity/events']")).Click();
