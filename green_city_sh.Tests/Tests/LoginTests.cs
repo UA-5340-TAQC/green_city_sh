@@ -14,14 +14,11 @@ namespace green_city_sh.Tests.Tests;
 public class LoginTests : BaseTest
 {
     private HomePage homePage = null!;
-    private HeaderComponent header = null!;
-    private SignInModalComponent signInModal = null!;
 
     protected override void OnSetup()
     {
         NavigateToBaseUrl(); 
         homePage = new HomePage(Driver!);
-        header = homePage.Header;
     }
 
     // Successful login with valid credentials
@@ -31,24 +28,23 @@ public class LoginTests : BaseTest
     [Category("Smoke")]
     public void VerifySuccessfulLoginWithValidCredentials()
     {
-        var wait = new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
 
-        header.ClickSignIn();
-        signInModal = SignInModalComponent.WaitAndCreate(Driver!);
+        homePage.Header.ClickSignIn();
+        SignInModalComponent signInModal = SignInModalComponent.WaitAndCreate(Driver!);
 
-        signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
-        
-        var userProfileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("#header_user-wrp")));
+        signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
+        MySpacePage spacePage = new MySpacePage(Driver!);
 
-        IJavaScriptExecutor js = (IJavaScriptExecutor)Driver!;
-        string? accessToken = (string?)js.ExecuteScript("return window.localStorage.getItem('accessToken');");
+
+
+        string accessToken = spacePage.GetAccessTokenFromLocalStorage();
         Assert.IsFalse(string.IsNullOrEmpty(accessToken), "Session token was not created in LocalStorage.");
 
-        wait.Until(d => d.Url.Contains("/profile"));
+        spacePage.WaitUntilPageLoads();
         Assert.IsTrue(Driver!.Url.Contains("/profile"), "User is not on the profile page.");
 
-        userProfileBtn.Click();
-        var signOutOption = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[aria-label='sign-out']")));
+        spacePage.Header.UserProfileButtonClick();
+        IWebElement signOutOption = spacePage.Header.GetSignOutOption();
         Assert.IsTrue(signOutOption.Displayed, "'Sign out' button is not visible.");
     }
 
@@ -62,11 +58,10 @@ public class LoginTests : BaseTest
         string password = "asweQA5346!)";
         string expectedErrorMessage = "Please check that your e-mail address is indicated correctly";
 
-        header.ChangeLanguage("En");
-        header.ClickSignIn();
+        homePage.Header.ChangeLanguage("En");
+        homePage.Header.ClickSignIn();
 
-        signInModal = SignInModalComponent.WaitAndCreate(Driver!);
-
+        SignInModalComponent signInModal = SignInModalComponent.WaitAndCreate(Driver!);
         Assert.That(signInModal.IsModalVisible(), Is.True, "Sign in modal should be visible");
 
         signInModal.EnterEmail(invalidEmail);
@@ -81,7 +76,7 @@ public class LoginTests : BaseTest
             "Sign In button should be disabled when email format is invalid");
 
         signInModal.CloseModal();
-        Assert.That(header.IsUserLoggedIn(), Is.False,
+        Assert.That(homePage.Header.IsUserLoggedIn(), Is.False,
             "User should not be logged in after attempting with invalid email");
     }
 }
