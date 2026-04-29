@@ -422,7 +422,5 @@ FodyWeavers.xsd
 .DS_Store
 **/.DS_Store
 
-# Ignore local test settings and passwords
-*.runsettings
 #env
 .env

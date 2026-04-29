@@ -27,7 +27,7 @@ public static class Configuration
         var value = Environment.GetEnvironmentVariable(name);
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new InvalidOperationException($"{name} environment variable is missing or empty! Please check your .runsettings file.");
+            throw new InvalidOperationException($"{name} environment variable is missing or empty! Please ensure it is set in your environment.");
         }
         return value;
     }
