@@ -1,6 +1,8 @@
+using AngleSharp.Dom.Events;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Modals;
+using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Tests;
@@ -9,19 +11,16 @@ namespace green_city_sh.Tests.Tests;
 [Parallelizable(ParallelScope.Self)]
 public class EventDetailsPageTests : BaseTest
 {
-    
     protected override void OnSetup()
     {
-        Driver!.Manage().Window.Maximize();
-
         NavigateToBaseUrl();
 
-        var header = new HeaderComponent(Driver, Driver!.FindElement(By.CssSelector("header")));
+        HomePage homePage = new HomePage(Driver!);
         
-        header.ChangeLanguage("En");
-        header.ClickSignIn();
+        homePage.Header.ChangeLanguage("En");
+        homePage.Header.ClickSignIn();
 
-        var signInModal = SignInModalComponent.WaitAndCreate(Driver);
+        var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
 
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
     }
@@ -35,31 +34,29 @@ public class EventDetailsPageTests : BaseTest
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events/42");
 
-        var eventDetailsCard = new EventDetailsCardComponent(Driver, Driver!.FindElement(By.CssSelector(".event-main")));
-        var header = new HeaderComponent(Driver, Driver.FindElement(By.CssSelector("header")));
-        var eventInfo = new EventInfoComponent(Driver, Driver.FindElement(By.CssSelector(".event")));
+        HomePage homePage = new HomePage(Driver!);
+
+        EventDetailsPage eventDetailsPage = new EventDetailsPage(Driver!);
+
+        string eventInfoText = eventDetailsPage.EventDetailsCard.GetEventInfo();
         
+        Assert.IsFalse(eventDetailsPage.EventDetailsCard.IsEventSaved(), "Event should not be saved initially.");
 
-        string eventInfoText = eventInfo.GetEventInfo();
-        
+        eventDetailsPage.EventDetailsCard.ClickSaveEvent();
 
-        Assert.IsFalse(eventDetailsCard.IsEventSaved(), "Event should not be saved initially.");
+        Assert.IsTrue(eventDetailsPage.EventDetailsCard.IsEventSaved(), "Event should be marked as saved after clicking save.");
 
-        eventDetailsCard.ClickSaveEvent();
+        homePage.Header.ClickBookmarks();
 
-        Assert.IsTrue(eventDetailsCard.IsEventSaved(), "Event should be marked as saved after clicking save.");
+        Assert.That(Driver!.Url, Is.EqualTo(BaseUrl + "/news?isBookmark=true"), "URL should navigate to bookmarks page.");
 
-        header.ClickBookmarks();
+        SavedPage savedPage = new SavedPage(Driver!);
 
-        Assert.That(Driver.Url, Is.EqualTo(BaseUrl + "/news?isBookmark=true"), "URL should navigate to bookmarks page.");
+        savedPage.BookmarkTab.SwitchToTab("Events");
 
-        var bookmarkTab = new BookmarkTabComponent(Driver, Driver.FindElement(By.CssSelector(".tabs")));
-        bookmarkTab.SwitchToTab("Events");
+        Assert.That(Driver!.Url, Does.Contain("events"), "URL should contain 'events' after switching to Events tab.");
 
-        Assert.That(Driver.Url, Does.Contain("events"), "URL should contain 'events' after switching to Events tab.");
-
-        var eventsList = new EventsListComponent(Driver, Driver.FindElement(By.CssSelector(".event-list")));
-        var savedEventCard = eventsList.GetSavedEventCard(eventInfoText);
+        var savedEventCard = savedPage.EventsList.GetSavedEventCard(eventInfoText);
 
         Assert.IsNotNull(savedEventCard, "Saved event should be visible in bookmarks.");
 
@@ -75,16 +72,16 @@ public class EventDetailsPageTests : BaseTest
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events/36");
 
-        var commentComponent= new CommentComponent(Driver, Driver.FindElement(By.XPath("//app-comments-container[.//div[contains(@class, 'counter')]]")));
+        EventDetailsPage eventDetailsPage = new EventDetailsPage(Driver);
 
-        Assert.IsTrue(commentComponent.IsCommentFieldEmpty(), "Comment field should be empty initially.");
+        Assert.IsTrue(eventDetailsPage.Comments.IsCommentFieldEmpty(), "Comment field should be empty initially.");
 
-        commentComponent.ClickUploadImgBtn();
-        commentComponent.UploadImage("test_image.jpg");
+        eventDetailsPage.Comments.ClickUploadImgBtn();
+        eventDetailsPage.Comments.UploadImage("test_image.jpg");
 
-        Assert.IsTrue(commentComponent.IsImagePreviewDisplayed(), "Image preview should be displayed after uploading an image.");
+        Assert.IsTrue(eventDetailsPage.Comments.IsImagePreviewDisplayed(), "Image preview should be displayed after uploading an image.");
 
-        Assert.IsTrue(commentComponent.IsCommentButtonDisabled(), "Submit button should be disabled when only an image is uploaded without text.");
+        Assert.IsTrue(eventDetailsPage.Comments.IsCommentButtonDisabled(), "Submit button should be disabled when only an image is uploaded without text.");
     }
 
     [Test]
@@ -96,18 +93,18 @@ public class EventDetailsPageTests : BaseTest
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events/42");
 
-        var eventDetailsCard = new EventDetailsCardComponent(Driver, Driver.FindElement(By.CssSelector(".event-main")));
-        Assert.IsTrue(eventDetailsCard.IsJoinRequestCancelled(), "Join request should not be sent initially.");
+        EventDetailsPage eventDetailsPage = new EventDetailsPage(Driver);
 
-        eventDetailsCard.ClickJoinEvent();
-        Assert.IsTrue(eventDetailsCard.IsJoinRequestSent(), "Join request should be sent after clicking Join Event.");
+        Assert.IsTrue(eventDetailsPage.EventDetailsCard.IsJoinRequestCancelled(), "Join request should not be sent initially.");
 
-        eventDetailsCard.ClickCancelRequest();
+        eventDetailsPage.EventDetailsCard.ClickJoinEvent();
+        Assert.IsTrue(eventDetailsPage.EventDetailsCard.IsJoinRequestSent(), "Join request should be sent after clicking Join Event.");
 
-        var cancelModal = new CancelJoiningEventModal(Driver, Driver.FindElement(By.XPath(".//app-warning-pop-up[@class='ng-star-inserted']")));
-        cancelModal.ClickYesButton();
+        eventDetailsPage.EventDetailsCard.ClickCancelRequest();
 
-        Assert.IsTrue(eventDetailsCard.IsJoinRequestCancelled(), "Join request should be cancelled after confirming cancellation.");
+        eventDetailsPage.CancelModal.ClickYesButton();
+
+        Assert.IsTrue(eventDetailsPage.EventDetailsCard.IsJoinRequestCancelled(), "Join request should be cancelled after confirming cancellation.");
 
     }
 }

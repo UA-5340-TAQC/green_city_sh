@@ -13,12 +13,14 @@ public class EventDetailsCardComponent : BaseComponent
     }
 
     private By SaveEventButton => By.CssSelector("div.save-join-event-block button.secondary-global-button:nth-of-type(1)");
-
     private By CancelRequestButton => By.CssSelector("div.save-join-event-block button.secondary-global-button:nth-of-type(2)");
-
     private By JoinEventButton => By.CssSelector("div.save-join-event-block button.primary-global-button");
-
     private By BackToEventsButton => By.XPath(".//div[@class='button-text']");
+    private By EventTitle => By.CssSelector(".event-title"); 
+    private By DateOnly => By.CssSelector("div.event-date-content > div:nth-child(1)");
+    private By TimeOnly => By.CssSelector("div.event-date-content > div:nth-child(3)");
+    private By EventLocation => By.CssSelector("div.event-location"); 
+    private By EventAuthor => By.CssSelector("div.event-author");
 
     public bool IsEventSaved()
     {
@@ -73,10 +75,43 @@ public class EventDetailsCardComponent : BaseComponent
     }
 
     public void ClickBackToEvents()
-{
-    var backButton = RootElement.FindElement(BackToEventsButton);
-    
-    IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-    js.ExecuteScript("arguments[0].click();", backButton);
-}
+    {
+        var backButton = RootElement.FindElement(BackToEventsButton);
+        
+        IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+        js.ExecuteScript("arguments[0].click();", backButton);
+    }
+
+    public string GetEventTitle()
+    {
+        return RootElement.FindElement(EventTitle).Text.Trim();
+    }
+
+    public string GetEventDate()
+    {
+        string date = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(DateOnly)).Text.Trim();
+        string time = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(TimeOnly)).Text.Trim();
+
+        return $"{date} | {time}"; 
+    }
+
+    public string GetEventLocation()
+    {
+        return RootElement.FindElement(EventLocation).Text.Trim();
+    }
+
+    public string GetEventAuthor()
+    {
+        return RootElement.FindElement(EventAuthor).Text.Trim();
+    }
+
+    public string GetEventInfo()
+    {
+        string title = GetEventTitle();
+        string date = GetEventDate();
+        //string location = GetEventLocation();
+        string author = GetEventAuthor();
+
+        return $"Title: {title}\nDate: {date}\nAuthor: {author}";
+    }
 }

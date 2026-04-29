@@ -2,6 +2,7 @@ using AngleSharp.Dom.Events;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Modals;
+using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Tests;
@@ -12,13 +13,11 @@ public class EventPageTests : BaseTest
 {
     protected override void OnSetup()
     {
-        Driver!.Manage().Window.Maximize();
-
         NavigateToBaseUrl();
 
-        var header = new HeaderComponent(Driver, Driver!.FindElement(By.CssSelector("header")));
+        HomePage homePage = new HomePage(Driver!);
         
-        header.ChangeLanguage("En");
+        homePage.Header.ChangeLanguage("En");
     }
 
     [Test]
@@ -30,22 +29,22 @@ public class EventPageTests : BaseTest
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events");
 
-        var eventList = new EventsListComponent(Driver, Driver.FindElement(By.CssSelector(".event-list")));
-        var eventCard = eventList.GetEventCardByIndex(1);
+        EventsPage eventsPage = new EventsPage(Driver);
+        var eventCard = eventsPage.EventList.GetEventCardByIndex(1);
 
         eventCard.ClickMore();
 
         Assert.That(Driver!.Url, Is.Not.EqualTo(BaseUrl + "/events"));
 
-        var eventDetailsCard = new EventDetailsCardComponent(Driver, Driver.FindElement(By.XPath(".//div[@class='event ng-star-inserted']")));
-        eventDetailsCard.ClickJoinEvent();
+        EventDetailsPage eventDetailsPage = new EventDetailsPage(Driver);
+        eventDetailsPage.EventDetailsCard.ClickJoinEvent();
 
         var signInModal = SignInModalComponent.WaitAndCreate(Driver);
         signInModal.CloseModal();
 
-        Assert.IsTrue(eventDetailsCard.IsJoinEventButtonVisible(), "Join button should be visible after closing sign-in modal.");
+        Assert.IsTrue(eventDetailsPage.EventDetailsCard.IsJoinEventButtonVisible(), "Join button should be visible after closing sign-in modal.");
 
-        eventDetailsCard.ClickBackToEvents();
+        eventDetailsPage.EventDetailsCard.ClickBackToEvents();
 
         Assert.That(Driver!.Url, Is.EqualTo(BaseUrl + "/events"));
     }
