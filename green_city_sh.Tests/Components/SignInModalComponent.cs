@@ -55,17 +55,19 @@ public class SignInModalComponent : BaseComponent
     private static readonly By CloseButtonLocator = By.CssSelector("a.close-modal-window");
     private static readonly By ForgotPasswordLocator = By.XPath(".//a[contains(text(), 'Forgot password')]");
     private static readonly By SignUpLinkLocator = By.XPath(".//a[contains(text(), 'Sign up')]");
+    private static readonly By EmailErrorLocator = By.CssSelector("#email-err-msg div");
     private static readonly By ErrorMessageLocator = By.CssSelector(".alert-general-error");
 
     /// <summary>
     /// Clears the email field and types the given email address.
     /// </summary>
     /// <param name="email">Email address to enter.</param>
-    public void EnterEmail(string email)
+    public SignInModalComponent EnterEmail(string email)
     {
         var input = RootElement.FindElement(EmailInputLocator);
         input.Clear();
         input.SendKeys(email);
+        return this;
     }
 
     /// <summary>
@@ -77,7 +79,7 @@ public class SignInModalComponent : BaseComponent
     /// <exception cref="NoSuchElementException">
     /// Thrown if neither password nor text input is found inside the modal
     /// </exception>
-    public void EnterPassword(string password)
+    public SignInModalComponent EnterPassword(string password)
     {
         var inputs = RootElement.FindElements(PasswordInputLocator);
         if (inputs.Count == 0)
@@ -97,6 +99,7 @@ public class SignInModalComponent : BaseComponent
 
         passwordInput.Click();
         passwordInput.SendKeys(password);
+        return this;
     }
 
     /// <summary>
@@ -117,6 +120,11 @@ public class SignInModalComponent : BaseComponent
                 return btn.Enabled && btn.Displayed;
             });
         RootElement.FindElement(SignInButtonLocator).Click();
+    }
+
+    public void ClickSignInAndWaitClose()
+    {
+        ClickSignIn();
         wait.Until(ExpectedConditions.StalenessOf(RootElement));
     }
 
@@ -198,14 +206,19 @@ public class SignInModalComponent : BaseComponent
     /// <returns></returns>
     public string GetErrorMessage()
     {
-        var error = wait.Until(_ =>
+        var error = wait.Until(driver =>
         {
-            var elements = RootElement.FindElements(ErrorMessageLocator);
-            return elements.FirstOrDefault(e => e.Displayed);
+            var element = RootElement.FindElement(ErrorMessageLocator);
+            return element.Displayed ? element : null;
         });
 
-        return error?.Text.Trim()
-            ?? throw new WebDriverTimeoutException("Error message was not displayed.");
+        return error.Text.Trim();
+    }
+
+    public string GetEmailErrorMessage() {
+        WaitUntilElementVisibleBy(EmailErrorLocator);
+        return RootElement.FindElement(EmailErrorLocator).Text.Trim();
     }
 
 }
+

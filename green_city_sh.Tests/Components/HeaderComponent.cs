@@ -10,6 +10,7 @@ public class HeaderComponent: BaseComponent
     private By LanguageDropdown => By.CssSelector(".header_lang-switcher-wrp");
     private By LanguageDropdownOptions => By.CssSelector(".header_lang-switcher-wrp li");
     private By SignInLink => By.CssSelector(".header_sign-in-link");
+    private By SignInModalRootLocator = By.CssSelector("app-auth-modal");
     private By SignUpLink => By.CssSelector(".header_sign-up-btn");
     private By BookmarkBtn => By.CssSelector(".bookmark-icon");
     private By NotificationsBtn => By.CssSelector(".notification-icon");
@@ -73,10 +74,12 @@ public class HeaderComponent: BaseComponent
         var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
         return hasProfile && !hasSignIn;
     }
-    public void ClickSignIn()
+    public SignInModalComponent ClickSignIn()
     {
         var signInLink = RootElement.FindElement(SignInLink);
         signInLink.Click();
+        var signInModal = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(SignInModalRootLocator));
+        return new SignInModalComponent(driver, signInModal);
     }
     public void ClickSignUp()
     {
