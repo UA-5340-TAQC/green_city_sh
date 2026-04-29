@@ -20,4 +20,10 @@ public class PrivacySettingsComponent : BaseComponent
         var dropdown = new DropDownComponent(driver, By.TagName("body"));
         dropdown.ClickDropDownOptionByPartialName(value);
     }
+    public string GetSelectedPrivacyValue(string category)
+    {
+        return FindElement(PrivacyDropdown(category)).Text.Trim();
+    }
+
 }
+
