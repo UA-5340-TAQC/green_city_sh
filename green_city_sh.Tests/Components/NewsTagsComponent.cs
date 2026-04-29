@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace green_city_sh.Tests.Components;
 
@@ -23,21 +24,83 @@ public class NewsTagsComponent : TagsComponent
 
     public void SelectTag(string name)
     {
-        
+        var tagButton = RootElement.FindElement(TagButtonByName(name));
+        tagButton.Click();
+        wait.Until(driver => tagButton.GetAttribute("class").Contains("global-tag-clicked"));
     }
 
     public void SelectTags(params string[] tags)
     {
-        
+        foreach (var tag in tags)
+        {
+            SelectTag(tag);
+        }
+    }
+    public void SelectTagWithRealClick(string name)
+    {
+        var allTagButtons = RootElement.FindElements(TagButtons);
+
+        IWebElement targetButton = null;
+        foreach (var button in allTagButtons)
+        {
+            var tagText = button.FindElement(By.CssSelector(".text")).Text.Trim();
+            if (tagText.Equals(name, StringComparison.OrdinalIgnoreCase))
+            {
+                targetButton = button;
+                break;
+            }
+        }
+
+        if (targetButton == null)
+            throw new NoSuchElementException($"Tag '{name}' not found");
+
+        var tagLink = targetButton.FindElement(By.CssSelector("a.global-tag"));
+
+        var actions = new Actions(driver);
+        actions.MoveToElement(tagLink)
+               .ClickAndHold()
+               .Release()
+               .Perform();
     }
 
     public bool IsTagSelected(string name)
     {
-               return false;
+        var elements = RootElement.FindElements(SelectedTagByName(name));
+        return elements.Count > 0;
     }
 
     public int GetSelectedTagsCount()
     {
-               return 0;
+        return RootElement.FindElements(SelectedTags).Count;
+    }
+
+    public void ClearAllFilters()
+    {
+        while (true)
+        {
+            var selectedTags = RootElement.FindElements(SelectedTags);
+            if (selectedTags.Count == 0) break;
+
+            selectedTags[0].Click();
+            wait.Until(driver =>
+                RootElement.FindElements(SelectedTags).Count < selectedTags.Count);
+        }
+    }
+
+    /// <summary>
+    /// Returns a list of the names of all available tags on the page.
+    /// </summary>
+    public List<string> GetAllAvailableTags()
+    {
+        var tagButtons = RootElement.FindElements(TagButtons);
+        var tags = new List<string>();
+
+        foreach (var button in tagButtons)
+        {
+            var tagName = button.FindElement(By.CssSelector(".text")).Text.Trim();
+            tags.Add(tagName);
+        }
+
+        return tags;
     }
 }

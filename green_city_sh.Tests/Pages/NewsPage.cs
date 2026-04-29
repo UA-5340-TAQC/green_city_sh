@@ -7,6 +7,7 @@ public class NewsPage : BasePage
 {
     public NewsTopBarComponent TopBar { get;}
     public NewsFilterSelectionComponent Filters { get;  }
+    public NewsTagsComponent TagsFilter { get; }
     public NewsListComponent List { get;}
 
     private By TopBarRoot => By.CssSelector(".main-header");
@@ -17,6 +18,7 @@ public class NewsPage : BasePage
     {
         TopBar = new NewsTopBarComponent(driver, driver.FindElement(TopBarRoot));
         Filters = new NewsFilterSelectionComponent(driver, driver.FindElement(FilterRoot));
+        TagsFilter = new NewsTagsComponent(driver, driver.FindElement(FilterRoot));
         List = new NewsListComponent(driver, driver.FindElement(ListRoot));
     }
 
