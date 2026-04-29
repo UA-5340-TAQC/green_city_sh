@@ -116,7 +116,7 @@ public class SignUpModalComponent : BaseComponent
 
     public bool IsInvalidEmailMessageDisplayed()
     {
-        return RootElement.FindElements(InvalidEmailMessageLocator).Any();
+        return RootElement.FindElements(InvalidEmailMessageLocator).Any(e => e.Displayed);
     }
 
     public bool IsPasswordMismatchMessageDisplayed()
