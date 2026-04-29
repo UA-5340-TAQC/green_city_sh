@@ -24,7 +24,7 @@ public class InvalidPasswordTests : BaseTest
         const string invalidPassword = "wrongPassword123!";
 
         // Act
-        
+
         SignInModalComponent signInModal = _homePage!.Header.ClickSignIn();
 
         signInModal.EnterEmail(Configuration.TestEmail)

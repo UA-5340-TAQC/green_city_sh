@@ -11,7 +11,7 @@ public class MySpacePage : BasePage
     private readonly By _userLocation = By.CssSelector("app-profile-header .location");
     private readonly By _userRate = By.XPath("//div[contains(@class, 'rate')]/p");
     private readonly By _editProfileIcon = By.CssSelector("app-profile-header .edit-icon");
-    
+
     private readonly By _acquiredHabitsStat = By.XPath("//div[@class='chain']//p[contains(text(), 'acquired habits')]/preceding-sibling::p");
     private readonly By _habitsInProgressStat = By.XPath("//div[@class='chain']//p[contains(text(), 'habits in progress')]/preceding-sibling::p");
     private readonly By _publishedNewsStat = By.XPath("//div[@class='chain']//p[contains(text(), 'published news')]/preceding-sibling::p");
@@ -22,29 +22,29 @@ public class MySpacePage : BasePage
     private readonly By _myEventsTab = By.XPath("//div[@role='tab' and .//span[contains(text(), 'My Events')]]");
 
     private readonly By _addNewHabitButton = By.Id("create-button-new-habit");
-    private readonly By _welcomeMessage = By.XPath("//*[contains(text(), 'Hi Eco Friend')]"); 
+    private readonly By _welcomeMessage = By.XPath("//*[contains(text(), 'Hi Eco Friend')]");
 
     private readonly By _notificationBadge = By.CssSelector(".notification-icon div");
 
     private readonly By _factOfTheDayDescription = By.CssSelector("app-profile-cards .card-description");
     private readonly By _seeAllAchievementsLink = By.CssSelector("app-users-achievements .title-achievements a");
     private readonly By _seeAllFriendsLink = By.CssSelector("app-users-friends a.text-more");
-    
+
     public MySpacePage(IWebDriver driver) : base(driver)
     {
     }
 
-    
+
     public MyHabitsTabComponent SwitchToMyHabits()
     {
         var tabElement = wait.Until(ExpectedConditions.ElementToBeClickable(_myHabitsTab));
         tabElement.ClickWithRetry();
-        
+
         string panelId = tabElement.GetAttribute("aria-controls");
         By containerLocator = By.Id(panelId);
-        
+
         wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
-        
+
         return new MyHabitsTabComponent(driver, containerLocator);
     }
 
@@ -55,7 +55,7 @@ public class MySpacePage : BasePage
 
         string panelId = tabElement.GetAttribute("aria-controls");
         By containerLocator = By.Id(panelId);
-        
+
         wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
 
         return new MyNewsTabComponent(driver, containerLocator);
@@ -68,7 +68,7 @@ public class MySpacePage : BasePage
 
         string panelId = tabElement.GetAttribute("aria-controls");
         By containerLocator = By.Id(panelId);
-        
+
         wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
 
         return new MyEventsTabComponent(driver, containerLocator);
@@ -117,7 +117,7 @@ public class MySpacePage : BasePage
         {
             return driver.FindElement(_welcomeMessage).Text.Trim();
         }
-        return string.Empty; 
+        return string.Empty;
     }
 
     public string GetFactOfTheDayText()

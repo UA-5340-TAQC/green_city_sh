@@ -18,7 +18,7 @@ public class NewsFormComponent : BaseComponent
     private By TouchedInvalidTitleTextarea => By.CssSelector("textarea[formcontrolname='title'].ng-invalid.ng-touched");
 
     // ===== Source =====
-    private By SourceBlock => By.CssSelector(".source-block"); 
+    private By SourceBlock => By.CssSelector(".source-block");
     private By SourceWrapper => By.CssSelector(".source-block .title-wrapper");
     private By SourceInput => By.CssSelector("input[formcontrolname='source']");
     private By SourceFieldInfo => By.CssSelector(".source-block .field-info");
@@ -50,105 +50,105 @@ public class NewsFormComponent : BaseComponent
 
     public void EnterTitle(string title)
     {
-        
+
     }
 
     public void ClickTitleField()
     {
-        
+
     }
 
     public void FocusAndBlurTitleField()
     {
-        
+
     }
 
     public void SelectTags(params string[] tags)
     {
-        
+
         Tags.SelectTags(tags);
     }
 
     public void EnterSource(string url)
     {
-        
+
     }
 
     public void ClickSourceField()
     {
-        
+
     }
 
     public void EnterContent(string text)
     {
-               RichTextEditor.SetText(text);
+        RichTextEditor.SetText(text);
     }
 
     public void UploadImage(string filePath)
     {
-        
+
         ImageUpload.Upload(filePath);
     }
 
     public void ClickPublish()
     {
-        
+
     }
 
     public void ClickPreview()
     {
-        
+
     }
 
     public void ClickCancel()
     {
-        
+
     }
 
     public bool IsTitleFieldInvalid()
     {
-        
+
         return false;
     }
 
     public bool IsTitleFieldTouchedAndInvalid()
     {
-        
+
         return false;
     }
 
     public bool IsSourceFieldValid()
     {
-              return false;
+        return false;
     }
 
     public bool IsSourceFieldInvalid()
     {
-              return false;
+        return false;
     }
 
     public bool IsPublishButtonEnabled()
     {
-                return false;
+        return false;
     }
 
     public string GetTitleCharacterCount()
     {
-              return "";
+        return "";
     }
 
     public string GetSourceFieldInfoText()
     {
-                return "";
+        return "";
     }
 
     public string GetDate()
     {
-                return "";
+        return "";
     }
 
     public string GetAuthor()
     {
-                return "";
+        return "";
     }
 }

@@ -8,26 +8,26 @@ namespace green_city_sh.Tests.Pages;
 
 public class NewsDetailsPage : BasePage
 {
-    private CommentComponent? comment; 
+    private CommentComponent? comment;
     private DeleteCommentModal? deleteComment;
     private CommentInputComponent? commentInput;
     private NewsInfoComponent? newsInfo;
-    
-    
+
+
     private By CommentsLocator => By.XPath("//div[contains(@class, 'wrapper-comment')]");
     private By RepliesLocator => By.XPath("//div[contains(@class, 'wrapper-reply')]");
     private By ViewRepliesBtn => By.XPath("//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
     private By HideRepliesBtn => By.XPath("//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
-    private By CommentCounter => By.Id("total-count"); 
+    private By CommentCounter => By.Id("total-count");
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
     }
-    
+
     private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list/div"));
-    
+
     private DeleteCommentModal DeleteCommentModal => deleteComment ??= new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
     private CommentInputComponent CommentInput => commentInput ??= new CommentInputComponent(driver, By.XPath("//app-add-comment"));
-    private NewsInfoComponent NewsInfo => newsInfo ??= new  NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
+    private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
     public void OpenNewsDetailsPage(int newsId)
     {
         var currentUrl = driver.Url;
@@ -49,7 +49,7 @@ public class NewsDetailsPage : BasePage
         Comment.ClickEditCommentBtn();
         Comment.EnterEditComment(text);
         Comment.ClickSaveEditBtn();
-        return this; 
+        return this;
     }
 
     public NewsDetailsPage DeleteComment()
@@ -71,7 +71,7 @@ public class NewsDetailsPage : BasePage
         Comment.ClickSubmitReplyBtn();
         return this;
     }
-    
+
 
     public NewsDetailsPage ClickYesDelete()
     {
@@ -92,7 +92,8 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
-    public IList<CommentComponent> GetComments() {
+    public IList<CommentComponent> GetComments()
+    {
         IList<IWebElement> commentsList = driver.FindElements(CommentsLocator);
 
         IList<CommentComponent> comments = new List<CommentComponent>();
@@ -128,7 +129,7 @@ public class NewsDetailsPage : BasePage
         }
 
         return allReplies;
-    } 
+    }
 
     public IList<CommentComponent> GetAllCommentsWithReplies()
     {
@@ -140,7 +141,7 @@ public class NewsDetailsPage : BasePage
         }
         return allComments;
     }
-    
+
     public int WaitForCommentCounterVisible()
     {
         wait.Until(ExpectedConditions.ElementIsVisible(CommentCounter));
@@ -164,7 +165,7 @@ public class NewsDetailsPage : BasePage
         });
         return value;
     }
-    
+
     public int WaitForCommentCounterToChange(int previousValue)
     {
         wait.Until(ExpectedConditions.ElementIsVisible(CommentCounter));
@@ -184,8 +185,8 @@ public class NewsDetailsPage : BasePage
         });
         return newValue;
     }
-    
-    public string? GetLastComment() => 
+
+    public string? GetLastComment() =>
         Comment.GetLastComment();
 
     public string? GetLastReplyComment() =>
@@ -193,16 +194,16 @@ public class NewsDetailsPage : BasePage
     public bool IsEditedLabelDisplayed() =>
         Comment.IsEditedLabelDisplayed();
 
-    public string GetDateText() => 
+    public string GetDateText() =>
         NewsInfo.GetDateText();
-    
-    public bool IsViewReplyBtnDisplayed() => 
+
+    public bool IsViewReplyBtnDisplayed() =>
         Comment.IsViewBtnDisplayed();
-    
-    public bool IsHideReplyBtnDisplayed() => 
+
+    public bool IsHideReplyBtnDisplayed() =>
         Comment.IsHideBtnDisplayed();
 
     public string GetAttributeReplyButton() =>
         Comment.GetReplyButtonAttribute;
-    
+
 }

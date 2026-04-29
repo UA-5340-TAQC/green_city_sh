@@ -1,10 +1,12 @@
 using OpenQA.Selenium;
 using green_city_sh.Tests.Drivers;
+using NUnit.Allure.Core;
 using NUnit.Framework;
 
 namespace green_city_sh.Tests.Infrastructure;
 
 [TestFixture]
+[AllureNUnit]
 public abstract class BaseTest
 {
     protected IWebDriver? Driver { get; private set; }

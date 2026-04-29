@@ -215,7 +215,8 @@ public class SignInModalComponent : BaseComponent
         return error.Text.Trim();
     }
 
-    public string GetEmailErrorMessage() {
+    public string GetEmailErrorMessage()
+    {
         WaitUntilElementVisibleBy(EmailErrorLocator);
         return RootElement.FindElement(EmailErrorLocator).Text.Trim();
     }

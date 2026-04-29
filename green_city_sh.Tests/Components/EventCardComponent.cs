@@ -49,7 +49,7 @@ public class EventCardComponent : BaseComponent
     {
         string date = RootElement.FindElement(DateLocator).Text.Trim();
         string time = RootElement.FindElement(TimeLocator).Text.Trim();
-        return $"{date} {time}".Trim(); 
+        return $"{date} {time}".Trim();
     }
 
     public string GetLocation() => RootElement.FindElement(LocationLocator).Text.Trim();
@@ -65,18 +65,18 @@ public class EventCardComponent : BaseComponent
     public void ClickMore() => RootElement.FindElement(MoreButtonLocator).Click();
 
     public void ClickBookmark()
-{
-    var bookmarkButtons = RootElement.FindElements(BookmarkButtonLocator);
+    {
+        var bookmarkButtons = RootElement.FindElements(BookmarkButtonLocator);
 
-    if (bookmarkButtons.Count > 0)
-    {
-        bookmarkButtons[0].Click();
+        if (bookmarkButtons.Count > 0)
+        {
+            bookmarkButtons[0].Click();
+        }
+        else
+        {
+            throw new NoSuchElementException("Cannot click bookmark: This specific event card does not have a bookmark button.");
+        }
     }
-    else
-    {
-        throw new NoSuchElementException("Cannot click bookmark: This specific event card does not have a bookmark button.");
-    }
-}
 
     public void ClickJoinEvent()
     {
@@ -97,7 +97,7 @@ public class EventCardComponent : BaseComponent
 
     #region State Verification
 
-    public bool IsClosed() => 
+    public bool IsClosed() =>
         GetStatus().Equals("Closed", StringComparison.OrdinalIgnoreCase);
 
     public bool IsJoined()

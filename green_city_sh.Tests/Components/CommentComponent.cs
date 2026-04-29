@@ -17,7 +17,7 @@ public class CommentComponent : BaseComponent
     private By ReplyCommentBtn => By.XPath(".//button[contains(@class, 'reply')]");
     private By DateComment => By.XPath(".//*[contains(@class, 'comment-date-month')]");
     private By CommentText => By.XPath(".//*[@class='comment-text']");
-    
+
     private By ViewRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
     private By HideRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
 
@@ -26,9 +26,9 @@ public class CommentComponent : BaseComponent
     private By CancelEditBtn => By.XPath(".//button[contains(@class, 'cancel-edit')]");
     private By SaveEditBtn => By.XPath(".//button[contains(@class, 'save-edit')]");
     private By RepliesLocator => By.XPath(".//div[contains(@class, 'wrapper-reply')]");
-    
+
     private By EditedLabel => By.XPath(".//span[contains(@class, 'edited')]");
-    
+
 
     public CommentComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
@@ -42,7 +42,7 @@ public class CommentComponent : BaseComponent
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
-    
+
         wait.Until(d =>
         {
             var field = d.FindElement(ReplyCommentField);
@@ -60,7 +60,7 @@ public class CommentComponent : BaseComponent
 
     public void ClickDeleteCommentBtn() =>
         WaitAndClick(DeleteCommentBtn);
-    public void ClickViewRepliesBtn() => 
+    public void ClickViewRepliesBtn() =>
         WaitAndClick(ViewRepliesBtn);
     public void ClickHideRepliesBtn() =>
         WaitAndClick(HideRepliesBtn);
@@ -71,7 +71,7 @@ public class CommentComponent : BaseComponent
     public void ClickReplyCommentBtn()
     {
         WaitAndClick(ReplyCommentBtn);
-    } 
+    }
 
     public void ClickUploadImgBtn() =>
         WaitAndClick(UploadImgBtn);
@@ -105,19 +105,19 @@ public class CommentComponent : BaseComponent
         WaitUntilElementVisibleBy(ReplyCommentText);
         return RootElement.FindElements(ReplyCommentText).FirstOrDefault()?.Text;
     }
-        
+
 
     public bool IsEditedLabelDisplayed()
     {
         WaitUntilElementVisibleBy(EditedLabel);
-        return RootElement.FindElement(EditedLabel).Displayed; 
+        return RootElement.FindElement(EditedLabel).Displayed;
     }
-    public string GetReplyButtonAttribute => 
+    public string GetReplyButtonAttribute =>
         RootElement.FindElement(ReplyCommentBtn).GetAttribute("class");
 
-    public bool IsViewBtnDisplayed() => 
+    public bool IsViewBtnDisplayed() =>
         FindElements(ViewRepliesBtn).Any(e => e.Displayed);
-    public bool IsHideBtnDisplayed() => 
+    public bool IsHideBtnDisplayed() =>
         FindElements(HideRepliesBtn).Any(e => e.Displayed);
 }
 

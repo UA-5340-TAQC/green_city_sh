@@ -3,33 +3,33 @@
 namespace green_city_sh.Tests.Components;
 
 public class ProfileDetailsComponent : BaseComponent
-{ 
-        private By NameField => By.Id("name");
-        private By CityNameField => By.CssSelector("input[role='combobox']"); 
-        private By CredoField => By.Id("credo");
-        
-        public ProfileDetailsComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
-        {
-        }
+{
+    private By NameField => By.Id("name");
+    private By CityNameField => By.CssSelector("input[role='combobox']");
+    private By CredoField => By.Id("credo");
 
-        public ProfileDetailsComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
-        {
-        }
+    public ProfileDetailsComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
+    {
+    }
 
-        public void EnterName(string name)
-        {
-                WaitAndTypeText(NameField, name);
-        }
+    public ProfileDetailsComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
+    {
+    }
 
-        public void EnterCityName(string name)
-        {
-                WaitAndTypeText(CityNameField, name);
-                var dropdown = new DropDownComponent(driver, By.TagName("body"));
-                dropdown.ClickDropDownOptionByPartialName(name);
-        }
+    public void EnterName(string name)
+    {
+        WaitAndTypeText(NameField, name);
+    }
 
-        public void EnterCredo(string credo)
-        {
-                WaitAndTypeText(CredoField, credo);
-        }
+    public void EnterCityName(string name)
+    {
+        WaitAndTypeText(CityNameField, name);
+        var dropdown = new DropDownComponent(driver, By.TagName("body"));
+        dropdown.ClickDropDownOptionByPartialName(name);
+    }
+
+    public void EnterCredo(string credo)
+    {
+        WaitAndTypeText(CredoField, credo);
+    }
 }
