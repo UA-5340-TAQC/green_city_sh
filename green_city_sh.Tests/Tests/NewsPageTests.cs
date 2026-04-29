@@ -3,6 +3,8 @@ using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -20,11 +22,9 @@ public class NewsPageTests : BaseTest
 
         header.ChangeLanguage("En");
         header.ClickSignIn();
-
         var signInModal = SignInModalComponent.WaitAndCreate(Driver);
-        signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
 
-        Thread.Sleep(1000);
+        signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
 
         Driver.Navigate().GoToUrl("https://www.greencity.cx.ua/#/greenCity/news");
         newsPage = new NewsPage(Driver);
@@ -40,15 +40,15 @@ public class NewsPageTests : BaseTest
         var allTags = newsPage.TagsFilter.GetAllAvailableTags();
         Assert.That(allTags, Is.Not.Empty, "No tags found on the page");
 
-        int tagsToTestCount = Math.Min(6, allTags.Count);
-        var tagsToTest = allTags.Take(tagsToTestCount).ToList();
-
-        for (int i = 0; i < tagsToTest.Count; i++)
+        for (int i = 0; i < allTags.Count; i++)
         {
-            var tag = tagsToTest[i];
+            var tag = allTags[i];
 
             newsPage.TagsFilter.SelectTagWithRealClick(tag);
 
+            bool isSelected = newsPage.TagsFilter.IsTagSelected(tag);
+
+            newsPage.List.WaitForCardsToLoad();
             var displayedCards = newsPage.List.GetAllNewsCardsAsComponents();
 
             Assert.That(displayedCards, Is.Not.Empty,
