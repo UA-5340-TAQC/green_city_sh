@@ -424,3 +424,5 @@ FodyWeavers.xsd
 
 # Ignore local test settings and passwords
 *.runsettings
+#env
+.env
