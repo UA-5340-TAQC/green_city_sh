@@ -117,7 +117,7 @@ public class SignInModalComponent : BaseComponent
                 return btn.Enabled && btn.Displayed;
             });
         RootElement.FindElement(SignInButtonLocator).Click();
-        wait.Until(ExpectedConditions.InvisibilityOfElementLocated(RootLocator));
+        wait.Until(ExpectedConditions.StalenessOf(RootElement));
     }
 
     /// <summary>
