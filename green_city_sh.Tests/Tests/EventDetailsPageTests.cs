@@ -23,9 +23,7 @@ public class EventDetailsPageTests : BaseTest
 
         var signInModal = SignInModalComponent.WaitAndCreate(Driver);
 
-        signInModal.Login("greencitytest69@hotmail.com", "asweQA5346!)");
-
-        
+        signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
     }
 
     [Test]
@@ -65,7 +63,7 @@ public class EventDetailsPageTests : BaseTest
 
         Assert.IsNotNull(savedEventCard, "Saved event should be visible in bookmarks.");
 
-        savedEventCard.ClickFavouriteButton();
+        savedEventCard.ClickBookmark();
     }
 
     [Test]

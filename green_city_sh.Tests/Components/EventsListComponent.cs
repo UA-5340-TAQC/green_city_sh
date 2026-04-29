@@ -24,10 +24,10 @@ public class EventsListComponent : BaseComponent
         return driver.FindElements(AllEventCards).Count;
     }
 
-    public List<EventsCardComponent> GetAllEventCards()
+    public List<EventCardComponent> GetAllEventCards()
     {
         //Повернути список всіх карток подій
-        var eventCards = new List<EventsCardComponent>();
+        var eventCards = new List<EventCardComponent>();
         var eventCardsCount = GetEventCardsCount();
 
         for (int i = 0; i < eventCardsCount; i++)
@@ -38,11 +38,11 @@ public class EventsListComponent : BaseComponent
         return eventCards;
     }
 
-    public EventsCardComponent GetEventCardByIndex(int index)
+    public EventCardComponent GetEventCardByIndex(int index)
     {
         //Повернути картку події за індексом
         IWebElement eventCardRoot = RootElement.FindElement(EventCardByIndex(index));
-        return new EventsCardComponent(driver, eventCardRoot);
+        return new EventCardComponent(driver, eventCardRoot);
     }
 
     public bool IsEndPageMessageDisplayed()
@@ -51,15 +51,15 @@ public class EventsListComponent : BaseComponent
         var endPageMessages = driver.FindElements(EndPageMessage);
         return endPageMessages.Count > 0 && endPageMessages[0].Displayed;
     }
-    public EventsCardComponent GetSavedEventCard(string targetKey)
+    public EventCardComponent GetSavedEventCard(string targetKey)
     {
         var eventCards = GetAllEventCards();
 
         foreach (var card in eventCards)
         {
-            string title = card.GetEventTitle().Trim();
-            string date = card.GetEventDate().Trim();
-            string time = card.GetEventTime().Trim();
+            string title = card.GetTitle().Trim();
+            string date = card.GetDate().Trim();
+            string time = card.GetTime().Trim();
             string author = card.GetAuthorName().Trim();
 
             string currentCardKey = $"Title: {title}\nDate: {date} | {time}\nAuthor: {author}";

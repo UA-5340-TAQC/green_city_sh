@@ -33,7 +33,7 @@ public class EventPageTests : BaseTest
         var eventList = new EventsListComponent(Driver, Driver.FindElement(By.CssSelector(".event-list")));
         var eventCard = eventList.GetEventCardByIndex(1);
 
-        eventCard.ClickMoreButton();
+        eventCard.ClickMore();
 
         Assert.That(Driver!.Url, Is.Not.EqualTo(BaseUrl + "/events"));
 
