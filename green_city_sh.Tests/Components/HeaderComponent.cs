@@ -114,15 +114,42 @@ public class HeaderComponent: BaseComponent
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
-    public void SignOut()
+    public bool WaitUntilUserLoggedIn()
     {
-        UserProfileButtonClick();
-        var signOutBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SignOutOption));
-        signOutBtn.Click();
+        return wait.Until(_ =>
+        {
+            var profileButtons = driver.FindElements(UserProfileButton);
+            return profileButtons.Any(button => button.Displayed);
+        });
     }
 
-    public IWebElement GetSignOutOption()
+    public bool WaitUntilUserLoggedOut()
     {
-        return FindElement(SignOutOption);
+        return wait.Until(_ =>
+        {
+            var signInLinks = driver.FindElements(SignInLink);
+            return signInLinks.Any(link => link.Displayed);
+        });
     }
+
+    public void SignOut()
+    {
+        var profileButton = wait.Until(_ =>
+        {
+            var buttons = driver.FindElements(UserProfileButton);
+            return buttons.FirstOrDefault(button => button.Displayed && button.Enabled);
+        });
+
+        profileButton!.Click();
+
+        var signOutButton = wait.Until(_ =>
+        {
+            var buttons = driver.FindElements(SignOutOption);
+            return buttons.FirstOrDefault(button => button.Displayed && button.Enabled);
+        });
+
+        signOutButton!.Click();
+    }
+
 }
+
