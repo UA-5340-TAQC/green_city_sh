@@ -96,7 +96,7 @@ public class EventsPage : BasePage
         return EventList.GetEventCardByIndex(index);
     }
 
-    public List<EventsCardComponent> GetAllEventCards()
+    public List<EventCardComponent> GetAllEventCards()
     {
         //Повернути всі картки заходів
         return EventList.GetAllEventCards();

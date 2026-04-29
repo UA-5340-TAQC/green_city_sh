@@ -45,7 +45,7 @@ public class SignInModalComponent : BaseComponent
             ?? throw new WebDriverTimeoutException("Sign-in modal did not become visible.");
         return new SignInModalComponent(driver, modalRoot);
     }
-    
+
     private static readonly By TitleLocator = By.CssSelector("h1");
     private static readonly By EmailInputLocator = By.CssSelector("input[type='email']");
     private static readonly By PasswordInputLocator = By.CssSelector("input[type='password'], input[type='text']");
@@ -55,17 +55,19 @@ public class SignInModalComponent : BaseComponent
     private static readonly By CloseButtonLocator = By.CssSelector("a.close-modal-window");
     private static readonly By ForgotPasswordLocator = By.XPath(".//a[contains(text(), 'Forgot password')]");
     private static readonly By SignUpLinkLocator = By.XPath(".//a[contains(text(), 'Sign up')]");
+    private static readonly By EmailErrorLocator = By.CssSelector("#email-err-msg div");
     private static readonly By ErrorMessageLocator = By.CssSelector(".alert-general-error");
 
     /// <summary>
     /// Clears the email field and types the given email address.
     /// </summary>
     /// <param name="email">Email address to enter.</param>
-    public void EnterEmail(string email)
+    public SignInModalComponent EnterEmail(string email)
     {
         var input = RootElement.FindElement(EmailInputLocator);
         input.Clear();
         input.SendKeys(email);
+        return this;
     }
 
     /// <summary>
@@ -77,7 +79,7 @@ public class SignInModalComponent : BaseComponent
     /// <exception cref="NoSuchElementException">
     /// Thrown if neither password nor text input is found inside the modal
     /// </exception>
-    public void EnterPassword(string password)
+    public SignInModalComponent EnterPassword(string password)
     {
         var inputs = RootElement.FindElements(PasswordInputLocator);
         if (inputs.Count == 0)
@@ -91,12 +93,13 @@ public class SignInModalComponent : BaseComponent
                 break;
             }
         }
-        
+
         if (passwordInput == null)
             throw new NoSuchElementException("Visible password input was not found.");
-        
+
         passwordInput.Click();
         passwordInput.SendKeys(password);
+        return this;
     }
 
     /// <summary>
@@ -117,9 +120,14 @@ public class SignInModalComponent : BaseComponent
                 return btn.Enabled && btn.Displayed;
             });
         RootElement.FindElement(SignInButtonLocator).Click();
+    }
+
+    public void ClickSignInAndWaitClose()
+    {
+        ClickSignIn();
         wait.Until(ExpectedConditions.StalenessOf(RootElement));
     }
-    
+
     /// <summary>
     /// Clicks the "Forgot password?" link to navigate to password recovery.
     /// </summary>
@@ -148,7 +156,7 @@ public class SignInModalComponent : BaseComponent
                 }
             });
     }
-    
+
     /// <summary>
     /// Clicks the "Sign up" link at the bottom of the modal.
     /// </summary>
@@ -165,7 +173,7 @@ public class SignInModalComponent : BaseComponent
         EnterPassword(password);
         ClickSignIn();
     }
-    
+
     /// <summary>
     /// Returns the text content of the modal title element.
     /// </summary>
@@ -186,7 +194,7 @@ public class SignInModalComponent : BaseComponent
     {
         return driver.FindElements(RootLocator).Any(e => e.Displayed);
     }
-    
+
     /// <summary>
     /// Clicks the "Sign in with Google" button to initiate OAuth flow.
     /// </summary>
@@ -206,5 +214,11 @@ public class SignInModalComponent : BaseComponent
 
         return error.Text.Trim();
     }
+
+    public string GetEmailErrorMessage() {
+        WaitUntilElementVisibleBy(EmailErrorLocator);
+        return RootElement.FindElement(EmailErrorLocator).Text.Trim();
+    }
+
 }
 
