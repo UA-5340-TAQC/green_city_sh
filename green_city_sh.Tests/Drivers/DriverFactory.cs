@@ -5,6 +5,7 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
 
 namespace green_city_sh.Tests.Drivers;
 
@@ -29,12 +30,15 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
-        //new DriverManager().SetUpDriver(new ChromeConfig());
-        new DriverManager().SetUpDriver(new ChromeConfig(), "147.0.7727.117");
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
         options.AddArgument("--disable-popup-blocking");
+        if (Configuration.HeadlessMode)
+        {
+            options.AddArgument("--headless");
+            options.AddArgument("--window-size=1920,1080");
+        }
         return new ChromeDriver(options);
     }
 

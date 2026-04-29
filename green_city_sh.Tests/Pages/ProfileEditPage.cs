@@ -26,11 +26,11 @@ public class ProfileEditPage : BasePage
     private UploadImageModal UploadModal => 
         new UploadImageModal(driver,By.XPath("//div[@class='main-container']"));
     
-    public ProfileEditPage OpenProfileEditPage(int userId)
+    public void OpenProfileEditPage(int userId)
     {
-        var profileEditUrl = new System.Uri(new System.Uri(driver.Url), $"/profile/{userId}/edit").ToString();
-        Open(profileEditUrl);
-        return this; 
+        var currentUrl = driver.Url;
+        var uri = new Uri(currentUrl);
+        driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/profile/{userId}/edit");
     }
 
     public ProfileEditPage EnterName(string name)

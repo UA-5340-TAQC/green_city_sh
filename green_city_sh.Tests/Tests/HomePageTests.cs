@@ -22,9 +22,17 @@ public class HomePageTests : BaseTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(pageTitle, Is.Not.Empty, "Page title should not be empty");
-            Assert.That(pageTitle, Does.Contain("GreenCity"), "Page title should contain 'GreenCity'");
+            Assert.That(_homePage!.GetTitle(), Is.Not.Empty, "Page title should not be empty");
+            Assert.That(_homePage!.GetTitle(), Is.EqualTo("GreenCity — Build Eco-Friendly Habits Today"), "Page title should match the expected value");
         });
+    }
+
+    
+    
+     [TearDown]
+     public void TearDown()
+     {
+         Driver?.Quit();
     }
 }
 
