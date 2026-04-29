@@ -56,16 +56,18 @@ public class SignInModalComponent : BaseComponent
     private static readonly By ForgotPasswordLocator = By.XPath(".//a[contains(text(), 'Forgot password')]");
     private static readonly By SignUpLinkLocator = By.XPath(".//a[contains(text(), 'Sign up')]");
     private static readonly By EmailErrorLocator = By.CssSelector("#email-err-msg div");
+    private static readonly By ErrorMessageLocator = By.CssSelector(".alert-general-error");
 
     /// <summary>
     /// Clears the email field and types the given email address.
     /// </summary>
     /// <param name="email">Email address to enter.</param>
-    public void EnterEmail(string email)
+    public SignInModalComponent EnterEmail(string email)
     {
         var input = RootElement.FindElement(EmailInputLocator);
         input.Clear();
         input.SendKeys(email);
+        return this;
     }
 
     /// <summary>
@@ -77,7 +79,7 @@ public class SignInModalComponent : BaseComponent
     /// <exception cref="NoSuchElementException">
     /// Thrown if neither password nor text input is found inside the modal
     /// </exception>
-    public void EnterPassword(string password)
+    public SignInModalComponent EnterPassword(string password)
     {
         var inputs = RootElement.FindElements(PasswordInputLocator);
         if (inputs.Count == 0)
@@ -97,6 +99,7 @@ public class SignInModalComponent : BaseComponent
 
         passwordInput.Click();
         passwordInput.SendKeys(password);
+        return this;
     }
 
     /// <summary>
@@ -117,7 +120,12 @@ public class SignInModalComponent : BaseComponent
                 return btn.Enabled && btn.Displayed;
             });
         RootElement.FindElement(SignInButtonLocator).Click();
-        wait.Until(ExpectedConditions.InvisibilityOfElementLocated(RootLocator));
+    }
+
+    public void ClickSignInAndWaitClose()
+    {
+        ClickSignIn();
+        wait.Until(ExpectedConditions.StalenessOf(RootElement));
     }
 
     /// <summary>
@@ -193,11 +201,24 @@ public class SignInModalComponent : BaseComponent
     public void ClickGoogleSignIn() => RootElement.FindElement(GoogleButtonLocator).Click();
 
     /// <summary>
-    /// Returns the error message text for invalid email format.
+    /// Returns the text content of the error message element.
     /// </summary>
-    public string GetEmailErrorMessage()
+    /// <returns></returns>
+    public string GetErrorMessage()
     {
+        var error = wait.Until(driver =>
+        {
+            var element = RootElement.FindElement(ErrorMessageLocator);
+            return element.Displayed ? element : null;
+        });
+
+        return error.Text.Trim();
+    }
+
+    public string GetEmailErrorMessage() {
         WaitUntilElementVisibleBy(EmailErrorLocator);
         return RootElement.FindElement(EmailErrorLocator).Text.Trim();
     }
+
 }
+
