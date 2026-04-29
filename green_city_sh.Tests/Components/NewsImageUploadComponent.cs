@@ -30,19 +30,14 @@ public class NewsImageUploadComponent : ImageUploadComponent
     {
     }
 
-    public new void Upload(string filePath)
+    public bool IsDropZoneDisplayed()
     {
-        
-    }
-
-    public new bool IsDropZoneDisplayed()
-    {
-              return false;
+              return this.FindElement(DropZone).Displayed;
     }
 
     public bool IsBrowseDisplayed()
     {
-              return false;
+              return this.FindElement(BrowseLabel).Displayed;
     }
 
     public bool IsCropperDisplayed()

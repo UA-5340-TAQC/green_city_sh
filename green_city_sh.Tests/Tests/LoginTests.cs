@@ -11,6 +11,7 @@ using green_city_sh.Tests.Pages;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class LoginTests : BaseTest
 {
     private HomePage homePage = null!;
