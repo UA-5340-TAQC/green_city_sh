@@ -46,7 +46,7 @@ public abstract class BaseTest
         Driver?.Navigate().GoToUrl(BaseUrl);
     }
 
-    private void TakeScreenshot(string testName)
+    protected void TakeScreenshot(string testName)
     {
         try
         {

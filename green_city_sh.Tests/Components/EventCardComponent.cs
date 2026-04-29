@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using green_city_sh.Tests.Infrastructure;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
@@ -11,6 +13,8 @@ public class EventCardComponent : BaseComponent
     private By EventImageLocator => By.CssSelector("img.event-image");
 
     // Metadata & Info
+    private By ImageLocator => By.CssSelector("img.event-image");
+    private By CategoryLocator => By.CssSelector("ul.ul-eco-buttons span.tag-active");
     private By TagsLocator => By.CssSelector(".tag-active");
     private By DateLocator => By.CssSelector(".date-container .date");
     private By TimeLocator => By.CssSelector(".time");
@@ -23,6 +27,7 @@ public class EventCardComponent : BaseComponent
     // Action Buttons
     private By MoreButtonLocator => By.XPath(".//button[contains(text(), 'More')]");
     private By JoinButtonLocator => By.CssSelector(".event-button");
+    private By ActionButtonLocator => By.CssSelector(".secondary-global-button.m-btn");
 
     // Footer Stats
     private By PublicationDateLocator => By.CssSelector(".date p");
@@ -116,4 +121,38 @@ public class EventCardComponent : BaseComponent
 
     #endregion
 
+    public IWebElement GetImage() =>
+        RootElement.FindElement(ImageLocator);
+
+    public bool IsImageLoaded()
+    {
+        var image = GetImage();
+        return new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(drv => (bool)((IJavaScriptExecutor)drv)
+                .ExecuteScript(
+                    "return arguments[0].complete && arguments[0].naturalWidth > 0", image));
+    }
+    
+    public string GetImageSrc() =>
+    GetImage().GetAttribute("src") ?? string.Empty;
+    
+    public string GetCategoryText() =>
+    RootElement.FindElement(CategoryLocator).Text.Trim();
+    
+    public string GetDateText() =>
+    RootElement.FindElement(DateLocator).Text.Trim();
+    
+    public string GetTimeText() =>
+    RootElement.FindElement(TimeLocator).Text.Trim();
+    
+    public string GetStatusTest() =>
+    RootElement.FindElement(StatusLabelLocator).Text.Trim();
+    
+    public IReadOnlyList<string> GetActionButtonTexts() =>
+        RootElement.FindElements(ActionButtonLocator)
+            .Select(e => e.Text.Trim())
+            .ToList();
+    
+    public bool AreAllActionButtonsEnabled() =>
+        RootElement.FindElements(ActionButtonLocator).All(b => b.Enabled);
 }

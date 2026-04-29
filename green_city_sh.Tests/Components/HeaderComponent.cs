@@ -1,4 +1,6 @@
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
@@ -18,7 +20,8 @@ public class HeaderComponent: BaseComponent
     private By NotificationsOption => By.CssSelector("[aria-label='notifications']");
     private By CabinetOption => By.CssSelector("a[href*='/ubs/user/orders']");
     private By SignOutOption => By.CssSelector("[aria-label='sign-out']");
-    
+    public static By RootLocator { get; set; } = By.CssSelector("app-root app-header");
+
     public HeaderComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
@@ -70,9 +73,26 @@ public class HeaderComponent: BaseComponent
 
     public bool IsUserLoggedIn()
     {
-        var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
-        var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
-        return hasProfile && !hasSignIn;
+        try
+        {
+            var header = driver.FindElement(RootLocator);
+            var hasSignIn = header.FindElements(SignInLink).Count > 0;
+            var hasProfile = header.FindElements(UserProfileButton).Count > 0;
+            return hasProfile && !hasSignIn;
+        }
+        catch (StaleElementReferenceException)
+        {
+            var header = driver.FindElement(RootLocator);
+            var hasSignIn = header.FindElements(SignInLink).Count > 0;
+            var hasProfile = header.FindElements(UserProfileButton).Count > 0;
+            return hasProfile && !hasSignIn;
+        }
+    }
+    
+    public void WaitForUserLoggedIn()
+    {
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(_ => IsUserLoggedIn());
     }
     public SignInModalComponent ClickSignIn()
     {
