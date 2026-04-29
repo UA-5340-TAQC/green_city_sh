@@ -31,7 +31,6 @@ public class LoginTests : BaseTest
     public void AttemptToLoginWithInvalidEmail()
     {
         string invalidEmail = "invalid-email";
-        string password = "asweQA5346!)";
         string expectedErrorMessage = "Please check that your e-mail address is indicated correctly";
 
         header.ChangeLanguage("En");
@@ -42,7 +41,7 @@ public class LoginTests : BaseTest
         Assert.That(signInModal.IsModalVisible(), Is.True, "Sign in modal should be visible");
 
         signInModal.EnterEmail(invalidEmail);
-        signInModal.EnterPassword(password);
+        signInModal.EnterPassword(Configuration.TestPassword);
 
         string errorMessage = signInModal.GetEmailErrorMessage();
 

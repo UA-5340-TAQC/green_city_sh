@@ -21,16 +21,15 @@ public class InvalidPasswordTests : BaseTest
     public void Login_WithInvalidPassword_ShouldShowError()
     {
         // Arrange
-        const string email = "greencitytest69@hotmail.com";
         const string invalidPassword = "wrongPassword123!";
 
         // Act
-        _homePage!.Header.ClickSignIn();
-        SignInModalComponent signInModal = SignInModalComponent.WaitAndCreate(Driver!);
+        
+        SignInModalComponent signInModal = _homePage!.Header.ClickSignIn();
 
-        signInModal.EnterEmail(email);
-        signInModal.EnterPassword(invalidPassword);
-        signInModal.ClickSignIn();
+        signInModal.EnterEmail(Configuration.TestEmail)
+            .EnterPassword(invalidPassword)
+            .ClickSignIn();
 
         var actualErrorMessage = signInModal.GetErrorMessage();
 
