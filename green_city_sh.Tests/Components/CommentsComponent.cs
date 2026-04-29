@@ -87,11 +87,19 @@ public class CommentsComponent : BaseComponent
         return this;
     }
 
+    private static string GetSelectAllShortcut()
+    {
+        return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)
+            ? Keys.Command + "a"
+            : Keys.Control + "a";
+    }
+
     public CommentsComponent EnterComment(string text)
     {
         var input = RootElement.FindElement(CommentInputLocator);
         input.Click();
-        input.Clear();
+        input.SendKeys(GetSelectAllShortcut());
+        input.SendKeys(Keys.Backspace);
         input.SendKeys(text);
         return this;
     }
