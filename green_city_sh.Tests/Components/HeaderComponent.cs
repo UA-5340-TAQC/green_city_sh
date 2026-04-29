@@ -9,7 +9,8 @@ public class HeaderComponent: BaseComponent
     private By SearchBtn => By.CssSelector(".search-icon");
     private By LanguageDropdown => By.CssSelector(".header_lang-switcher-wrp");
     private By LanguageDropdownOptions => By.CssSelector(".header_lang-switcher-wrp li");
-    private By SignInLink => By.CssSelector(".ubs-header-sing-in-img");
+    private By SignInLink => By.CssSelector(".header_sign-in-link");
+    private By SignInModalRootLocator = By.CssSelector("app-auth-modal");
     private By SignUpLink => By.CssSelector(".header_sign-up-btn");
     private By BookmarkBtn => By.CssSelector(".bookmark-icon");
     private By NotificationsBtn => By.CssSelector(".notification-icon");
@@ -73,10 +74,12 @@ public class HeaderComponent: BaseComponent
         var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
         return hasProfile && !hasSignIn;
     }
-    public void ClickSignIn()
+    public SignInModalComponent ClickSignIn()
     {
         var signInLink = RootElement.FindElement(SignInLink);
         signInLink.Click();
+        var signInModal = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(SignInModalRootLocator));
+        return new SignInModalComponent(driver, signInModal);
     }
     public void ClickSignUp()
     {
@@ -93,22 +96,33 @@ public class HeaderComponent: BaseComponent
         var notificationsBtn = RootElement.FindElement(NotificationsBtn);
         notificationsBtn.Click();
     }
+    public HeaderComponent UserProfileButtonClick()
+    {
+        var userProfileBtn = FindElement(UserProfileButton);
+        userProfileBtn.Click();
+        return this;
+    }
     public void OpenNotificationsTab()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var notificationsBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(NotificationsOption));
         notificationsBtn.Click();
     }
     public void OpenPersonalCabinet()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
     public void SignOut()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var signOutBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SignOutOption));
         signOutBtn.Click();
+    }
+
+    public IWebElement GetSignOutOption()
+    {
+        return FindElement(SignOutOption);
     }
 }

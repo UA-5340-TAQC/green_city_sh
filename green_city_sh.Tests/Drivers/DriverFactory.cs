@@ -30,11 +30,15 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
-        new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
         options.AddArgument("--disable-popup-blocking");
+        if (Configuration.HeadlessMode)
+        {
+            options.AddArgument("--headless");
+            options.AddArgument("--window-size=1920,1080");
+        }
         return new ChromeDriver(options);
     }
 
