@@ -72,7 +72,6 @@ public class HeaderComponent: BaseComponent
         var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
         var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
         return hasProfile && !hasSignIn;
-
     }
     public void ClickSignIn()
     {
@@ -106,11 +105,42 @@ public class HeaderComponent: BaseComponent
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
+    public bool WaitUntilUserLoggedIn()
+    {
+        return wait.Until(_ =>
+        {
+            var profileButtons = driver.FindElements(UserProfileButton);
+            return profileButtons.Any(button => button.Displayed);
+        });
+    }
+
+    public bool WaitUntilUserLoggedOut()
+    {
+        return wait.Until(_ =>
+        {
+            var signInLinks = driver.FindElements(SignInLink);
+            return signInLinks.Any(link => link.Displayed);
+        });
+    }
+
     public void SignOut()
     {
-        RootElement.FindElement(UserProfileButton).Click();
-        var signOutBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SignOutOption));
-        signOutBtn.Click();
+        var profileButton = wait.Until(_ =>
+        {
+            var buttons = driver.FindElements(UserProfileButton);
+            return buttons.FirstOrDefault(button => button.Displayed && button.Enabled);
+        });
+
+        profileButton!.Click();
+
+        var signOutButton = wait.Until(_ =>
+        {
+            var buttons = driver.FindElements(SignOutOption);
+            return buttons.FirstOrDefault(button => button.Displayed && button.Enabled);
+        });
+
+        signOutButton!.Click();
     }
+
 }
 

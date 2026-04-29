@@ -421,4 +421,6 @@ FodyWeavers.xsd
 # Mac System Files
 .DS_Store
 **/.DS_Store
-/green_city_sh.Tests/Tests/RegistrationTests.cs
+
+# Environment files
+.env
