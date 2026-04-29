@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
@@ -105,7 +106,7 @@ public class CommentComponent : BaseComponent
         WaitUntilElementVisibleBy(ReplyCommentText);
         return RootElement.FindElements(ReplyCommentText).FirstOrDefault()?.Text;
     }
-        
+    
 
     public bool IsEditedLabelDisplayed()
     {
