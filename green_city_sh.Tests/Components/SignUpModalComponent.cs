@@ -133,5 +133,13 @@ public class SignUpModalComponent : BaseComponent
     {
         return RootElement.Displayed;
     }
+
+    public void FillRegistrationForm(string email, string userName, string password)
+    {
+        EnterEmail(email);
+        EnterUserName(userName);
+        EnterPassword(password);
+        EnterConfirmPassword(password);
+    }
 }
 
