@@ -29,3 +29,4 @@ public static class Configuration
         Environment.GetEnvironmentVariable("TEST_PASSWORD");
 
 }
+

@@ -39,9 +39,19 @@ public class EventsTopBarComponent : BaseComponent
         //Реалізувати клік по іконці "My events"
     }
 
+    public bool IsCreateEventButtonVisible()
+    {
+        return RootElement.FindElement(CreateEventButton).Displayed;
+    }
+
+    public bool IsCreateEventButtonEnable()
+    {
+        return RootElement.FindElement(CreateEventButton).Enabled;
+    }
+    
     public void ClickCreateEventButton()
     {
-        //Реалізувати клік по кнопці створення події
+        RootElement.FindElement(CreateEventButton).Click();
     }
 
     public void FillSearchInputField(string searchText)
