@@ -11,11 +11,11 @@ public class CreateUpdateEventPage : BasePage
     private By InitiativeTypeButton(string type) => By.XPath($"//button[contains(., '{type}')]");
 
     private By EventTypeDropdown => By.CssSelector("mat-select[formcontrolname='open']");
-    private By InviteDropdown => By.XPath("//mat-form-field[.//mat-label[contains(text(), 'Invite')]]//mat-select"); 
+    private By InviteDropdown => By.XPath("//mat-form-field[.//mat-label[contains(text(), 'Invite')]]//mat-select");
 
-    private By DescriptionEditor => By.CssSelector("textarea[formcontrolname='description'], .ql-editor"); 
+    private By DescriptionEditor => By.CssSelector("textarea[formcontrolname='description'], .ql-editor");
 
-    private By AddPictureButton => By.CssSelector("input[type='file']"); 
+    private By AddPictureButton => By.CssSelector("input[type='file']");
     private By UploadedImagePreview => By.CssSelector(".image-preview");
     private By ClosePictureIcon => By.CssSelector(".selected-delete");
     private By GreencityPictureItem(int index) => By.CssSelector($".images-container img:nth-child({index}), .gallery-item:nth-child({index})"); // a specific picture by index

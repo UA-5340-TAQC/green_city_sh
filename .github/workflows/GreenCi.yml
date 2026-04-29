@@ -77,6 +77,7 @@ jobs:
         with: 
           name: allure-results
           path: allure-results
+        if-no-files: warn
       - name: Test 
         run: echo "Testing..."
 
@@ -98,7 +99,9 @@ jobs:
       - name: Merge Allure results
         run: |
           mkdir -p allure-results
-          find allure-results-merged -type f \( -name "*.json" -o -name "*.png" \) -exec cp {} allure-results \;
+          if [ -d "allure-results-merged" ]; then
+            find allure-results-merged -type f \( -name "*.json" -o -name "*.png" \) -exec cp {} allure-results \;
+          fi
           
       - name: Get Allure history
         uses: actions/checkout@v4

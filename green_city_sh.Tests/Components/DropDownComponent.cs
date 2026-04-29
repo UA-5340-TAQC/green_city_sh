@@ -7,7 +7,7 @@ public class DropDownComponent : BaseComponent
 {
     private const string OptionNameNotFound = "Dropdown option not found";
     private readonly By _searchLocator;
-    
+
     //Default Locator For Angular dropdown options
     private static readonly By DefaultOptions =
         By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
@@ -33,12 +33,12 @@ public class DropDownComponent : BaseComponent
 
     private IWebElement GetDropDownOptionByPartialName(string partialName)
     {
-        if (string.IsNullOrWhiteSpace(partialName)) 
+        if (string.IsNullOrWhiteSpace(partialName))
             throw new ArgumentException("Option cannot be empty", nameof(partialName));
-        
+
         var options = GetOptionList();
 
-        return options.FirstOrDefault(option => 
+        return options.FirstOrDefault(option =>
                    option.Text.Contains(partialName, StringComparison.OrdinalIgnoreCase))
                ?? throw new NoSuchElementException($"{OptionNameNotFound}: {partialName}");
     }

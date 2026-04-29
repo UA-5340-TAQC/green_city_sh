@@ -23,10 +23,10 @@ public abstract class BasePage : Base
     {
         return driver.Url;
     }
-    
-    public void Refresh() => 
+
+    public void Refresh() =>
         driver.Navigate().Refresh();
-    
+
     public void WaitUntilPageLoads() =>
         wait.Until(d =>
             ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState")?.Equals("complete") == true

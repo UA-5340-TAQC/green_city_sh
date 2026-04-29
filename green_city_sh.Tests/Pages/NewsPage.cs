@@ -5,9 +5,9 @@ namespace green_city_sh.Tests.Pages;
 
 public class NewsPage : BasePage
 {
-    public NewsTopBarComponent TopBar { get;}
-    public NewsFilterSelectionComponent Filters { get;  }
-    public NewsListComponent List { get;}
+    public NewsTopBarComponent TopBar { get; }
+    public NewsFilterSelectionComponent Filters { get; }
+    public NewsListComponent List { get; }
 
     private By TopBarRoot => By.CssSelector(".main-header");
     private By FilterRoot => By.CssSelector(".ul-eco-buttons");

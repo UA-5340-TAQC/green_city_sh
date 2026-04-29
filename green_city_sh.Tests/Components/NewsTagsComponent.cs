@@ -23,21 +23,21 @@ public class NewsTagsComponent : TagsComponent
 
     public void SelectTag(string name)
     {
-        
+
     }
 
     public void SelectTags(params string[] tags)
     {
-        
+
     }
 
     public bool IsTagSelected(string name)
     {
-               return false;
+        return false;
     }
 
     public int GetSelectedTagsCount()
     {
-               return 0;
+        return 0;
     }
 }

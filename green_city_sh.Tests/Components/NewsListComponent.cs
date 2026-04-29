@@ -70,7 +70,7 @@ public class NewsListComponent : BaseComponent
 
     public void ScrollToLoad()
     {
-        
+
     }
 
 

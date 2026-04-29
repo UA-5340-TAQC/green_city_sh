@@ -11,7 +11,7 @@ public class NewsTopBarComponent : BaseComponent
     private By MyNewsIcon => By.XPath(".//img[@class='my-events-img']/..");
     private By CreateNewButton => By.CssSelector(".create button");
 
-    public NewsTopBarComponent (IWebDriver driver, By rootLocator) : base(driver, rootLocator)
+    public NewsTopBarComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
 
@@ -24,7 +24,7 @@ public class NewsTopBarComponent : BaseComponent
         var searchBtn = RootElement.FindElement(SearchIcon);
         searchBtn.Click();
     }
-    
+
     public void SearchNews(string searchTerm)
     {
         OpenSearch();
@@ -32,20 +32,20 @@ public class NewsTopBarComponent : BaseComponent
         searchInput.SendKeys(searchTerm);
         searchInput.SendKeys(Keys.Enter);
     }
-    
+
     public void OpenSavedNews()
     {
         var bookmarkBtn = RootElement.FindElement(BookmarkIcon);
         bookmarkBtn.Click();
     }
-    
+
     public void OpenMyNews()
     {
         var calendarBtn = RootElement.FindElement(MyNewsIcon);
         calendarBtn.Click();
     }
-    
-    
+
+
     public void ClickCreateNews()
     {
         var createBtn = RootElement.FindElement(CreateNewButton);
