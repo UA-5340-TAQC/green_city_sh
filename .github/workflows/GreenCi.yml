@@ -77,7 +77,7 @@ jobs:
         with: 
           name: allure-results
           path: allure-results
-        if-no-files: warn
+          if-no-files-found: warn
       - name: Test 
         run: echo "Testing..."
 
