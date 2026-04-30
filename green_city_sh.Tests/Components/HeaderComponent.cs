@@ -1,4 +1,6 @@
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
@@ -18,6 +20,8 @@ public class HeaderComponent: BaseComponent
     private By NotificationsOption => By.CssSelector("[aria-label='notifications']");
     private By CabinetOption => By.CssSelector("a[href*='/ubs/user/orders']");
     private By SignOutOption => By.CssSelector("[aria-label='sign-out']");
+    
+    private By UserName = By.CssSelector("#header_user-wrp .user-name");
     
     public HeaderComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
@@ -54,7 +58,7 @@ public class HeaderComponent: BaseComponent
         search.Click();
     }
 
-    public void ChangeLanguage(string langCode)
+    public HeaderComponent ChangeLanguage(string langCode)
     {
         var dropdown = RootElement.FindElement(LanguageDropdown);       
 
@@ -66,14 +70,29 @@ public class HeaderComponent: BaseComponent
             link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
         targetOption?.Click();
+        return this;
     }
 
     public bool IsUserLoggedIn()
     {
-        var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
-        var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
-        return hasProfile && !hasSignIn;
+        try
+        {
+            var userName = driver.FindElement(UserName);
+            return userName.Displayed && !string.IsNullOrWhiteSpace(userName.Text);
+        }
+        catch(StaleElementReferenceException)
+        {
+            return false;
+            
+        }
     }
+    
+    public void WaitForUserLoggedIn()
+    {
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(_ => IsUserLoggedIn());
+    }
+    
     public SignInModalComponent ClickSignIn()
     {
         var signInLink = RootElement.FindElement(SignInLink);
