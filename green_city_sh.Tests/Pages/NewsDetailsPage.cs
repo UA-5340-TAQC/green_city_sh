@@ -32,7 +32,7 @@ public class NewsDetailsPage : BasePage
     {
         var currentUrl = driver.Url;
         var uri = new Uri(currentUrl);
-        driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/events/{newsId}");
+        driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/{newsId}");
     }
 
     public NewsDetailsPage AddComment(string text)
