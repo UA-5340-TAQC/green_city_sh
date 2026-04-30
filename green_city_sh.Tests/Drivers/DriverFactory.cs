@@ -6,6 +6,7 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
 
 namespace green_city_sh.Tests.Drivers;
 
@@ -35,13 +36,11 @@ public static class DriverFactory
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
         options.AddArgument("--disable-popup-blocking");
-
-        var chromeBinary = Environment.GetEnvironmentVariable("CHROME_BINARY_PATH");
-        if (!string.IsNullOrWhiteSpace(chromeBinary))
+        if (Configuration.HeadlessMode)
         {
-            options.BinaryLocation = chromeBinary;
+            options.AddArgument("--headless");
+            options.AddArgument("--window-size=1920,1080");
         }
-
         return new ChromeDriver(options);
     }
 

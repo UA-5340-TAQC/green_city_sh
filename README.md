@@ -287,21 +287,15 @@ dotnet test --filter "FullyQualifiedName~HomePageTests.VerifyHomePageLoads"
 ### Environment Variables (Optional)
 
 Override defaults using environment variables:
+create file `.env` in project root (`green_city_sh.Tests/.env`):
 
 ```bash
-# Windows PowerShell
-$env:BASE_URL="https://www.greencity.cx.ua/#/greenCity"
-$env:BROWSER="Chrome"  # or Firefox, Edge
-$env:DEFAULT_TIMEOUT="15"
-$env:HEADLESS="false"
-
-# Windows CMD
-set BASE_URL=https://www.greencity.cx.ua/#/greenCity
-set BROWSER=Chrome
-
-# Linux/Mac
-export BASE_URL="https://www.greencity.cx.ua/#/greenCity"
-export BROWSER="Chrome"
+BASE_URL=https://www.greencity.cx.ua/#/greenCity
+BROWSER=Chrome
+DEFAULT_TIMEOUT=15
+HEADLESS=false
+TEST_EMAIL=test@hotmail.com
+TEST_PASSWORD=password123
 ```
 
 ### Configuration Class

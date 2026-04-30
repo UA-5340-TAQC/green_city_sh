@@ -85,13 +85,13 @@ public class EventsPage : BasePage
         //Приєднатися до заходу за індексом в списку
     }
 
-    public EventsCardComponent GetEventCardByIndex(int index)
+    public EventCardComponent GetEventCardByIndex(int index)
     {
         //Повернути картку заходу за індексом
         return EventList.GetEventCardByIndex(index);
     }
 
-    public List<EventsCardComponent> GetAllEventCards()
+    public List<EventCardComponent> GetAllEventCards()
     {
         //Повернути всі картки заходів
         return EventList.GetAllEventCards();
