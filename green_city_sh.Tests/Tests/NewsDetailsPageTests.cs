@@ -12,20 +12,20 @@ namespace green_city_sh.Tests.Tests;
 public class NewsDetailsPageTests : BaseTest
 {
     private NewsDetailsPage? newsDetailsPage;
-    private HeaderComponent? header;
+    private HomePage? homePage;
     
     protected override void OnSetup()
     {
-        Driver!.Manage().Window.Maximize();
         NavigateToBaseUrl();
-        header = new HeaderComponent(Driver, Driver!.FindElement(By.CssSelector("header")));
+
+        homePage = new HomePage(Driver!);
         
-        header.ChangeLanguage("En");
-        header.ClickSignIn();
-        var signInModal = SignInModalComponent.WaitAndCreate(Driver);
-        
+        homePage.Header.ChangeLanguage("En");
+        homePage.Header.ClickSignIn();
+
+        var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
+
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
-        newsDetailsPage = new NewsDetailsPage(Driver);
     }
     
     [Test]
@@ -35,12 +35,13 @@ public class NewsDetailsPageTests : BaseTest
     public void VerifyCommentsCount()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10326");
+        newsDetailsPage = new NewsDetailsPage(Driver!);
         
         Assert.Multiple(() =>
         {
             Assert.That(newsDetailsPage.GetComments().Count, Is.EqualTo(7), "There should be 7 comments in the list");
             Assert.That(newsDetailsPage.GetReplies().Count, Is.EqualTo(3), "The comment should have 3 replies");
-            Assert.That(newsDetailsPage.GetAllCommentsWithReplies().Count, Is.EqualTo(10), "The comment section should have 11 comments including replies");
+            Assert.That(newsDetailsPage.GetAllCommentsWithReplies().Count, Is.EqualTo(10), "The comment section should have 10 comments including replies");
         });
     }
 
@@ -53,6 +54,7 @@ public class NewsDetailsPageTests : BaseTest
     public void VerifyDeletingUserCommentAndCounterUpdates(string comment)
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
+        newsDetailsPage = new NewsDetailsPage(Driver!);
         var initialCount = newsDetailsPage.WaitForCommentCounterVisible();
         newsDetailsPage.AddComment(comment);
         var afterAdd = newsDetailsPage.WaitForCommentCounterToChange(initialCount);
@@ -90,8 +92,9 @@ public class NewsDetailsPageTests : BaseTest
     [Category ("Comment")]
     public void VerifyThatUserCanEditTheirOwnComment(string addText, string editText)
     {
-        Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
         
+        Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
+        newsDetailsPage = new NewsDetailsPage(Driver!);
         newsDetailsPage
             .AddComment(addText)
             .EditComment(editText);
@@ -115,6 +118,7 @@ public class NewsDetailsPageTests : BaseTest
     public void VerifyThatUserCanReplyToAnotherUserComment(string addText, string replyText)
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
+        newsDetailsPage = new NewsDetailsPage(Driver!);
         newsDetailsPage
             .AddComment(addText)
             .ReplyComment(replyText);
@@ -150,6 +154,7 @@ public class NewsDetailsPageTests : BaseTest
     public void VerifyPublicationDateIsDisplayedInAmericanFormat()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
+        newsDetailsPage = new NewsDetailsPage(Driver!);
         
         var dateEn = newsDetailsPage.GetDateText();
         Assert.That(dateEn, Is.Not.Null.And.Not.Empty);
@@ -164,9 +169,10 @@ public class NewsDetailsPageTests : BaseTest
     [Category ("Smoke")]
     public void VerifyPublicationDateIsDisplayedInUkrainianFormat()
     {
-        header = new HeaderComponent(Driver, Driver.FindElement(By.CssSelector("header")));
-        header.ChangeLanguage("Uk");
+        homePage = new HomePage(Driver!);
+        homePage.Header.ChangeLanguage("Uk");
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
+        newsDetailsPage = new NewsDetailsPage(Driver!);
         
         var dateUk = newsDetailsPage.GetDateText();
         Assert.That(dateUk, Is.Not.Null.And.Not.Empty);
