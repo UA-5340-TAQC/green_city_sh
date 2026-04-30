@@ -52,6 +52,14 @@ public class EventCardComponent : BaseComponent
         return $"{date} {time}".Trim(); 
     }
 
+    public string GetDate() => RootElement.FindElement(DateLocator).Text.Trim();
+    public string GetTime() => RootElement.FindElement(TimeLocator).Text.Trim();
+
+    public string GetAuthorName()
+    {
+        return RootElement.FindElement(AuthorNameLocator).Text.Trim();
+    }
+
     public string GetLocation() => RootElement.FindElement(LocationLocator).Text.Trim();
 
     public string GetStatus() => RootElement.FindElement(StatusLabelLocator).Text.Trim();

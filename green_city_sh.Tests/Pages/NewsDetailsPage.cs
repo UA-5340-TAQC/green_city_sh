@@ -203,6 +203,6 @@ public class NewsDetailsPage : BasePage
         Comment.IsHideBtnDisplayed();
 
     public string GetAttributeReplyButton() =>
-        Comment.GetReplyButtonAttribute;
+        Comment.GetReplyButtonAttribute();
     
 }
