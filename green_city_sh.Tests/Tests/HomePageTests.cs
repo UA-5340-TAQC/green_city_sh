@@ -4,6 +4,7 @@ using green_city_sh.Tests.Pages;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class HomePageTests : BaseTest
 {
     private HomePage? _homePage;
@@ -18,6 +19,8 @@ public class HomePageTests : BaseTest
     [Category("Smoke")]
     public void VerifyHomePageLoads()
     {
+        var pageTitle = _homePage!.GetTitle();
+
         Assert.Multiple(() =>
         {
             Assert.That(_homePage!.GetTitle(), Is.Not.Empty, "Page title should not be empty");
@@ -25,11 +28,13 @@ public class HomePageTests : BaseTest
         });
     }
 
-    
-    
-     [TearDown]
-     public void TearDown()
-     {
-         Driver?.Quit();
+
+
+    [TearDown]
+    public new void TearDown()
+    {
+        Driver?.Quit();
     }
 }
+
+

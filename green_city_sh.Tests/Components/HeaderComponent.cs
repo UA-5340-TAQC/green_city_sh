@@ -1,8 +1,10 @@
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
-public class HeaderComponent: BaseComponent
+public class HeaderComponent : BaseComponent
 {
     private By HeaderLogo => By.CssSelector(".header_logo");
     private By NavigationLinks => By.CssSelector(".header_navigation-menu-left a");
@@ -10,6 +12,7 @@ public class HeaderComponent: BaseComponent
     private By LanguageDropdown => By.CssSelector(".header_lang-switcher-wrp");
     private By LanguageDropdownOptions => By.CssSelector(".header_lang-switcher-wrp li");
     private By SignInLink => By.CssSelector(".header_sign-in-link");
+    private By SignInModalRootLocator = By.CssSelector("app-auth-modal");
     private By SignUpLink => By.CssSelector(".header_sign-up-btn");
     private By BookmarkBtn => By.CssSelector(".bookmark-icon");
     private By NotificationsBtn => By.CssSelector(".notification-icon");
@@ -17,7 +20,9 @@ public class HeaderComponent: BaseComponent
     private By NotificationsOption => By.CssSelector("[aria-label='notifications']");
     private By CabinetOption => By.CssSelector("a[href*='/ubs/user/orders']");
     private By SignOutOption => By.CssSelector("[aria-label='sign-out']");
-    
+
+    private By UserName = By.CssSelector("#header_user-wrp .user-name");
+
     public HeaderComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
@@ -38,7 +43,7 @@ public class HeaderComponent: BaseComponent
 
         var allLinks = RootElement.FindElements(NavigationLinks);
 
-        var targetLink = allLinks.FirstOrDefault(link => 
+        var targetLink = allLinks.FirstOrDefault(link =>
             link.Text.Contains(tabName, StringComparison.OrdinalIgnoreCase));
 
         if (targetLink != null)
@@ -53,30 +58,48 @@ public class HeaderComponent: BaseComponent
         search.Click();
     }
 
-    public void ChangeLanguage(string langCode)
+    public HeaderComponent ChangeLanguage(string langCode)
     {
-        var dropdown = RootElement.FindElement(LanguageDropdown);       
+        var dropdown = RootElement.FindElement(LanguageDropdown);
 
         dropdown.Click();
 
         var options = RootElement.FindElements(LanguageDropdownOptions);
 
-        var targetOption = options.FirstOrDefault(link => 
+        var targetOption = options.FirstOrDefault(link =>
             link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
         targetOption?.Click();
+
+        return this;
     }
 
     public bool IsUserLoggedIn()
     {
-        var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
-        var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
-        return hasProfile && !hasSignIn;
+        try
+        {
+            var hasSignIn = driver.FindElements(SignInLink).Count > 0;
+            var hasProfile = driver.FindElements(UserProfileButton).Count > 0;
+            return hasProfile && !hasSignIn;
+        }
+        catch (StaleElementReferenceException)
+        {
+            return false;
+        }
     }
-    public void ClickSignIn()
+
+    public void WaitForUserLoggedIn()
+    {
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(_ => IsUserLoggedIn());
+    }
+
+    public SignInModalComponent ClickSignIn()
     {
         var signInLink = RootElement.FindElement(SignInLink);
         signInLink.Click();
+        var signInModal = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(SignInModalRootLocator));
+        return new SignInModalComponent(driver, signInModal);
     }
     public void ClickSignUp()
     {
@@ -93,22 +116,33 @@ public class HeaderComponent: BaseComponent
         var notificationsBtn = RootElement.FindElement(NotificationsBtn);
         notificationsBtn.Click();
     }
+    public HeaderComponent UserProfileButtonClick()
+    {
+        var userProfileBtn = FindElement(UserProfileButton);
+        userProfileBtn.Click();
+        return this;
+    }
     public void OpenNotificationsTab()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var notificationsBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(NotificationsOption));
         notificationsBtn.Click();
     }
     public void OpenPersonalCabinet()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
     public void SignOut()
     {
-        RootElement.FindElement(UserProfileButton).Click();
+        UserProfileButtonClick();
         var signOutBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SignOutOption));
         signOutBtn.Click();
+    }
+
+    public IWebElement GetSignOutOption()
+    {
+        return FindElement(SignOutOption);
     }
 }

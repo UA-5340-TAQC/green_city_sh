@@ -1,17 +1,20 @@
-﻿using green_city_sh.Tests.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
 public class DropDownComponent : BaseComponent
 {
     private const string OptionNameNotFound = "Dropdown option not found";
+
     private readonly By _searchLocator;
-
-
-    private static readonly By DefaultOptions =
-    By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option | .//div[contains(@class,'pac-container')]//div[contains(@class,'pac-item')]");
-
+    // Updated to global scope (removed leading dot)
+    private static readonly By DefaultOptions = By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
+    private readonly By _selectedValueLocator = By.CssSelector(".mat-mdc-select-value-text");
 
     public DropDownComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
@@ -25,27 +28,40 @@ public class DropDownComponent : BaseComponent
         _searchLocator = DefaultOptions;
     }
 
-
-    private IList<IWebElement> GetOptionList()
+    public string GetSelectedOptionText()
     {
-        return wait.Until(_ =>
+        // Polling the element until Angular populates the text (prevents empty string assertions)
+        var selectedValueElement = wait.Until(driver =>
         {
-            var elements = RootElement
-                .FindElements(_searchLocator)
-                .Where(option =>
-                {
-                    try
-                    {
-                        return option.Displayed && !string.IsNullOrWhiteSpace(option.Text);
-                    }
-                    catch (StaleElementReferenceException)
-                    {
-                        return false;
-                    }
-                })
-                .ToList();
+            try
+            {
+                var el = RootElement.FindElement(_selectedValueLocator);
+                return !string.IsNullOrWhiteSpace(el.Text) ? el : null;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return null; // Ignore stale elements and keep polling
+            }
+        });
 
-            return elements.Count > 0 ? elements : null;
+        return selectedValueElement!.Text.Trim();
+    }
+
+    private IList<IWebElement> GetOptionList() =>
+        wait.Until(drv =>
+        {
+            try
+            {
+                // Search globally and filter for interactable options
+                var elements = drv.FindElements(_searchLocator)
+                                  .Where(e => e.Displayed && e.Enabled)
+                                  .ToList();
+                return elements.Count > 0 ? elements : null;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return null; // Implicit protection against DOM changes during filtering
+            }
         })!;
     }
 
@@ -55,9 +71,6 @@ public class DropDownComponent : BaseComponent
             throw new ArgumentException("Option cannot be empty", nameof(partialName));
 
         var options = GetOptionList();
-
-        var optionTexts = string.Join(", ", options.Select(o => o.Text.Trim()));
-        TestContext.WriteLine($"Dropdown options: {optionTexts}");
 
         return options.FirstOrDefault(option =>
                    option.Text.Contains(partialName, StringComparison.OrdinalIgnoreCase))
@@ -74,5 +87,8 @@ public class DropDownComponent : BaseComponent
         GetDropDownOptionByPartialName(partialName).Click();
     }
 
-
+    public void Click()
+    {
+        wait.Until(ExpectedConditions.ElementToBeClickable(RootElement)).Click();
+    }
 }

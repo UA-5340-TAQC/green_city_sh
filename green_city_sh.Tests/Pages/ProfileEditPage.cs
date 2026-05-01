@@ -25,10 +25,8 @@ public class ProfileEditPage : BasePage
         new UploadAvatarComponent(driver, By.XPath("//div[@class='profile-avatar-wrapper']"));
     private UploadImageModal UploadModal =>
         new UploadImageModal(driver, By.XPath("//div[@class='main-container']"));
-    private By SuccessMessage =>
-        By.CssSelector("mat-snack-bar-container.success-snackbar");
 
-    public ProfileEditPage OpenProfileEditPage(int userId)
+    public void OpenProfileEditPage(int userId)
     {
         var currentUrl = driver.Url;
         var uri = new Uri(currentUrl);
@@ -100,30 +98,6 @@ public class ProfileEditPage : BasePage
         UploadModal.UploadImage(imagePath);
         UploadModal.ClickSaveImgButton();
         return this;
-    }
-
-    public string GetName()
-    {
-        return ProfileDetails.GetName();
-    }
-
-    public string GetCityName()
-    {
-        return ProfileDetails.GetCityName();
-    }
-
-    public string GetCredo()
-    {
-        return ProfileDetails.GetCredo();
-    }
-
-    public string GetSelectedPrivacyValue(string category)
-    {
-        return ProfilePrivacy.GetSelectedPrivacyValue(category);
-    }
-    public bool IsSaveButtonEnabled()
-    {
-        return FormActionButtons.IsSaveBtnEnabled();
     }
     public ProfileEditPage ToggleAllNotifications(bool enabled)
     {

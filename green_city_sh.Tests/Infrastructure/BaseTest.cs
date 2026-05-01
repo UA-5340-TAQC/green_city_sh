@@ -1,67 +1,72 @@
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using green_city_sh.Tests.Drivers;
+using NUnit.Framework;
+using Allure.Net.Commons;
+using System.IO;
 
-namespace green_city_sh.Tests.Infrastructure;
-
-[TestFixture]
-public abstract class BaseTest
+namespace green_city_sh.Tests.Infrastructure
 {
-    protected IWebDriver? Driver { get; private set; }
-    protected string BaseUrl { get; set; } = Configuration.BaseUrl;
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    [Allure.NUnit.AllureNUnit]
+    public abstract class BaseTest
     {
-        Driver = DriverFactory.CreateDriver(BrowserType.Chrome);
-        OnSetup();
-    }
+        protected IWebDriver? Driver { get; private set; }
+        protected string BaseUrl { get; set; } = Configuration.BaseUrl;
 
-    [TearDown]
-    public void TearDown()
-    {
-        OnTearDown();
-
-        if (TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
+        [SetUp]
+        public void Setup()
         {
-            TakeScreenshot(TestContext.CurrentContext.Test.Name);
+            Driver = DriverFactory.CreateDriver(BrowserType.Chrome);
+            OnSetup();
         }
 
-        Driver?.Quit();
-        Driver?.Dispose();
-    }
-
-    protected virtual void OnSetup()
-    {
-        // Override this method in derived test classes for custom setup
-    }
-
-    protected virtual void OnTearDown()
-    {
-        // Override this method in derived test classes for custom teardown
-    }
-
-    protected void NavigateToBaseUrl()
-    {
-        Driver?.Navigate().GoToUrl(BaseUrl);
-    }
-
-    private void TakeScreenshot(string testName)
-    {
-        try
+        [TearDown]
+        public void TearDown()
         {
-            var screenshot = ((ITakesScreenshot)Driver!).GetScreenshot();
-            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var fileName = $"{testName}_{timestamp}.png";
-            var screenshotPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Screenshots", fileName);
-
-            Directory.CreateDirectory(Path.GetDirectoryName(screenshotPath)!);
-            screenshot.SaveAsFile(screenshotPath);
-
-            TestContext.WriteLine($"Screenshot saved: {screenshotPath}");
+            try
+            {
+                if (TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
+                {
+                    TakeScreenshot(TestContext.CurrentContext.Test.Name);
+                }
+                OnTearDown();
+            }
+            catch (Exception ex)
+            {
+                TestContext.WriteLine($"Error during TearDown: {ex.Message}");
+            }
+            finally
+            {
+                Driver?.Quit();
+                Driver?.Dispose();
+            }
         }
-        catch (Exception ex)
+
+        protected virtual void OnSetup() { }
+        protected virtual void OnTearDown() { }
+
+        protected void NavigateToBaseUrl() => Driver?.Navigate().GoToUrl(BaseUrl);
+
+        protected void TakeScreenshot(string testName)
         {
-            TestContext.WriteLine($"Failed to take screenshot: {ex.Message}");
+            try
+            {
+                if (Driver == null) return;
+
+                var screenshot = ((ITakesScreenshot)Driver).GetScreenshot().AsByteArray;
+
+                // Найбільш універсальний спосіб для Allure C# адаптера:
+                AllureApi.AddAttachment(
+                    name: $"Screenshot_{testName}",
+                    type: "image/png",
+                    content: screenshot,
+                    fileExtension: ".png"
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Не вдалося прикріпити скріншот до Allure: {ex.Message}");
+            }
         }
     }
 }

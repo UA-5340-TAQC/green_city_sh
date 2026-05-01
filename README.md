@@ -9,6 +9,10 @@
 
 ## 📋 Overview
 
+<a href="https://ua-5340-taqc.github.io/green_city_sh/" target="_blank">
+    <img src="https://img.shields.io/badge/Allure%20Report-main-blue" alt="Allure Report"/>
+</a>
+
 **Professional Test Automation Framework** for the [**Green City**](https://www.greencity.cx.ua/#/greenCity) ecological platform. Built with **Selenium WebDriver**, **C# .NET 8**, and **NUnit**, implementing enterprise-grade design patterns for maintainable and scalable test automation.
 
 **Green City** is an eco-friendly social platform that promotes sustainable living, environmental awareness, and green habits. This framework ensures quality and reliability through comprehensive automated testing.

@@ -2,6 +2,7 @@
   <Folder Name="/root/">
     <File Path=".coderabbit.yaml" />
     <File Path=".github/workflows/conflict-labeler.yml" />
+    <File Path=".github/workflows/GreenCi.yml" />
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
