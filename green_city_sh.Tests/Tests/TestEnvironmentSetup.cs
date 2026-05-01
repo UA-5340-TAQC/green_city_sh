@@ -20,7 +20,9 @@ public class TestEnvironmentSetup
 
         if (!File.Exists(envPath))
         {
-            throw new FileNotFoundException($".env file not found at: {envPath}");
+            TestContext.WriteLine(
+                $".env file not found at: {envPath}"
+            );
         }
 
         Env.Load(envPath);

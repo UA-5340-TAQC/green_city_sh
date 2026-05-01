@@ -39,7 +39,7 @@ public class TC037_EventCardUITest : BaseTest
                                              ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
         NavigateToBaseUrl();
 
-        var header = new HeaderComponent(Driver!, HeaderComponent.RootLocator);
+        var header = new HomePage(Driver!).Header;
         header.ChangeLanguage("En");
         header.ClickSignIn();
 
