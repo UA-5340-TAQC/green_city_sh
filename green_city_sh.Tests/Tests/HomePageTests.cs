@@ -18,7 +18,7 @@ public class HomePageTests : BaseTest
     [Category("Smoke")]
     public void VerifyHomePageLoads()
     {
-        var pageTitle = _homePage!.getTitle();
+        var pageTitle = _homePage!.GetTitle();
 
         Assert.Multiple(() =>
         {
