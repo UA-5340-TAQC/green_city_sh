@@ -92,7 +92,7 @@ public class CreateEventPage : BasePage
         driver.FindElement(InviteDropdown).Click();
         wait.Until(drv => drv.FindElements(InviteOption).Any(e => e.Displayed));
         driver.FindElement(InviteOption).Click();
-        
+
         return this;
     }
 
@@ -123,8 +123,8 @@ public class CreateEventPage : BasePage
     public bool IsPublishButtonEnabled() => driver.FindElement(PublishButton).Enabled;
     public bool IsTitleErrorVisible() => driver.FindElements(TitleError).Any(e => e.Displayed);
     public bool IsDescriptionErrorVisible() => driver.FindElements(DescriptionError).Any();
-    
-    
+
+
     public string GetTitleErrorText()
     {
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))

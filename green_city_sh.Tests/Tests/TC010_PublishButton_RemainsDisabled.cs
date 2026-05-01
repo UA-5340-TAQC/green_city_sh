@@ -9,14 +9,14 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
 {
     private string TestEmail = null!;
     private string TestPassword = null!;
-    
+
     private const string ValidTitle = "Test Event";
     private const string ValidDescription = "Test description for the event";
     private const string ShortDescription = "MyTesting";
     private const string ValidStartTime = "23:30";
     private const string ValidEndTime = "23:59";
     private const string ValidOnlineLink = "https://meet.google.com/test";
-    
+
     private CreateEventPage? createEventPage;
 
     protected override void OnSetup()
@@ -34,15 +34,15 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
             .Header
             .ChangeLanguage("En")
             .ClickSignIn();
-        
+
         SignInModalComponent
             .WaitAndCreate(Driver!)
             .Login(Configuration.TestEmail, Configuration.TestPassword);
-        
+
         createEventPage = new CreateEventPage(Driver!);
         createEventPage.Open();
     }
-    
+
     protected override void OnTearDown()
     {
         try
@@ -64,13 +64,13 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
             .ClickOnlineCheckbox()
             .EnterOnlineLink(ValidOnlineLink);
     }
-    
+
     [Test]
     [Category("Smoke")]
     public void TC010_Step1_EnterValidTitle_TitleIsAccepted()
     {
         createEventPage!.EnterTitle(ValidTitle);
-        
+
         Assert.Pass("Valid title text was entered into the Title field.");
     }
 
@@ -81,7 +81,7 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
         createEventPage!.EnterTitle(ValidTitle);
         createEventPage.EnterDescription(ShortDescription);
         FillMandatoryFieldsExceptDescription();
-        
+
         Assert.That(
             createEventPage.IsDescriptionErrorVisible(),
             Is.True,
@@ -95,7 +95,7 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
         createEventPage!.EnterTitle(ValidTitle);
         createEventPage.EnterDescription(ShortDescription);
         FillMandatoryFieldsExceptDescription();
-        
+
         Assert.That(
             createEventPage.IsPublishButtonEnabled(),
             Is.False,
