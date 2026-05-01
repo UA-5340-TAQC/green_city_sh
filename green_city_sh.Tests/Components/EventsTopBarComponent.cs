@@ -20,32 +20,44 @@ public class EventsTopBarComponent : BaseComponent
 
     public string GetTopBarTitle()
     {
-        //Реалізувати отримання тексту заголовка
         return "";
     }
-
-    public void ClickSearchIcon()
-    {
-        //Реалізувати клік по іконці пошуку
-    }
+    
+     public void ClickSearchIcon() => WaitAndClick(SearchIcon);
 
     public void ClickBookmarkIcon()
     {
-        //Реалізувати клік по іконці закладок
     }
 
     public void ClickMyEventsIcon()
     {
-        //Реалізувати клік по іконці "My events"
     }
 
+    public bool IsCreateEventButtonVisible()
+    {
+        return RootElement.FindElement(CreateEventButton).Displayed;
+    }
+
+    public bool IsCreateEventButtonEnable()
+    {
+        return RootElement.FindElement(CreateEventButton).Enabled;
+    }
+    
     public void ClickCreateEventButton()
     {
-        //Реалізувати клік по кнопці створення події
+        RootElement.FindElement(CreateEventButton).Click();
     }
 
     public void FillSearchInputField(string searchText)
     {
-        //Реалізувати введення тексту в поле пошуку
+        var searchInput = wait.Until(d => 
+        {
+            var element = RootElement.FindElement(SearchInputField);
+            return element.Displayed ? element : null;
+        });
+
+        searchInput.Clear();
+        searchInput.SendKeys(searchText);
+        searchInput.SendKeys(Keys.Enter);
     }
 }

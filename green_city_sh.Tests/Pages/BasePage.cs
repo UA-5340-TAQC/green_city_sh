@@ -7,8 +7,12 @@ namespace green_city_sh.Tests.Pages;
 
 public abstract class BasePage : Base
 {
+    private By HeaderRootLocator => By.XPath("//header[@aria-label='Welcome to header']");
+    
+    private HeaderComponent? header;
+    public HeaderComponent Header => header ??= new HeaderComponent(driver, HeaderRootLocator);
     protected BasePage(IWebDriver driver) : base(driver)
-    {
+    {   
     }
 
     public void Open(string url)
