@@ -1,57 +1,50 @@
-# 🌿 Green City Test Framework — Architectural & Code-Quality Audit
+# 🌿 Green City Test Framework — Architectural & Code-Quality Audit (v2)
 
-## Project Health Score: **5.5 / 10** — *Functional but structurally fragile*
+> **Audit date:** 2026-05-01 — re-run after `main` was updated with commits
+> `86a7201` (fix time), `97b1ccd` (fix), `196e6ab` (update), `3cd4e5b` (fix).
+> New test files added: `CreateEventButtonTest`, `LoginTests`, `RegistrationTests`,
+> `InvalidPasswordTests`, `TC001_AddCommentTests`, `TC037_EventCardUITest`.
+> New components: `DateTimePickerComponent`, `CommentComponent`, `NewsTagsComponent`,
+> `NewsImageUploadComponent`. Updated pages: `MySpacePage`, `CreateUpdateEventPage`.
 
-The framework has a solid conceptual skeleton: `Base → BasePage/BaseComponent → concrete POM classes`
-is the right pattern, `Configuration` cleanly centralises env-var reading, and `BaseTest` correctly
-owns the WebDriver lifecycle. However, a significant accumulation of critical bugs, anti-patterns,
-and incomplete implementations prevents this from being considered production-quality automation.
+## Project Health Score: **5 / 10** — *Still fragile; three new issues introduced*
+
+The framework backbone (`Base → BasePage/BaseComponent → POM`) remains sound.
+`Configuration` centralises env-var reading and `BaseTest` owns the WebDriver lifecycle correctly.
+However, the majority of issues identified in the first audit are unchanged, and three new
+problems were introduced by the latest commits.
 
 ---
 
 ## 🔴 Critical
 
-### 1. Double `Driver.Quit()` / Double-Dispose
+### C-1. Double `Driver.Quit()` / Double-Dispose — **UNCHANGED**
 
-**`HomePageTests`** and **`TC011_CreateEventTest`** both declare their own `[TearDown]` methods that
-call `Driver?.Quit()`. Because `BaseTest.TearDown()` *also* calls `Quit()` and `Dispose()`, the
-driver is torn down twice per test run, which produces `ObjectDisposedException` noise and obscures
-real failures.
+`HomePageTests` (line 33) and `TC011_CreateEventTest` (line 47) both declare their own
+`[TearDown]` methods that call `Driver?.Quit()`. `BaseTest.TearDown()` *also* calls `Quit()`
+and `Dispose()`, so the driver is torn down twice every test run, generating
+`ObjectDisposedException` noise and masking real failures.
 
-**Offending code (`HomePageTests.cs`, `TC011_CreateEventTest.cs`):**
+**Offending code:**
 ```csharp
+// HomePageTests.cs:33
 [TearDown]
-public void TearDown()       // NUnit sees TWO [TearDown] methods
+public new void TearDown()    // NUnit sees TWO [TearDown] methods
 {
-    Driver?.Quit();          // BaseTest already does this — double-dispose!
+    Driver?.Quit();            // BaseTest already does this!
 }
 ```
 
-**Fix:** Remove all `[TearDown]` overrides from derived test classes.  
-Move any cleanup logic into `OnTearDown()` instead:
-```csharp
-protected override void OnTearDown()
-{
-    // specific cleanup only; NEVER call Driver.Quit() here
-}
-```
+**Fix:** Remove both overrides. Move any per-class cleanup into `OnTearDown()` and never call
+`Driver.Quit()` there.
 
 ---
 
-### 2. `EventDetailsPage.RefreshPage()` Does Not Actually Refresh the Page
+### C-2. `EventDetailsPage.RefreshPage()` Navigates Away Instead of Refreshing — **UNCHANGED**
 
-`RefreshPage()` navigates back to `/events` and clicks the first available "More" button —
-identical behaviour to `OpenViaMoreButton()`. Any test calling `RefreshPage()` silently tests
-the **wrong** event.
-
-**Offending code (`EventDetailsPage.cs`):**
-```csharp
-public EventDetailsPage RefreshPage()
-{
-    driver.Navigate().GoToUrl($"{Configuration.BaseUrl}/events"); // navigates away!
-    // ... then clicks "More" on the FIRST event, not the previously opened one
-}
-```
+`RefreshPage()` is a verbatim copy of `OpenViaMoreButton()`. It navigates back to `/events`
+and opens the *first* available event — not the one that was open. `TC001_AddCommentTests`
+calls this and silently tests a different event after "refresh".
 
 **Fix:**
 ```csharp
@@ -65,49 +58,55 @@ public EventDetailsPage RefreshPage()
 
 ---
 
-### 3. Credential Env-Var Inconsistency in `CreateEventsTests`
+### C-3. Dead `GC_TEST_EMAIL` / `GC_TEST_PASSWORD` Properties in `CreateEventsTests` — **UNCHANGED**
 
-`CreateEventsTests` defines its own `GetRequiredEnv()` helper and declares `TestEmail`/`TestPassword`
-properties reading **`GC_TEST_EMAIL`** / **`GC_TEST_PASSWORD`** — variables never defined in CI or
-the `.env` template. The actual `PerformLogin()` call uses `Configuration.TestEmail` (`TEST_EMAIL`)
-instead. The private properties are dead code that will throw on any machine without the `GC_*` vars.
+`CreateEventsTests` declares two private properties that read `GC_TEST_EMAIL` and
+`GC_TEST_PASSWORD`, variables that are never set in CI or the `.env` template.
+The actual `PerformLogin()` call correctly uses `Configuration.TestEmail`/`TestPassword`.
+The two properties are dead code that will throw `InvalidOperationException` if ever referenced.
 
-**Offending code (`CreateEventsTests.cs`):**
-```csharp
-private static string TestEmail => GetRequiredEnv("GC_TEST_EMAIL");     // always throws in CI
-private static string TestPassword => GetRequiredEnv("GC_TEST_PASSWORD");
-
-private void PerformLogin(CreateUpdateEventPage page)
-{
-    signInModal.Login(Configuration.TestEmail, Configuration.TestPassword); // uses different vars
-}
-```
-
-**Fix:** Delete the local `GetRequiredEnv` helper and the duplicate properties;  
-use `Configuration.TestEmail` / `Configuration.TestPassword` everywhere.
+**Fix:** Delete the local `GetRequiredEnv` helper and the two unused properties.
 
 ---
 
-### 4. Hardcoded, Environment-Specific IDs in Tests
+### C-4. Redundant Local Credential Fields in `TC001_AddCommentTests` and `TC037_EventCardUITest` — **NEW**
 
-`EventDetailsPageTests` and `NewsDetailsPageTests` hardcode database record IDs and assert
-specific comment counts tied to a specific state of the staging database.
+Both files duplicate the credential-reading pattern that already exists in `Configuration`:
 
-**Offending code:**
 ```csharp
-Driver!.Navigate().GoToUrl(BaseUrl + "/events/42");       // EventDetailsPageTests
-Driver!.Navigate().GoToUrl(BaseUrl + "/news/10326");      // NewsDetailsPageTests
-Assert.That(newsDetailsPage.GetComments().Count, Is.EqualTo(7), ...); // breaks if anyone adds a comment
+// TC001_AddCommentTests.cs:12-15 — declared but NEVER used
+private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
+    ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
+private static string TestPassword = ...;
 ```
 
-**Fix:**  
-- Move IDs to `Configuration` (env vars) or a dedicated `TestData` class.
-- Replace exact-count assertions with `Is.GreaterThanOrEqualTo` where the count is not
-  the actual behaviour under test.
+`TC037_EventCardUITest` re-reads them in `OnSetup()` into *instance* fields, then passes
+those fields to `Login()` instead of using `Configuration.TestEmail`. If the pattern diverges,
+tests silently use stale values.
+
+**Fix:**
+- In `TC001_AddCommentTests`: delete the two static fields (they are completely unused).
+- In `TC037_EventCardUITest`: delete the instance fields; call `Configuration.TestEmail` /
+  `Configuration.TestPassword` directly.
 
 ---
 
-### 5. `CreateEventsTests.LocalTearDown()` Does Nothing — Data Pollution
+### C-5. `SMOKE_SEARCH_KEYWORD` Missing from CI Workflow — **NEW**
+
+`Configuration.SmokeSearchKeyword` throws `InvalidOperationException` when
+`SMOKE_SEARCH_KEYWORD` is not set. `EventsSearchTests.SearchByKeywordReturnsMatchingEvents`
+calls it in the test body. The CI workflow (`GreenCi.yml`) provides `TEST_EMAIL`,
+`TEST_PASSWORD`, `BASE_URL`, `BROWSER`, `DEFAULT_TIMEOUT`, `HEADLESS`, and `TEST_USER_ID`
+— but **not** `SMOKE_SEARCH_KEYWORD`. Every run of this test in CI throws before any
+assertion executes.
+
+**Fix:** Add `SMOKE_SEARCH_KEYWORD: ${{ secrets.SMOKE_SEARCH_KEYWORD }}` to the `env:` block
+of the `tests` job in `.github/workflows/GreenCi.yml`, and add the corresponding repository
+secret.
+
+---
+
+### C-6. `CreateEventsTests.LocalTearDown()` Is an Empty Stub — Data Pollution — **UNCHANGED**
 
 ```csharp
 [TearDown]
@@ -117,258 +116,288 @@ public void LocalTearDown()
 }
 ```
 
-Every test run leaves orphaned events on the shared staging environment. This contaminates
-search results for `EventsSearchTests`, `SearchTypeAndDateRangeTest`, etc., causing
-non-deterministic failures.
+Every run leaves orphaned events on the shared staging environment, contaminating results of
+`EventsSearchTests` and `SearchTypeAndDateRangeTest`.
 
-**Fix:** Implement cleanup — store the created event's title/ID in a field and delete it via
-the UI or API in `OnTearDown()`.
+**Fix:** Store the created event's title in a field during `Act`, then navigate to the event
+and delete it in `OnTearDown()`.
 
 ---
 
-### 6. Two Competing `[SetUpFixture]` Classes
+### C-7. Two Competing `[SetUpFixture]` Classes Load `.env` With Different Strategies — **UNCHANGED**
 
-`GlobalSetup.cs` (root namespace) and `TestEnvironmentSetup.cs` both call `Env.Load()`.
-NUnit runs both, with different path-resolution strategies; it is unclear which one wins
-if they discover different `.env` files.
+`GlobalSetup.cs` (root namespace) uses `Env.TraversePath().Load()` while
+`TestEnvironmentSetup.cs` constructs an absolute path relative to `TestContext.CurrentContext.TestDirectory`.
+NUnit runs both; the one that runs last wins, and the correct file is not guaranteed.
 
-**Fix:** Remove one `[SetUpFixture]` and standardise on a single `.env` loading strategy.
-`GlobalSetup` using `Env.TraversePath().Load()` is the more robust of the two.
+**Fix:** Remove `TestEnvironmentSetup`; keep `GlobalSetup` with `Env.TraversePath().Load()`.
 
 ---
 
 ## 🟡 Warning
 
-### 7. Mixing Implicit and Explicit Waits (Reliability Anti-Pattern)
-
-`DriverFactory` sets `ImplicitWait` to `DefaultTimeout` seconds, while every page and component
-also uses `WebDriverWait`. An explicit wait polling for element *absence* or a *condition* can
-take up to `implicit + explicit` seconds to time out, making test execution unpredictably slow.
-
-**Fix:** Set `ImplicitWait = TimeSpan.Zero` in `DriverFactory` and rely exclusively on explicit
-`WebDriverWait`.
+### W-1. `EventDetailsPageTests` and `NewsDetailsPageTests` — Hardcoded DB IDs and Exact Counts — **UNCHANGED**
 
 ```csharp
-// DriverFactory.cs — change this:
-driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Configuration.DefaultTimeout);
-// to:
-driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+Driver!.Navigate().GoToUrl(BaseUrl + "/events/42");    // EventDetailsPageTests
+Driver!.Navigate().GoToUrl(BaseUrl + "/news/10326");   // NewsDetailsPageTests
+Assert.That(newsDetailsPage.GetComments().Count, Is.EqualTo(7), ...); // brittle
 ```
+
+Any DB reset or comment added by another tester breaks these tests.
+
+**Fix:** Move IDs to `Configuration` / `TestData`. Replace equality assertions on counts with
+`Is.GreaterThanOrEqualTo` where the precise count is not the behaviour under test.
 
 ---
 
-### 8. `EventCardComponent` — Duplicate Locators and Duplicate Methods
+### W-2. `SearchTypeAndDateRangeTest` — Assertion Outside Conditional Guard — **NEW**
 
 ```csharp
-private By EventImageLocator => By.CssSelector("img.event-image"); // line 13
-private By ImageLocator      => By.CssSelector("img.event-image"); // line 16 — exact duplicate
-
-public string GetDate()     => RootElement.FindElement(DateLocator).Text.Trim();  // line 60
-public string GetDateText() => RootElement.FindElement(DateLocator).Text.Trim();  // line 150 — identical body
-
-public string GetTime()     => RootElement.FindElement(TimeLocator).Text.Trim();  // line 61
-public string GetTimeText() => RootElement.FindElement(TimeLocator).Text.Trim();  // line 153 — identical body
-
-public string GetStatus()     => RootElement.FindElement(StatusLabelLocator).Text.Trim(); // line 70
-public string GetStatusTest() => RootElement.FindElement(StatusLabelLocator).Text.Trim(); // line 156 — typo + identical
+if (eventsPage.EventsTopBar.IsSearchIconEnabled())
+{
+    searchResults = eventsPage.EventList.GetAllEventCards();
+}
+Assert.That(searchResults.Count, Is.GreaterThan(0), ...); // runs even when list is empty!
 ```
 
-**Fix:** Delete the duplicate members. Standardise on `GetDate`, `GetTime`, `GetStatus`,
-and `GetImage`.
+If the search icon is not enabled, `searchResults` remains an empty `List<EventCardComponent>`
+and the assertion fails for the wrong reason. The same empty-list check is duplicated inside
+the `if` block on the next line.
+
+**Fix:** Remove the conditional guard entirely (a search icon that is not enabled is itself a
+test failure), or move the `Assert` inside the `if` block and add an explicit failure outside.
 
 ---
 
-### 9. `BaseTest` Always Creates Chrome — `Configuration.Browser` Is Ignored
+### W-3. Implicit + Explicit Wait Combination — Reliability Anti-Pattern — **UNCHANGED**
 
-```csharp
-// BaseTest.cs
-Driver = DriverFactory.CreateDriver(BrowserType.Chrome); // hardcoded, ignores Configuration.Browser
-```
+`DriverFactory` sets `ImplicitWait = DefaultTimeout` (default 15 s). Every page and component
+also uses `WebDriverWait` for explicit waits. When an explicit wait polls for element
+*absence* or a negative condition, the effective timeout becomes `implicit + explicit` seconds,
+making failures take 30 s+ and producing misleading timing.
 
-`Configuration.Browser` and `DriverFactory`'s Firefox/Edge support are dead code.
-
-**Fix:**
-```csharp
-var browserType = Enum.Parse<BrowserType>(Configuration.Browser, ignoreCase: true);
-Driver = DriverFactory.CreateDriver(browserType);
-```
+**Fix:** Set `ImplicitWait = TimeSpan.Zero` in `DriverFactory`; rely exclusively on explicit waits.
 
 ---
 
-### 10. Component Scope Leakage — `driver.FindElements()` Inside Components
+### W-4. `EventCardComponent` — Duplicate Locators and Duplicate Methods — **UNCHANGED**
 
-`EventsListComponent`, `CommentsComponent`, and others use `driver.FindElements(...)` instead
-of `RootElement.FindElements(...)`. If the same CSS class appears outside the component root,
-the component picks up the wrong elements.
+| Duplicate pair | Lines |
+|---|---|
+| `EventImageLocator` vs `ImageLocator` | 13 & 16 — identical CSS selector |
+| `GetDate()` vs `GetDateText()` | 60 & 150 — identical bodies |
+| `GetTime()` vs `GetTimeText()` | 61 & 153 — identical bodies |
+| `GetStatus()` vs `GetStatusTest()` (typo) | 70 & 156 — identical bodies |
 
-**Offending code:**
-```csharp
-// EventsListComponent.cs
-public int GetEventCardsCount() => driver.FindElements(AllEventCards).Count; // leaks outside root
-
-// CommentsComponent.cs
-public int GetCommentCount() { var elements = driver.FindElements(CommentCountLocator); ... }
-```
-
-**Fix:** Replace `driver.FindElements(...)` → `RootElement.FindElements(...)` inside all components.
+**Fix:** Delete the duplicates. Standardise on `GetDate`, `GetTime`, `GetStatus`, and `EventImageLocator`.
 
 ---
 
-### 11. `NewsPageTests.OnSetup` — Hardcoded Production URL
+### W-5. `BaseTest` Always Creates Chrome — `Configuration.Browser` Is Ignored — **UNCHANGED**
+
+```csharp
+Driver = DriverFactory.CreateDriver(BrowserType.Chrome); // hardcoded
+```
+
+`Configuration.Browser` and `DriverFactory`'s Firefox/Edge branches are dead code.
+
+**Fix:** `Driver = DriverFactory.CreateDriver(Enum.Parse<BrowserType>(Configuration.Browser, true));`
+
+---
+
+### W-6. Component Scope Leakage — `driver.FindElements()` Inside Components — **UNCHANGED**
+
+`CommentsComponent` (`GetCommentCount`, `GetFirstCommentText`, `GetFirstCommentAuthor`,
+`IsCommentVisible`, `DeleteComment`) and `EventsListComponent` (`GetEventCardsCount`,
+`IsEndPageMessageDisplayed`) call `driver.FindElements()` instead of `RootElement.FindElements()`.
+
+If the same CSS selector appears outside the component's root, the methods return incorrect
+results.
+
+**Fix:** Replace `driver.FindElements(...)` with `RootElement.FindElements(...)` in all components.
+
+---
+
+### W-7. `NewsPageTests.OnSetup` — Hardcoded Production URL — **UNCHANGED**
 
 ```csharp
 Driver.Navigate().GoToUrl("https://www.greencity.cx.ua/#/greenCity/news"); // hardcoded!
 ```
 
-This ignores `Configuration.BaseUrl` and always targets production.
-
-**Fix:**
-```csharp
-Driver.Navigate().GoToUrl($"{Configuration.BaseUrl}/news");
-```
+**Fix:** `Driver.Navigate().GoToUrl($"{Configuration.BaseUrl}/news");`
 
 ---
 
-### 12. `HeaderComponent.WaitForUserLoggedIn()` Creates a Redundant `WebDriverWait`
+### W-8. `HeaderComponent.WaitForUserLoggedIn()` Allocates a Redundant `WebDriverWait` — **UNCHANGED**
 
 ```csharp
-public void WaitForUserLoggedIn()
-{
-    new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-        .Until(_ => IsUserLoggedIn()); // new allocation instead of reusing `this.wait`
-}
+new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+    .Until(_ => IsUserLoggedIn()); // should reuse `this.wait`
 ```
 
 **Fix:** `wait.Until(_ => IsUserLoggedIn());`
 
 ---
 
-### 13. `[Retry]` Applied to Stateful Tests
+### W-9. `[Retry]` Applied to Stateful (Write-Path) Tests — **UNCHANGED**
 
-Tests in `EventDetailsPageTests` and `EventPageTests` carry `[Retry(2)]` but perform write
-operations (save event, join event, click bookmark). If a test fails mid-way and retries, the
-DOM state is already mutated, producing false positives or cascading failures.
+`EventDetailsPageTests` uses `[Retry(2)]` on tests that save events, join events, and click
+bookmarks. A mid-test failure leaves the DOM in a mutated state; the retry then finds an
+unexpected state and either produces a false positive or a cascading failure.
 
-**Fix:** Remove `[Retry]` from write-path tests, or make them idempotent before adding it back.
+**Fix:** Remove `[Retry]` from all tests that perform write operations.
 
 ---
 
-### 14. Allure Integration Is Mostly a Stub
+### W-10. `NewsImageUploadComponent` — Four Stub Methods Always Return Hardcoded Values — **NEW**
+
+```csharp
+public bool IsCropperDisplayed()      => false;  // never queries the DOM
+public bool IsImagePreviewDisplayed() => false;  // never queries the DOM
+public void ClickCancel()             { }        // no-op
+public void ClickSubmit()             { }        // no-op
+```
+
+Any test relying on these methods will receive incorrect results or silently do nothing.
+
+**Fix:** Implement the four methods using the locators that are already declared in the class
+(`CropperBlock`, `CropperArea`, `CancelButton`, `SubmitButton`).
+
+---
+
+### W-11. Allure Integration Is a Stub — **UNCHANGED**
 
 `BaseTest` carries `[AllureNUnit]`, but no test method uses `[AllureFeature]`,
-`[AllureSuite]`, `[AllureSeverity]`, `[AllureStep]`, or `[AllureDescription]`.
-The Allure report is generated with only raw test names and no contextual metadata.
+`[AllureSeverity]`, `[AllureStep]`, or `[AllureDescription]`. The report contains only raw
+test names.
 
-**Fix:** Annotate all test methods with `[AllureSeverity]` and `[AllureFeature]`;
-wrap key actions with `[AllureStep]` in page/component methods.
+**Fix:** Annotate test methods with `[AllureSeverity]` and `[AllureFeature]`; add `[AllureStep]`
+to key page/component actions.
 
 ---
 
-### 15. Mixed NUnit Assertion Styles
+### W-12. Mixed NUnit Assertion Styles — **UNCHANGED**
 
-The codebase uses both the legacy API (`Assert.IsTrue`, `Assert.IsFalse`, `Assert.IsNotNull`)
-and the preferred constraint model (`Assert.That(x, Is.True)`).
+Legacy calls (`Assert.IsTrue`, `Assert.IsFalse`, `Assert.IsNotNull`) still appear in
+`EventDetailsPageTests`, `LoginTests`, and `EventPageTests`.
 
-**Fix:** Standardise on `Assert.That` throughout for consistency and better failure messages.
+**Fix:** Standardise on `Assert.That` throughout.
 
 ---
 
 ## 🔵 Optimization
 
-### 16. Two Page Classes for One Page: `CreateEventPage` vs `CreateUpdateEventPage`
+### O-1. Two Page Classes for One Page — `CreateEventPage` vs `CreateUpdateEventPage` — **UNCHANGED**
 
-Both classes model `/events/create-update-event` with overlapping locators (`TitleInput`,
-`StartTimeInput`, `EndTimeInput`, …). Any locator change requires two updates.
+Both model `/events/create-update-event` with overlapping locators. Any selector change needs
+two edits.
 
-**Fix:** Merge them into a single `CreateUpdateEventPage`, keeping the richer implementation.
+**Fix:** Delete `CreateEventPage`; migrate `TC011_CreateEventTest` to use `CreateUpdateEventPage`.
 
 ---
 
-### 17. Login Boilerplate Repeated in Every `OnSetup()`
+### O-2. Login Boilerplate Repeated Across Test Classes — **UNCHANGED**
 
-Ten test classes repeat the same 4–6 line login sequence:
+At least eight test classes (`EventDetailsPageTests`, `EventsSearchTests`, `SearchTypeAndDateRangeTest`,
+`CreateEventButtonTest`, `TC001_AddCommentTests`, `TC037_EventCardUITest`, `CreateEventsTests`,
+`TC011_CreateEventTest`) repeat the same 4-6 line login sequence.
+
+**Fix:** Extract an `AuthenticatedBaseTest` intermediate class.
+
+---
+
+### O-3. `CreateEventPage` Methods Allocate Fresh `WebDriverWait` Instances — **NEW**
+
+`SelectInvite()`, `ClickOnlineCheckbox()`, and `EnterOnlineLink()` each create a new
+`WebDriverWait` instead of using the inherited `wait` field from `Base`:
 
 ```csharp
-homePage.Header.ChangeLanguage("En");
-homePage.Header.ClickSignIn();
-SignInModalComponent.WaitAndCreate(Driver!).Login(Configuration.TestEmail, Configuration.TestPassword);
-```
-
-**Fix:** Extract an `AuthenticatedBaseTest` intermediate class that performs login in `OnSetup()`,
-and have all login-required test classes extend it.
-
-```csharp
-public abstract class AuthenticatedBaseTest : BaseTest
+public CreateEventPage SelectInvite()
 {
-    protected override void OnSetup()
-    {
-        NavigateToBaseUrl();
-        new HomePage(Driver!).Header
-            .ChangeLanguage("En")
-            .ClickSignIn();
-        SignInModalComponent.WaitAndCreate(Driver!).Login(
-            Configuration.TestEmail, Configuration.TestPassword);
-    }
+    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout)); // local!
+    ...
 }
 ```
 
+**Fix:** Remove the local declarations and use `this.wait` directly.
+
 ---
 
-### 18. `TC037_EventCardUITest` — Step Numbers Encoded in Method Names
+### O-4. `DateTimePickerComponent.EnterDate` — Incorrect Wait Lambda — **NEW**
 
 ```csharp
-public void TC037_Step1_FirstEventCard_IsVisible() { ... }
-public void TC037_Step2_EventImage_IsPresentAndLoaded() { ... }
+var element = wait.Until(d => RootElement.FindElement(_inputLocator));
 ```
 
-NUnit tests are independent; encoding step order in names implies a sequential dependency
-that does not exist. Rename to describe *behaviour*, not step order.
+The lambda parameter `d` (the driver) is never used; `RootElement` is captured from the outer
+scope. This pattern is misleading and can hide stale-element issues because `RootElement` is
+resolved once during construction.
 
----
-
-### 19. `DriverFactory` — No `WebDriverManager` for Firefox/Edge
-
-`CreateFirefoxDriver()` / `CreateEdgeDriver()` instantiate drivers without calling
-`WebDriverManager`, so they fail on any machine without a pre-installed driver binary.
-
-**Fix:** Mirror the Chrome pattern:
+**Fix:**
 ```csharp
-new DriverManager().SetUpDriver(new FirefoxConfig(), VersionResolveStrategy.MatchingBrowser);
+var element = wait.Until(_ => RootElement.FindElement(_inputLocator));
+// or simply:
+var element = FindElement(_inputLocator);
 ```
 
 ---
 
-### 20. `WebElementExtensions.ClickWithRetry` Uses `Thread.Sleep`
+### O-5. `TC037_EventCardUITest` — Step Numbers Encoded in Method Names — **UNCHANGED**
+
+NUnit tests are independent; `TC037_Step1_*`, `TC037_Step2_*` etc. imply a sequential
+dependency that does not exist and breaks Allure categorisation.
+
+**Fix:** Rename to describe behaviour: `EventCard_IsDisplayedOnEventsPage`,
+`EventCard_ImageIsPresentAndLoaded`, etc.
+
+---
+
+### O-6. `DriverFactory` — Firefox/Edge Drivers Miss `WebDriverManager` Setup — **UNCHANGED**
+
+Only `CreateChromeDriver()` calls `WebDriverManager`; Firefox and Edge will fail on CI unless
+a browser binary is pre-installed.
+
+**Fix:** Add `new DriverManager().SetUpDriver(new FirefoxConfig(), ...)` mirroring the Chrome branch.
+
+---
+
+### O-7. `WebElementExtensions.ClickWithRetry` Uses `Thread.Sleep` — **UNCHANGED**
 
 ```csharp
 Thread.Sleep(500); // only Thread.Sleep in the entire codebase
 ```
 
-**Fix:** Replace with a `WebDriverWait` polling `ElementToBeClickable`.
+**Fix:** Replace with a short `WebDriverWait` polling `ElementToBeClickable`.
 
 ---
 
 ## 📋 Prioritised Action Plan
 
-| # | Priority | Task | File(s) | Impact |
-|---|----------|------|---------|--------|
-| 1 | **P0** | Fix double `Driver.Quit()` | `HomePageTests.cs`, `TC011_CreateEventTest.cs` | Prevents driver crash noise |
-| 2 | **P0** | Fix `EventDetailsPage.RefreshPage()` | `EventDetailsPage.cs` | Correctness |
-| 3 | **P0** | Remove dead `GC_TEST_EMAIL`/`GC_TEST_PASSWORD` code | `CreateEventsTests.cs` | Prevents CI failures |
-| 4 | **P0** | Implement `LocalTearDown()` to delete created events | `CreateEventsTests.cs` | Data isolation |
-| 5 | **P1** | Consolidate two `[SetUpFixture]` classes into one | `GlobalSetup.cs`, `TestEnvironmentSetup.cs` | Eliminates double `.env` load |
-| 6 | **P1** | Remove `ImplicitWait`; use only explicit waits | `DriverFactory.cs` | Eliminates timing ambiguity |
-| 7 | **P1** | Extract `AuthenticatedBaseTest` | New file | Eliminates 10× login duplication |
-| 8 | **P1** | Move hardcoded IDs/counts to `Configuration` / `TestData` | `EventDetailsPageTests.cs`, `NewsDetailsPageTests.cs` | Test stability |
-| 9 | **P1** | Merge `CreateEventPage` + `CreateUpdateEventPage` | Both page files | DRY |
-| 10 | **P2** | Fix component scope leakage (`driver` → `RootElement`) | `EventsListComponent.cs`, `CommentsComponent.cs` | Reliability |
-| 11 | **P2** | Respect `Configuration.Browser` in `BaseTest` | `BaseTest.cs` | Cross-browser coverage |
-| 12 | **P2** | Deduplicate `EventCardComponent` locators & methods | `EventCardComponent.cs` | Cleanliness |
-| 13 | **P2** | Add `WebDriverManager` setup to Firefox/Edge | `DriverFactory.cs` | CI portability |
-| 14 | **P3** | Add `[AllureFeature]`, `[AllureSeverity]`, `[AllureStep]` | All test/page files | Reporting quality |
-| 15 | **P3** | Standardise on `Assert.That` constraint model | All test files | Consistency |
-| 16 | **P3** | Remove `[Retry]` from stateful tests | `EventDetailsPageTests.cs`, `EventPageTests.cs` | Reliability |
-| 17 | **P3** | Replace `Thread.Sleep` with explicit wait | `WebElementExtensions.cs` | Performance |
-| 18 | **P3** | Rename `TC037_Step*` methods to behaviour names | `TC037_EventCardUITest.cs` | Readability |
-| 19 | **P3** | Fix hardcoded URL in `NewsPageTests.OnSetup` | `NewsPageTests.cs` | Environment portability |
-| 20 | **P3** | Replace redundant `WebDriverWait` in `WaitForUserLoggedIn` | `HeaderComponent.cs` | Minor perf/cleanliness |
+| # | Priority | Task | File(s) | New? |
+|---|----------|------|---------|------|
+| 1 | **P0** | Fix double `Driver.Quit()` | `HomePageTests.cs`, `TC011_CreateEventTest.cs` | — |
+| 2 | **P0** | Fix `EventDetailsPage.RefreshPage()` | `EventDetailsPage.cs` | — |
+| 3 | **P0** | Remove dead `GC_TEST_EMAIL`/`GC_TEST_PASSWORD` + redundant local cred fields | `CreateEventsTests.cs`, `TC001_AddCommentTests.cs`, `TC037_EventCardUITest.cs` | TC001/TC037 **new** |
+| 4 | **P0** | Add `SMOKE_SEARCH_KEYWORD` to CI workflow + repo secret | `.github/workflows/GreenCi.yml` | **new** |
+| 5 | **P0** | Implement `LocalTearDown()` event cleanup | `CreateEventsTests.cs` | — |
+| 6 | **P1** | Consolidate two `[SetUpFixture]` classes | `GlobalSetup.cs`, `TestEnvironmentSetup.cs` | — |
+| 7 | **P1** | Remove `ImplicitWait`; use only explicit waits | `DriverFactory.cs` | — |
+| 8 | **P1** | Implement `NewsImageUploadComponent` stub methods | `NewsImageUploadComponent.cs` | **new** |
+| 9 | **P1** | Move hardcoded IDs/counts to `Configuration`/`TestData` | `EventDetailsPageTests.cs`, `NewsDetailsPageTests.cs` | — |
+| 10 | **P1** | Fix `SearchTypeAndDateRangeTest` assertion logic | `SearchTypeAndDateRangeTest.cs` | **new** |
+| 11 | **P1** | Merge `CreateEventPage` + `CreateUpdateEventPage` | Both page files | — |
+| 12 | **P2** | Extract `AuthenticatedBaseTest` | New file | — |
+| 13 | **P2** | Fix component scope leakage (`driver` → `RootElement`) | `EventsListComponent.cs`, `CommentsComponent.cs` | — |
+| 14 | **P2** | Respect `Configuration.Browser` in `BaseTest` | `BaseTest.cs` | — |
+| 15 | **P2** | Deduplicate `EventCardComponent` locators & methods | `EventCardComponent.cs` | — |
+| 16 | **P2** | Fix local `WebDriverWait` in `CreateEventPage` | `CreateEventPage.cs` | **new** |
+| 17 | **P2** | Fix `DateTimePickerComponent.EnterDate` wait pattern | `DateTimePickerComponent.cs` | **new** |
+| 18 | **P2** | Add `WebDriverManager` setup for Firefox/Edge | `DriverFactory.cs` | — |
+| 19 | **P3** | Add Allure annotations across test/page files | All test files | — |
+| 20 | **P3** | Standardise on `Assert.That` constraint model | All test files | — |
+| 21 | **P3** | Remove `[Retry]` from write-path tests | `EventDetailsPageTests.cs`, `EventPageTests.cs` | — |
+| 22 | **P3** | Replace `Thread.Sleep` with explicit wait | `WebElementExtensions.cs` | — |
+| 23 | **P3** | Fix hardcoded URL in `NewsPageTests.OnSetup` | `NewsPageTests.cs` | — |
+| 24 | **P3** | Replace redundant `WebDriverWait` in `WaitForUserLoggedIn` | `HeaderComponent.cs` | — |
+| 25 | **P3** | Rename `TC037_Step*` methods to behaviour names | `TC037_EventCardUITest.cs` | — |
