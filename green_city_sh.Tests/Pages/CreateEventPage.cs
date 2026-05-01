@@ -8,16 +8,17 @@ public class CreateEventPage : BasePage
 {
     private const string PageUrl = "/events/create-update-event";
 
-    private static readonly By TitleInput = By.CssSelector("input[placeholder*='Enter a name']");
+    private static readonly By TitleInput = By.CssSelector("input[formcontrolname='title']");
     private static readonly By TitleError = By.CssSelector("mat-error.mat-mdc-form-field-error");
     private static readonly By DescriptionInput = By.CssSelector(".ql-editor");
     private static readonly By DateInput = By.CssSelector("input[placeholder='Choose a date']");
-    private static readonly By StartTimeInput = By.CssSelector("input[placeholder='Start Time*']");
-    private static readonly By EndTimeInput = By.CssSelector("input[placeholder='End Time*']");
-    private static readonly By InviteDropdown = By.XPath("(//mat-select[@role='combobox'])[2]");
+    private static readonly By StartTimeInput = By.CssSelector("input[formcontrolname='startTime']");
+    private static readonly By EndTimeInput = By.CssSelector("input[formcontrolname='finishTime']");
+    private static readonly By InviteDropdown = By.XPath("//p[normalize-space()='Event type']/following::mat-select[2]");
     private static readonly By InviteOption = By.XPath("//mat-option//span[normalize-space()='All']");
-    private static readonly By OnlineCheckbox = By.XPath("//label[contains(text(), 'Online')]");
-    private static readonly By OnlineLinkInput = By.CssSelector("input[placeholder*='http']");
+    private static readonly By OnlineCheckboxLabel = By.XPath("//label[normalize-space()='Online']");
+    private static readonly By OnlineCheckboxInput = By.CssSelector("input[type='checkbox']"); 
+    private static readonly By OnlineLinkInput = By.CssSelector("input[formcontrolname='onlineLink']");
     private static readonly By PublishButton = By.CssSelector("button.submit-buttons");
 
 
@@ -29,7 +30,8 @@ public class CreateEventPage : BasePage
     {
         driver.Navigate().GoToUrl(Configuration.BaseUrl + PageUrl);
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-            .Until(drv => drv.FindElements(TitleInput).Any(el => el.Displayed));
+            .Until(drv => 
+                drv.FindElements(TitleInput).Any(el => el.Displayed));
     }
 
     public CreateEventPage EnterTitle(string title)
@@ -42,7 +44,7 @@ public class CreateEventPage : BasePage
 
     public CreateEventPage BlurTitleField()
     {
-        driver.FindElement(By.CssSelector("h3.ng-star-inserted")).Click();
+        driver.FindElement(By.CssSelector("body")).Click();
         return this;
     }
 
@@ -67,6 +69,7 @@ public class CreateEventPage : BasePage
         var input = driver.FindElement(StartTimeInput);
         input.Clear();
         input.SendKeys(time);
+        input.SendKeys(Keys.Escape);
         return this;
     }
 
@@ -75,28 +78,43 @@ public class CreateEventPage : BasePage
         var input = driver.FindElement(EndTimeInput);
         input.Clear();
         input.SendKeys(time);
+        
+        input.SendKeys(Keys.Escape);
         return this;
     }
 
     public CreateEventPage SelectInvite()
     {
+        var wait = new  WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
+        
+        wait.Until(drv => drv.FindElements(InviteDropdown).Any(e => e.Displayed));
         driver.FindElement(InviteDropdown).Click();
-        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-            .Until(drv => drv.FindElements(InviteOption).Any(e => e.Displayed));
+        wait.Until(drv => drv.FindElements(InviteOption).Any(e => e.Displayed));
         driver.FindElement(InviteOption).Click();
+        
+        wait.Until(d => !d.FindElements(InviteOption).Any());
+
         return this;
     }
 
     public CreateEventPage ClickOnlineCheckbox()
     {
-        driver.FindElement(OnlineCheckbox).Click();
+        var wait = new  WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
+        wait.Until(drv => drv.FindElements(OnlineCheckboxLabel).Any());
+        
+        var label = wait.Until(d => d.FindElement(
+            By.XPath("//label[normalize-space()='Online']")
+        ));
+        label.Click();
+        
         return this;
     }
 
     public CreateEventPage EnterOnlineLink(string url)
     {
-        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-            .Until(drv => drv.FindElements(OnlineLinkInput).Any(e => e.Displayed));
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
+        wait.Until(drv => drv.FindElements(OnlineLinkInput).Any(e => e.Displayed));
+        
         var input = driver.FindElement(OnlineLinkInput);
         input.Clear();
         input.SendKeys(url);

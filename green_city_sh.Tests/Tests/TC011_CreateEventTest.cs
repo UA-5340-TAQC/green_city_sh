@@ -42,14 +42,27 @@ public class TC011_CreateEventTest : BaseTest
         createEventPage = new CreateEventPage(Driver!);
         createEventPage.Open();
     }
+    
+    [TearDown]
+    public void TearDown()
+    {
+        try
+        {
+            Driver?.Quit();
+        }
+        catch
+        {
+        }
+    }
+
 
     private void FillMandatoryFieldsExceptTitle()
     {
         createEventPage!
             .EnterDescription(ValidDescription)
+            .SelectInvite()
             .EnterStartTimeInput(ValidStartTime)
             .EnterEndTimeInput(ValidEndTime)
-            .SelectInvite()
             .ClickOnlineCheckbox()
             .EnterOnlineLink(ValidOnlineLink);
     }
@@ -65,11 +78,10 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    public void TC011_Step2_BlurTitleField_ValidationErrorAppears()
+    public void TC011_Step2_ValidationErrorAppears_WhenOtherFieldsFilled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
         FillMandatoryFieldsExceptTitle();
-        createEventPage.BlurTitleField();
         
         Assert.That(createEventPage.IsTitleErrorVisible(),
             Is.True,
@@ -78,11 +90,10 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    public void TC011_Step4_PublishButton_RemainsDisabled()
+    public void TC011_Step3_PublishButton_RemainsDisabled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
         FillMandatoryFieldsExceptTitle();
-        createEventPage.BlurTitleField();
         
         Assert.That(createEventPage.IsPublishButtonEnabled(),
             Is.False,
