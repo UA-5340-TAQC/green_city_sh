@@ -20,7 +20,8 @@ public class HeaderComponent: BaseComponent
     private By NotificationsOption => By.CssSelector("[aria-label='notifications']");
     private By CabinetOption => By.CssSelector("a[href*='/ubs/user/orders']");
     private By SignOutOption => By.CssSelector("[aria-label='sign-out']");
-    
+    public static readonly By RootLocator = By.CssSelector("app-root app-header");
+
     public HeaderComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
