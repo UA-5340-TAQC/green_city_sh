@@ -75,7 +75,7 @@ public class CreateEventsTests : BaseTest
         _eventPage.SelectInitiativeType("Social");
         _eventPage.SelectEventType("Open");
         _eventPage.SetDescription("Join us to clean the park and make our city greener!");
-        
+
         _eventPage.SetDate(tomorrow);
         _eventPage.SetTime("23:30", "23:59");
 
@@ -85,12 +85,12 @@ public class CreateEventsTests : BaseTest
 
         _eventPage.ClickPreview();
         _eventPage.ClickBackToEditing();
-        
+
         var prePublishUrl = Driver!.Url;
         _eventPage.ClickPublish();
 
         // Wait for the redirection to execute fully using encapsulated wait
-        bool isRedirected = _eventPage.WaitForUrlToChange(prePublishUrl) && 
+        bool isRedirected = _eventPage.WaitForUrlToChange(prePublishUrl) &&
                             _eventPage.WaitForUrlToContain("/events");
 
         // --- Assert ---
@@ -98,13 +98,14 @@ public class CreateEventsTests : BaseTest
     }
 
     [Test]
-    [Category("CreateEvent")][Description("TC-009: Successful creation of a 1-day online event with all mandatory fields and a picture")]
+    [Category("CreateEvent")]
+    [Description("TC-009: Successful creation of a 1-day online event with all mandatory fields and a picture")]
     public void CreateOneDayOnlineEvent_WithMandatoryFieldsAndPicture_Successfully()
     {
         // --- Arrange ---
         // Dynamically generating tomorrow's date formatted to exactly match the expected input
         string dynamicDateValue = DateTime.Today.AddDays(1).ToString("MMMM d, yyyy", new CultureInfo("en-US"));
-        
+
         _eventPage.NavigateToCreateEventPageFromProfile();
 
         // --- Act ---
@@ -113,11 +114,11 @@ public class CreateEventsTests : BaseTest
         _eventPage.SelectEventType(EventTypeValue);
         _eventPage.SelectInviteOption(InviteValue);
         _eventPage.SetDescription(DescriptionValue);
-        
+
         _eventPage.SetDate(dynamicDateValue);
         _eventPage.SetStartTime(StartTimeValue);
         _eventPage.SetEndTime(EndTimeValue);
-        
+
         _eventPage.CheckOnlineLocation();
         _eventPage.SetOnlineLink(OnlineLinkValue);
         _eventPage.CheckApplyToAllDays();
@@ -128,19 +129,19 @@ public class CreateEventsTests : BaseTest
         // --- Assert Intermediate Business Logic (Image Upload States) ---
         Assert.Multiple(() =>
         {
-            Assert.That(_eventPage.IsUploadedImagePreviewDisplayed(), Is.True, 
+            Assert.That(_eventPage.IsUploadedImagePreviewDisplayed(), Is.True,
                 "Failed: The image was not added to the upload block.");
-            Assert.That(_eventPage.IsMainBadgeDisplayed(), Is.True, 
+            Assert.That(_eventPage.IsMainBadgeDisplayed(), Is.True,
                 "Failed: The image did not receive the 'Main' badge.");
-            Assert.That(_eventPage.IsClosePictureIconDisplayed(), Is.True, 
+            Assert.That(_eventPage.IsClosePictureIconDisplayed(), Is.True,
                 "Failed: The 'X' (close) button is not displayed on the image.");
-            Assert.That(_eventPage.GetPictureCounterText(), Does.Contain(ExpectedCounterValue), 
+            Assert.That(_eventPage.GetPictureCounterText(), Does.Contain(ExpectedCounterValue),
                 $"Failed: The counter did not update to '{ExpectedCounterValue}'.");
         });
 
         // --- Act & Assert Readiness ---
         _eventPage.HoverOverPublishButton();
-        Assert.That(_eventPage.IsPublishButtonEnabled(), Is.True, 
+        Assert.That(_eventPage.IsPublishButtonEnabled(), Is.True,
             "Failed: The 'Publish' button did not become active.");
 
         // --- Final Submission ---
@@ -148,23 +149,23 @@ public class CreateEventsTests : BaseTest
         _eventPage.ClickPublish();
 
         // Properly wait for the URL to change first, THEN ensure it contains the expected substring
-        bool isRedirected = _eventPage.WaitForUrlToChange(prePublishUrl) && 
+        bool isRedirected = _eventPage.WaitForUrlToChange(prePublishUrl) &&
                             _eventPage.WaitForUrlToContain(ExpectedEventsUrlSubstring);
-        
+
         // --- Final Assertions ---
         Assert.Multiple(() =>
         {
-            Assert.That(isRedirected, Is.True, 
+            Assert.That(isRedirected, Is.True,
                 "Step 16 Failed: The user was not redirected to the Events page within the given timeout period.");
-            
+
             // Explicitly verify the URL is no longer the pre-publish URL
-            Assert.That(Driver!.Url, Is.Not.EqualTo(prePublishUrl).IgnoreCase, 
+            Assert.That(Driver!.Url, Is.Not.EqualTo(prePublishUrl).IgnoreCase,
                 "Step 16 Failed: The URL did not change after clicking Publish.");
-                
-            Assert.That(_eventPage.IsSuccessSnackBarDisplayed(), Is.True, 
+
+            Assert.That(_eventPage.IsSuccessSnackBarDisplayed(), Is.True,
                 "Step 16 Failed: The success message toast is not displayed.");
-                
-            Assert.That(Driver!.Url, Does.Contain(ExpectedEventsUrlSubstring), 
+
+            Assert.That(Driver!.Url, Does.Contain(ExpectedEventsUrlSubstring),
                 "Step 16 Failed: The URL does not contain the expected events substring.");
         });
     }

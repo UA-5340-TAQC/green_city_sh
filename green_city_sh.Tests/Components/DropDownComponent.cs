@@ -10,7 +10,7 @@ namespace green_city_sh.Tests.Components;
 public class DropDownComponent : BaseComponent
 {
     private const string OptionNameNotFound = "Dropdown option not found";
-    
+
     private readonly By _searchLocator;
     // Updated to global scope (removed leading dot)
     private static readonly By DefaultOptions = By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
@@ -31,7 +31,7 @@ public class DropDownComponent : BaseComponent
     public string GetSelectedOptionText()
     {
         // Polling the element until Angular populates the text (prevents empty string assertions)
-        var selectedValueElement = wait.Until(driver => 
+        var selectedValueElement = wait.Until(driver =>
         {
             try
             {
@@ -43,7 +43,7 @@ public class DropDownComponent : BaseComponent
                 return null; // Ignore stale elements and keep polling
             }
         });
-        
+
         return selectedValueElement!.Text.Trim();
     }
 

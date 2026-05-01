@@ -20,33 +20,17 @@ public class EventsTopBarComponent : BaseComponent
 
     public string GetTopBarTitle()
     {
-        //Реалізувати отримання тексту заголовка
         return "";
     }
 
-    public bool IsSearchIconVisible()
-    {
-        return RootElement.FindElement(SearchIcon).Displayed;
-    }
-    public bool IsSearchIconEnabled()
-    {
-        var elements = RootElement.FindElements(SearchIcon);
-        return elements.Count > 0 && elements[0].Enabled;
-    }
-    
-    public void ClickSearchIcon()
-    {
-        RootElement.FindElement(SearchIcon).Click();
-    }
+    public void ClickSearchIcon() => WaitAndClick(SearchIcon);
 
     public void ClickBookmarkIcon()
     {
-        //Реалізувати клік по іконці закладок
     }
 
     public void ClickMyEventsIcon()
     {
-        //Реалізувати клік по іконці "My events"
     }
 
     public bool IsCreateEventButtonVisible()
@@ -58,7 +42,7 @@ public class EventsTopBarComponent : BaseComponent
     {
         return RootElement.FindElement(CreateEventButton).Enabled;
     }
-    
+
     public void ClickCreateEventButton()
     {
         RootElement.FindElement(CreateEventButton).Click();
@@ -66,9 +50,14 @@ public class EventsTopBarComponent : BaseComponent
 
     public void FillSearchInputField(string searchText)
     {
-        var searchInput = RootElement.FindElement(SearchInputField);
+        var searchInput = wait.Until(d =>
+        {
+            var element = RootElement.FindElement(SearchInputField);
+            return element.Displayed ? element : null;
+        });
+
         searchInput.Clear();
         searchInput.SendKeys(searchText);
-        searchInput.SendKeys(Keys.Enter);    
+        searchInput.SendKeys(Keys.Enter);
     }
 }

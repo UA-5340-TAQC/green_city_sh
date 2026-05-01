@@ -10,13 +10,13 @@ public class EventsFilterSectionComponent : BaseComponent
     private By LocationDropdown => By.CssSelector("#mat-select-10"); //повертає дропдаун для вибору місця проведення заходу (Location)
     private By StatusDropdown => By.CssSelector("#mat-select-12"); //повертає дропдаун для вибору статусу заходу (Status)
     private By TypeDropdown => By.XPath("//div[contains(@class, 'dropdown')][./mat-label[contains(text(), 'Type')]]//mat-select");
-    private By TypeOption(string option) => By.XPath($"//mat-option//span[contains(text(), '{option}')]"); 
-    private By DateRangeDropdown => By.CssSelector(".date-range-input + .mat-mdc-select-arrow-wrapper");    
+    private By TypeOption(string option) => By.XPath($"//mat-option//span[contains(text(), '{option}')]");
+    private By DateRangeDropdown => By.CssSelector(".date-range-input + .mat-mdc-select-arrow-wrapper");
     private By nextBtn = By.CssSelector(".mat-calendar-next-button");
     private By prevBtn = By.CssSelector(".mat-calendar-previous-button");
     private By periodBtn = By.CssSelector(".mat-calendar-period-button");
     private By DayButton(string label) => By.XPath($"//button[@aria-label='{label}']");
-    
+
     public EventsFilterSectionComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
@@ -30,7 +30,7 @@ public class EventsFilterSectionComponent : BaseComponent
         var culture = new CultureInfo("en-US");
         int targetMonth = date.Month;
         int targetYear = date.Year;
-        
+
         while (true)
         {
             var periodButton = driver.FindElement(periodBtn);
@@ -49,7 +49,7 @@ public class EventsFilterSectionComponent : BaseComponent
             int month = DateTime.ParseExact(monthText, "MMMM", culture).Month;
             if (month == targetMonth && year == targetYear)
                 break;
-            
+
             if (year < targetYear || (year == targetYear && month < targetMonth))
             {
                 driver.FindElement(nextBtn).Click();
@@ -64,8 +64,8 @@ public class EventsFilterSectionComponent : BaseComponent
         var day = driver.FindElement(DayButton(label));
         day.Click();
     }
-    
-    
+
+
     public void SelectEventTime(string option)
     {
         //Вибрати опцію в дропдауні "Event time" ("Any time", "Upcoming", "Past")
@@ -109,7 +109,7 @@ public class EventsFilterSectionComponent : BaseComponent
     {
         return driver.FindElement(DateRangeDropdown).Enabled;
     }
-    
+
     public void ClickDateRangeDropdown()
     {
         var arrow = wait.Until(ExpectedConditions.ElementToBeClickable(DateRangeDropdown));
@@ -122,7 +122,7 @@ public class EventsFilterSectionComponent : BaseComponent
         PickDate(end);
     }
 
-    
+
 
     public void ClickResetAll()
     {

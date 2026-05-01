@@ -13,13 +13,13 @@ public class NewsDetailsPageTests : BaseTest
 {
     private NewsDetailsPage? newsDetailsPage;
     private HomePage? homePage;
-    
+
     protected override void OnSetup()
     {
         NavigateToBaseUrl();
 
         homePage = new HomePage(Driver!);
-        
+
         homePage.Header.ChangeLanguage("En");
         homePage.Header.ClickSignIn();
 
@@ -36,7 +36,7 @@ public class NewsDetailsPageTests : BaseTest
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10326");
         newsDetailsPage = new NewsDetailsPage(Driver!);
-        
+
         Assert.Multiple(() =>
         {
             Assert.That(newsDetailsPage.GetComments().Count, Is.EqualTo(7), "There should be 7 comments in the list");
@@ -92,7 +92,7 @@ public class NewsDetailsPageTests : BaseTest
     [Category("Comment")]
     public void VerifyThatUserCanEditTheirOwnComment(string addText, string editText)
     {
-        
+
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
         newsDetailsPage = new NewsDetailsPage(Driver!);
         newsDetailsPage
@@ -155,7 +155,7 @@ public class NewsDetailsPageTests : BaseTest
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
         newsDetailsPage = new NewsDetailsPage(Driver!);
-        
+
         var dateEn = newsDetailsPage.GetDateText();
         Assert.That(dateEn, Is.Not.Null.And.Not.Empty);
 
@@ -173,7 +173,7 @@ public class NewsDetailsPageTests : BaseTest
         homePage.Header.ChangeLanguage("Uk");
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
         newsDetailsPage = new NewsDetailsPage(Driver!);
-        
+
         var dateUk = newsDetailsPage.GetDateText();
         Assert.That(dateUk, Is.Not.Null.And.Not.Empty);
 

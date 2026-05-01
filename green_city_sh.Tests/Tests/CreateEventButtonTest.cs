@@ -12,16 +12,16 @@ public class CreateEventButtonTest : BaseTest
     protected override void OnSetup()
     {
         NavigateToBaseUrl();
-        
+
         eventsPage = new EventsPage(Driver!);
-        
+
         eventsPage.Header.ClickSignIn();
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
         eventsPage.Header.ChangeLanguage("en");
-        
+
         eventsPage.OpenEventsPage();
-        
+
     }
 
     [Test]
@@ -32,6 +32,6 @@ public class CreateEventButtonTest : BaseTest
         Assert.That(eventsPage!.EventsTopBar.IsCreateEventButtonEnable(), "Create Event button should be enabled");
         eventsPage!.ClickCreateEvent();
         Assert.That(Driver!.Url, Does.Contain("/events/create-update-event"), "URL should contain '/events/create' after clicking Create Event button");
-        
+
     }
 }

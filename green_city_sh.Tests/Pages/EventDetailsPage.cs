@@ -4,9 +4,9 @@ using green_city_sh.Tests.Modals;
 
 namespace green_city_sh.Tests.Pages;
 
-public class EventDetailsPage : BasePage 
+public class EventDetailsPage : BasePage
 {
-    private EventDetailsCardComponent? eventDetailsCard; 
+    private EventDetailsCardComponent? eventDetailsCard;
     private CommentComponent? comments;
     private CancelJoiningEventModal? cancelModal;
 

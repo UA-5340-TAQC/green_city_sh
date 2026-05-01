@@ -29,7 +29,7 @@ public class CommentComponent : BaseComponent
     private By CommentField => By.XPath(".//div[@class='comment-textarea']");
     private By FileInput => By.XPath(".//input[@type='file']");
     private By ImagePreview => By.XPath(".//img[@class='image-preview']");
-    
+
     public CommentComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
@@ -73,16 +73,16 @@ public class CommentComponent : BaseComponent
     public void ClickUploadImgBtn() =>
         WaitAndClick(UploadImgBtn);
 
-    public void ClickEmojiBtn() => 
+    public void ClickEmojiBtn() =>
         WaitAndClick(EmojiBtn);
 
     public void ClickCancelEditBtn() =>
         WaitAndClick(CancelEditBtn);
 
-    public void ClickSaveEditBtn() => 
+    public void ClickSaveEditBtn() =>
         WaitAndClick(SaveEditBtn);
 
-    public string GetDate() => 
+    public string GetDate() =>
         RootElement.FindElement(DateComment).Text;
 
     public string GetTextComment() =>
@@ -90,11 +90,11 @@ public class CommentComponent : BaseComponent
 
     public string GetAuthorName() =>
         RootElement.FindElement(AuthorName).Text;
-    
+
     public bool DoesTextContain(string text) =>
         GetTextComment().Contains(text, StringComparison.OrdinalIgnoreCase);
 
-    public bool IsCommentFieldEmpty() => 
+    public bool IsCommentFieldEmpty() =>
         string.IsNullOrWhiteSpace(RootElement.FindElement(CommentField).GetAttribute("value"));
 
     public void UploadImage(string fileName)
@@ -137,7 +137,7 @@ public class CommentComponent : BaseComponent
         return RootElement.FindElement(EditedLabel).Displayed;
     }
 
-    public string GetReplyButtonAttribute() => 
+    public string GetReplyButtonAttribute() =>
         RootElement.FindElement(ReplyCommentBtn).GetAttribute("class");
 
     public bool IsViewBtnDisplayed() =>

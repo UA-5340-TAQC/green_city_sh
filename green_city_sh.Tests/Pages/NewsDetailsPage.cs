@@ -144,7 +144,7 @@ public class NewsDetailsPage : BasePage
 
     public int WaitForCommentCounterVisible()
     {
-        
+
         var value = 0;
         wait.Until(_ =>
         {
@@ -204,5 +204,5 @@ public class NewsDetailsPage : BasePage
 
     public string GetAttributeReplyButton() =>
         Comment.GetReplyButtonAttribute();
-    
+
 }

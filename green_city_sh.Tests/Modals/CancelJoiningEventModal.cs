@@ -5,7 +5,7 @@ namespace green_city_sh.Tests.Modals;
 
 public class CancelJoiningEventModal : BaseModal
 {
-    private By CancelButton => By.XPath(".//button[@class='close ng-star-inserted']"); 
+    private By CancelButton => By.XPath(".//button[@class='close ng-star-inserted']");
     private By YesButton => By.XPath(".//button[@class='m-btn primary-global-button']");
     private By NoButton => By.XPath(".//button[@class='m-btn secondary-global-button']");
 
@@ -17,12 +17,12 @@ public class CancelJoiningEventModal : BaseModal
     {
     }
 
-    public void ClickYesButton() => 
+    public void ClickYesButton() =>
         RootElement.FindElement(YesButton).Click();
 
-    public void ClickNoButton() => 
+    public void ClickNoButton() =>
         RootElement.FindElement(NoButton).Click();
 
-    public void ClickCancelButton() => 
+    public void ClickCancelButton() =>
         RootElement.FindElement(CancelButton).Click();
 }

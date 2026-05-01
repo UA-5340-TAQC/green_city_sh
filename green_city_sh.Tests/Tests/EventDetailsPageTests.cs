@@ -16,7 +16,7 @@ public class EventDetailsPageTests : BaseTest
         NavigateToBaseUrl();
 
         HomePage homePage = new HomePage(Driver!);
-        
+
         homePage.Header.ChangeLanguage("En");
         homePage.Header.ClickSignIn();
 
@@ -39,7 +39,7 @@ public class EventDetailsPageTests : BaseTest
         EventDetailsPage eventDetailsPage = new EventDetailsPage(Driver!);
 
         string eventInfoText = eventDetailsPage.EventDetailsCard.GetEventInfo();
-        
+
         Assert.IsFalse(eventDetailsPage.EventDetailsCard.IsEventSaved(), "Event should not be saved initially.");
 
         eventDetailsPage.EventDetailsCard.ClickSaveEvent();
