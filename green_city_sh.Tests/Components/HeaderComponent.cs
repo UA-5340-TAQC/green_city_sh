@@ -70,6 +70,7 @@ public class HeaderComponent: BaseComponent
             link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
         targetOption?.Click();
+
         return this;
     }
 
@@ -77,13 +78,13 @@ public class HeaderComponent: BaseComponent
     {
         try
         {
-            var userName = driver.FindElement(UserName);
-            return userName.Displayed && !string.IsNullOrWhiteSpace(userName.Text);
+            var hasSignIn = driver.FindElements(SignInLink).Count > 0;
+            var hasProfile = driver.FindElements(UserProfileButton).Count > 0;
+            return hasProfile && !hasSignIn;
         }
-        catch(StaleElementReferenceException)
+        catch (StaleElementReferenceException)
         {
             return false;
-            
         }
     }
     

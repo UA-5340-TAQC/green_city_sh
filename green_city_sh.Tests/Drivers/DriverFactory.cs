@@ -4,9 +4,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
-using WebDriverManager;
-using WebDriverManager.DriverConfigs.Impl;
-using WebDriverManager.Helpers;
 
 namespace green_city_sh.Tests.Drivers;
 
@@ -46,14 +43,12 @@ public static class DriverFactory
 
     private static IWebDriver CreateFirefoxDriver()
     {
-        new DriverManager().SetUpDriver(new FirefoxConfig());
         var options = new FirefoxOptions();
         return new FirefoxDriver(options);
     }
 
     private static IWebDriver CreateEdgeDriver()
     {
-        new DriverManager().SetUpDriver(new EdgeConfig());
         var options = new EdgeOptions();
         options.AddArgument("--start-maximized");
         return new EdgeDriver(options);
