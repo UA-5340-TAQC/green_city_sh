@@ -57,7 +57,7 @@ public class HeaderComponent: BaseComponent
         search.Click();
     }
 
-    public void ChangeLanguage(string langCode)
+    public HeaderComponent ChangeLanguage(string langCode)
     {
         var dropdown = RootElement.FindElement(LanguageDropdown);       
 
@@ -69,23 +69,21 @@ public class HeaderComponent: BaseComponent
             link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
         targetOption?.Click();
+
+        return this;
     }
 
     public bool IsUserLoggedIn()
     {
         try
         {
-            var header = driver.FindElement(RootLocator);
-            var hasSignIn = header.FindElements(SignInLink).Count > 0;
-            var hasProfile = header.FindElements(UserProfileButton).Count > 0;
+            var hasSignIn = driver.FindElements(SignInLink).Count > 0;
+            var hasProfile = driver.FindElements(UserProfileButton).Count > 0;
             return hasProfile && !hasSignIn;
         }
         catch (StaleElementReferenceException)
         {
-            var header = driver.FindElement(RootLocator);
-            var hasSignIn = header.FindElements(SignInLink).Count > 0;
-            var hasProfile = header.FindElements(UserProfileButton).Count > 0;
-            return hasProfile && !hasSignIn;
+            return false;
         }
     }
     

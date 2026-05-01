@@ -1,6 +1,7 @@
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -19,16 +20,16 @@ public class TC001_AddCommentTests : BaseTest
     protected override void OnSetup()
     {
         NavigateToBaseUrl();
-        var header = new HeaderComponent(Driver!, HeaderComponent.RootLocator);
-        header.ChangeLanguage("En");
-        header.ClickSignIn();
+
+        new HomePage(Driver)
+            .Header
+            .ChangeLanguage("En")
+            .ClickSignIn();
         
-        SignInModalComponent
-            .WaitAndCreate(Driver!)
-            .Login(TestEmail, TestPassword);
-
-        header.WaitForUserLoggedIn();
-
+            SignInModalComponent
+                .WaitAndCreate(Driver!)
+                .Login(Configuration.TestEmail, Configuration.TestPassword);
+            
         eventDetailsPage = new EventDetailsPage(Driver!);
         eventDetailsPage.Open();
 
