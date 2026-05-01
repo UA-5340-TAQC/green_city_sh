@@ -1,4 +1,6 @@
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
@@ -54,7 +56,7 @@ public class HeaderComponent: BaseComponent
         search.Click();
     }
 
-    public void ChangeLanguage(string langCode)
+    public HeaderComponent ChangeLanguage(string langCode)
     {
         var dropdown = RootElement.FindElement(LanguageDropdown);       
 
@@ -66,13 +68,28 @@ public class HeaderComponent: BaseComponent
             link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
         targetOption?.Click();
+
+        return this;
     }
 
     public bool IsUserLoggedIn()
     {
-        var hasSignIn = RootElement.FindElements(SignInLink).Count > 0;
-        var hasProfile = RootElement.FindElements(UserProfileButton).Count > 0;
-        return hasProfile && !hasSignIn;
+        try
+        {
+            var hasSignIn = driver.FindElements(SignInLink).Count > 0;
+            var hasProfile = driver.FindElements(UserProfileButton).Count > 0;
+            return hasProfile && !hasSignIn;
+        }
+        catch (StaleElementReferenceException)
+        {
+            return false;
+        }
+    }
+    
+    public void WaitForUserLoggedIn()
+    {
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(_ => IsUserLoggedIn());
     }
     public SignInModalComponent ClickSignIn()
     {
