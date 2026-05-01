@@ -82,7 +82,7 @@ public class EventsPage : BasePage
 
     public void ClickCreateEvent()
     {
-        //Клікнути на кнопку створення події
+        EventsTopBar.ClickCreateEventButton();
     }
 
     public void JoinEventByIndex(int index)
