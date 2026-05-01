@@ -11,6 +11,7 @@ using OpenQA.Selenium.Support.UI;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class TC037_EventCardUITest : BaseTest
 {
     private string TestEmail = null!;

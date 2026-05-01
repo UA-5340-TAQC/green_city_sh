@@ -9,6 +9,7 @@ using SeleniumExtras.WaitHelpers;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class NewsPageTests : BaseTest
 {
     private NewsPage? newsPage;

@@ -40,8 +40,8 @@ public class MySpacePage : BasePage
         var tabElement = wait.Until(ExpectedConditions.ElementToBeClickable(_myHabitsTab));
         tabElement.ClickWithRetry();
 
-        string panelId = tabElement.GetAttribute("aria-controls");
-        By containerLocator = By.Id(panelId);
+        string? panelId = tabElement.GetAttribute("aria-controls");
+        By containerLocator = By.Id(panelId ?? string.Empty);
 
         wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
 
@@ -53,8 +53,8 @@ public class MySpacePage : BasePage
         var tabElement = wait.Until(ExpectedConditions.ElementToBeClickable(_myNewsTab));
         tabElement.ClickWithRetry();
 
-        string panelId = tabElement.GetAttribute("aria-controls");
-        By containerLocator = By.Id(panelId);
+        string? panelId = tabElement.GetAttribute("aria-controls");
+        By containerLocator = By.Id(panelId ?? string.Empty);
 
         wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
 
@@ -66,8 +66,8 @@ public class MySpacePage : BasePage
         var tabElement = wait.Until(ExpectedConditions.ElementToBeClickable(_myEventsTab));
         tabElement.ClickWithRetry();
 
-        string panelId = tabElement.GetAttribute("aria-controls");
-        By containerLocator = By.Id(panelId);
+        string? panelId = tabElement.GetAttribute("aria-controls");
+        By containerLocator = By.Id(panelId ?? string.Empty);
 
         wait.Until(ExpectedConditions.ElementIsVisible(containerLocator));
 

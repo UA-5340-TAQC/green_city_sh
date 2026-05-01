@@ -30,7 +30,7 @@ public class NewsImageUploadComponent : ImageUploadComponent
     {
     }
 
-    public bool IsDropZoneDisplayed()
+    public new bool IsDropZoneDisplayed()
     {
         return this.FindElement(DropZone).Displayed;
     }
