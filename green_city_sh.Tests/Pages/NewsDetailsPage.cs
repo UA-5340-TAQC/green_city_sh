@@ -144,7 +144,7 @@ public class NewsDetailsPage : BasePage
 
     public int WaitForCommentCounterVisible()
     {
-        wait.Until(ExpectedConditions.ElementIsVisible(CommentCounter));
+        
         var value = 0;
         wait.Until(_ =>
         {
@@ -168,7 +168,6 @@ public class NewsDetailsPage : BasePage
 
     public int WaitForCommentCounterToChange(int previousValue)
     {
-        wait.Until(ExpectedConditions.ElementIsVisible(CommentCounter));
         var newValue = 0;
         wait.Until(_ =>
         {
@@ -204,6 +203,6 @@ public class NewsDetailsPage : BasePage
         Comment.IsHideBtnDisplayed();
 
     public string GetAttributeReplyButton() =>
-        Comment.GetReplyButtonAttribute;
-
+        Comment.GetReplyButtonAttribute();
+    
 }

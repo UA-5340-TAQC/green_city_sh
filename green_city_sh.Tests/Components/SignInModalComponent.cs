@@ -55,6 +55,8 @@ public class SignInModalComponent : BaseComponent
     private static readonly By CloseButtonLocator = By.CssSelector("a.close-modal-window");
     private static readonly By ForgotPasswordLocator = By.XPath(".//a[contains(text(), 'Forgot password')]");
     private static readonly By SignUpLinkLocator = By.XPath(".//a[contains(text(), 'Sign up')]");
+    private static readonly By UserNameLocator = By.CssSelector(".user-name");
+    
     private static readonly By EmailErrorLocator = By.CssSelector("#email-err-msg div");
     private static readonly By ErrorMessageLocator = By.CssSelector(".alert-general-error");
 
@@ -171,7 +173,7 @@ public class SignInModalComponent : BaseComponent
     {
         EnterEmail(email);
         EnterPassword(password);
-        ClickSignIn();
+        ClickSignInAndWaitClose();
     }
 
     /// <summary>
