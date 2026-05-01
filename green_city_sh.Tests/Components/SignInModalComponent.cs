@@ -173,26 +173,7 @@ public class SignInModalComponent : BaseComponent
     {
         EnterEmail(email);
         EnterPassword(password);
-        ClickSignIn();
-
-        var currentModal = RootElement;
-        wait.Until(_ =>
-        {
-            try
-            {
-                return !currentModal.Displayed;
-            }
-            catch (StaleElementReferenceException)
-            {
-                return true;
-            }
-        });
-
-        wait.Until(d => 
-        {
-            var profileElements = d.FindElements(UserNameLocator); 
-            return profileElements.Any(e => e.Displayed);
-        });
+        ClickSignInAndWaitClose();
     }
 
     /// <summary>

@@ -18,6 +18,8 @@ public class HomePageTests : BaseTest
     [Category("Smoke")]
     public void VerifyHomePageLoads()
     {
+        var pageTitle = _homePage!.getTitle();
+
         Assert.Multiple(() =>
         {
             Assert.That(_homePage!.GetTitle(), Is.Not.Empty, "Page title should not be empty");
@@ -33,3 +35,5 @@ public class HomePageTests : BaseTest
          Driver?.Quit();
     }
 }
+
+

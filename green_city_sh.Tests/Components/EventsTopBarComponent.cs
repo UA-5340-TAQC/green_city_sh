@@ -33,8 +33,19 @@ public class EventsTopBarComponent : BaseComponent
     {
     }
 
+    public bool IsCreateEventButtonVisible()
+    {
+        return RootElement.FindElement(CreateEventButton).Displayed;
+    }
+
+    public bool IsCreateEventButtonEnable()
+    {
+        return RootElement.FindElement(CreateEventButton).Enabled;
+    }
+    
     public void ClickCreateEventButton()
     {
+        RootElement.FindElement(CreateEventButton).Click();
     }
 
     public void FillSearchInputField(string searchText)

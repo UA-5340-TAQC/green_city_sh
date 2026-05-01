@@ -65,6 +65,11 @@ public class EventsPage : BasePage
         return driver.FindElements(By.CssSelector(".list-view")).Count > 0;
     }
 
+    public void ClickSearchButton()
+    {
+        EventsTopBar.ClickSearchIcon();
+    }
+
     public void ApplyFilter(string category, string value)
     {
         //Застосувати фільтр за категорією та значенням
@@ -77,7 +82,7 @@ public class EventsPage : BasePage
 
     public void ClickCreateEvent()
     {
-        //Клікнути на кнопку створення події
+        EventsTopBar.ClickCreateEventButton();
     }
 
     public void JoinEventByIndex(int index)

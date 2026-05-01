@@ -36,3 +36,4 @@ public static class Configuration
     public static string TestPassword => GetRequiredEnv("TEST_PASSWORD");
     public static string SmokeSearchKeyword => GetRequiredEnv("SMOKE_SEARCH_KEYWORD");
 }
+
