@@ -84,6 +84,11 @@ jobs:
           name: trx-results
           path: TestResults
 
+      # 🔍 IMPORTANT: Check that allure-results are created
+      - name: Find allure results
+        run: |
+          echo "Searching for allure-results..."
+          find . -type d -name "allure-results"
       # 🔍 DEBUG: дивимось чи є allure-results
       - name: Debug allure folder
         run: |
