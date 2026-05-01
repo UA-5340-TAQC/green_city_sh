@@ -4,6 +4,7 @@ using NUnit.Framework;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using green_city_sh.Tests.Components;
+using NUnit.Allure.Attributes;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -22,6 +23,9 @@ public class CreateEventsTests : BaseTest
         return value;
     }
 
+    // Dynamically generating tomorrow's date formatted to exactly match the expected input
+        string dynamicDateValue = DateTime.Today.AddDays(1).ToString("MMMM d, yyyy", new CultureInfo("en-US"));
+
     // Evaluated at runtime using '=>', guaranteeing .env is loaded first
     private static string TestEmail => GetRequiredEnv("GC_TEST_EMAIL");
     private static string TestPassword => GetRequiredEnv("GC_TEST_PASSWORD");
@@ -39,6 +43,11 @@ public class CreateEventsTests : BaseTest
     private const string ExpectedEventsUrlSubstring = "/events";
 
     private CreateUpdateEventPage _eventPage = null!;
+
+    private const string EventTitle1 = "Green City Cleanup Festival 2026";
+    private const string InitiativeTypeValue1 = "Social";
+    private const string DescriptionValue1 = "Join us to clean the park and make our city greener!";
+    private const string AddressValue1 = "Mitskevycha Square, 14, Ivano-Frankivs'k";
 
     protected override void OnSetup()
     {
@@ -63,24 +72,25 @@ public class CreateEventsTests : BaseTest
     }
 
     [Test]
+    [AllureIssue("15")]
+    [AllureDescription("Verification that a user can create a new offline event with a physical address.")]
     [Category("Smoke")]
     public void VerifyUserCanCreateNewEvent()
     {
         // --- Arrange ---
-        string tomorrow = DateTime.Today.AddDays(1).ToString("MMMM d, yyyy", new CultureInfo("en-US"));
         _eventPage.NavigateToCreateEventPageFromProfile();
 
         // --- Act ---
-        _eventPage.SetTitle("Green City Cleanup Festival 2026");
-        _eventPage.SelectInitiativeType("Social");
-        _eventPage.SelectEventType("Open");
-        _eventPage.SetDescription("Join us to clean the park and make our city greener!");
+        _eventPage.SetTitle(EventTitle1);
+        _eventPage.SelectInitiativeType(InitiativeTypeValue1);
+        _eventPage.SelectEventType(EventTypeValue);
+        _eventPage.SetDescription(DescriptionValue1);
 
-        _eventPage.SetDate(tomorrow);
+        _eventPage.SetDate(dynamicDateValue);
         _eventPage.SetTime("23:30", "23:59");
 
         _eventPage.SelectPlaceLocation();
-        _eventPage.EnterAddress("Mitskevycha Square, 14, Ivano-Frankivs'k");
+        _eventPage.EnterAddress(AddressValue1);
         _eventPage.SelectAddressFromDropdown();
 
         _eventPage.ClickPreview();
@@ -98,13 +108,13 @@ public class CreateEventsTests : BaseTest
     }
 
     [Test]
+    [AllureIssue("9")]
+    [AllureDescription("Verification of creating a 1-day online event with all mandatory fields and an uploaded picture.")]
     [Category("CreateEvent")]
     [Description("TC-009: Successful creation of a 1-day online event with all mandatory fields and a picture")]
     public void CreateOneDayOnlineEvent_WithMandatoryFieldsAndPicture_Successfully()
     {
         // --- Arrange ---
-        // Dynamically generating tomorrow's date formatted to exactly match the expected input
-        string dynamicDateValue = DateTime.Today.AddDays(1).ToString("MMMM d, yyyy", new CultureInfo("en-US"));
 
         _eventPage.NavigateToCreateEventPageFromProfile();
 

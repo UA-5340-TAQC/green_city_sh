@@ -1,6 +1,7 @@
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using NUnit.Allure.Attributes;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -26,6 +27,7 @@ public class CreateEventPage : BasePage
     {
     }
 
+    [AllureStep("Open Create Event page")]
     public void Open()
     {
         driver.Navigate().GoToUrl(Configuration.BaseUrl + PageUrl);
@@ -34,6 +36,8 @@ public class CreateEventPage : BasePage
                 drv.FindElements(TitleInput).Any(el => el.Displayed));
     }
 
+    
+    [AllureStep("Enter event title")]
     public CreateEventPage EnterTitle(string title)
     {
         var input = driver.FindElement(TitleInput);
@@ -42,12 +46,14 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Blur title field")]
     public CreateEventPage BlurTitleField()
     {
         driver.FindElement(By.CssSelector("body")).Click();
         return this;
     }
 
+    [AllureStep("Enter event description")]
     public CreateEventPage EnterDescription(string text)
     {
         var field = driver.FindElement(DescriptionInput);
@@ -56,6 +62,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter event date")]
     public CreateEventPage EnterDate(string date)
     {
         var input = driver.FindElement(DateInput);
@@ -64,6 +71,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter start time")]
     public CreateEventPage EnterStartTimeInput(string time)
     {
         var input = driver.FindElement(StartTimeInput);
@@ -73,6 +81,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter end time")]
     public CreateEventPage EnterEndTimeInput(string time)
     {
         var input = driver.FindElement(EndTimeInput);
@@ -83,6 +92,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Select invite option")]
     public CreateEventPage SelectInvite()
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -97,6 +107,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Click online checkbox")]
     public CreateEventPage ClickOnlineCheckbox()
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -110,6 +121,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter online link")]
     public CreateEventPage EnterOnlineLink(string url)
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -121,9 +133,13 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Check if 'Publish' button is enabled")]
     public bool IsPublishButtonEnabled() => driver.FindElement(PublishButton).Enabled;
+    
+    [AllureStep("Check if title error is visible")]
     public bool IsTitleErrorVisible() => driver.FindElements(TitleError).Any(e => e.Displayed);
 
+    [AllureStep("Get title error text")]
     public string GetTitleErrorText()
     {
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))

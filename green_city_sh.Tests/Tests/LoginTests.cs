@@ -6,6 +6,7 @@ using System;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
+using NUnit.Allure.Attributes;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -17,13 +18,14 @@ public class LoginTests : BaseTest
 
     protected override void OnSetup()
     {
-        NavigateToBaseUrl();
+        NavigateToBaseUrl(); 
         homePage = new HomePage(Driver!);
     }
 
     // Successful login with valid credentials
     [Test]
-    [Order(1)]
+    [AllureIssue("24")]
+    [AllureDescription("Verification of successful login to the system using valid credentials.")]
     [Description("TC-024: Successful login to the system with valid credentials")]
     [Category("Smoke")]
     public void VerifySuccessfulLoginWithValidCredentials()
@@ -34,8 +36,6 @@ public class LoginTests : BaseTest
 
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
         MySpacePage spacePage = new MySpacePage(Driver!);
-
-
 
         string accessToken = spacePage.GetAccessTokenFromLocalStorage();
         Assert.IsFalse(string.IsNullOrEmpty(accessToken), "Session token was not created in LocalStorage.");
