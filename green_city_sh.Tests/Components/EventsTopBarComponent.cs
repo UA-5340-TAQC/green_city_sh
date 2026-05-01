@@ -60,4 +60,15 @@ public class EventsTopBarComponent : BaseComponent
         searchInput.SendKeys(searchText);
         searchInput.SendKeys(Keys.Enter);
     }
+
+    public bool IsSearchIconVisible()
+    {
+        return RootElement.FindElement(SearchIcon).Displayed;
+    }
+
+    public bool IsSearchIconEnabled()
+    {
+        var elements = RootElement.FindElements(SearchIcon);
+        return elements.Count > 0 && elements[0].Enabled;
+    }
 }
