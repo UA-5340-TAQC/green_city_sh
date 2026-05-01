@@ -22,8 +22,8 @@ public class EventsTopBarComponent : BaseComponent
     {
         return "";
     }
-    
-     public void ClickSearchIcon() => WaitAndClick(SearchIcon);
+
+    public void ClickSearchIcon() => WaitAndClick(SearchIcon);
 
     public void ClickBookmarkIcon()
     {
@@ -42,7 +42,7 @@ public class EventsTopBarComponent : BaseComponent
     {
         return RootElement.FindElement(CreateEventButton).Enabled;
     }
-    
+
     public void ClickCreateEventButton()
     {
         RootElement.FindElement(CreateEventButton).Click();
@@ -50,7 +50,7 @@ public class EventsTopBarComponent : BaseComponent
 
     public void FillSearchInputField(string searchText)
     {
-        var searchInput = wait.Until(d => 
+        var searchInput = wait.Until(d =>
         {
             var element = RootElement.FindElement(SearchInputField);
             return element.Displayed ? element : null;
@@ -59,5 +59,16 @@ public class EventsTopBarComponent : BaseComponent
         searchInput.Clear();
         searchInput.SendKeys(searchText);
         searchInput.SendKeys(Keys.Enter);
+    }
+
+    public bool IsSearchIconVisible()
+    {
+        return RootElement.FindElement(SearchIcon).Displayed;
+    }
+
+    public bool IsSearchIconEnabled()
+    {
+        var elements = RootElement.FindElements(SearchIcon);
+        return elements.Count > 0 && elements[0].Enabled;
     }
 }

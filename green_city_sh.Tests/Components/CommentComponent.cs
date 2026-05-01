@@ -24,12 +24,14 @@ public class CommentComponent : BaseComponent
         By.XPath(".//div[contains(@class, 'wrapper-reply ng-star-inserted')]//div[@class='comment-text']");
     private By CancelEditBtn => By.XPath(".//button[contains(@class, 'cancel-edit')]");
     private By SaveEditBtn => By.XPath(".//button[contains(@class, 'save-edit')]");
+    private By RepliesLocator => By.XPath(".//div[contains(@class, 'wrapper-reply')]");
+
     private By EditedLabel => By.XPath(".//span[contains(@class, 'edited')]");
     private By SubmitCommentBtn => By.XPath(".//button[@class='primary-global-button']");
     private By CommentField => By.XPath(".//div[@class='comment-textarea']");
     private By FileInput => By.XPath(".//input[@type='file']");
     private By ImagePreview => By.XPath(".//img[@class='image-preview']");
-    
+
     public CommentComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
@@ -37,15 +39,32 @@ public class CommentComponent : BaseComponent
     public CommentComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
-    
-    public void EnterReplyComment(string text) =>
-        WaitAndTypeText(ReplyCommentField, text);
 
-    public void ClickSubmitCommentBtn() =>
-        WaitAndClick(SubmitCommentBtn);
+    public void EnterReplyComment(string text)
+    {
+        wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
+
+        wait.Until(d =>
+        {
+            var field = d.FindElement(ReplyCommentField);
+            field.Clear();
+            field.SendKeys(text);
+            return true;
+        });
+    }
+
+    public void EnterEditComment(string text) =>
+        WaitAndTypeText(EditCommentField, text);
+
+    public void ClickSubmitReplyBtn() =>
+        WaitAndClick(SubmitReplyBtn);
 
     public void ClickDeleteCommentBtn() =>
         WaitAndClick(DeleteCommentBtn);
+    public void ClickViewRepliesBtn() =>
+        WaitAndClick(ViewRepliesBtn);
+    public void ClickHideRepliesBtn() =>
+        WaitAndClick(HideRepliesBtn);
 
     public void ClickEditCommentBtn() =>
         WaitAndClick(EditCommentBtn);
@@ -56,16 +75,16 @@ public class CommentComponent : BaseComponent
     public void ClickUploadImgBtn() =>
         WaitAndClick(UploadImgBtn);
 
-    public void ClickEmojiBtn() => 
+    public void ClickEmojiBtn() =>
         WaitAndClick(EmojiBtn);
 
     public void ClickCancelEditBtn() =>
         WaitAndClick(CancelEditBtn);
 
-    public void ClickSaveEditBtn() => 
+    public void ClickSaveEditBtn() =>
         WaitAndClick(SaveEditBtn);
 
-    public string GetDate() => 
+    public string GetDate() =>
         RootElement.FindElement(DateComment).Text;
 
     public string GetTextComment() =>
@@ -73,11 +92,11 @@ public class CommentComponent : BaseComponent
 
     public string GetAuthorName() =>
         RootElement.FindElement(AuthorName).Text;
-    
+
     public bool DoesTextContain(string text) =>
         GetTextComment().Contains(text, StringComparison.OrdinalIgnoreCase);
 
-    public bool IsCommentFieldEmpty() => 
+    public bool IsCommentFieldEmpty() =>
         string.IsNullOrWhiteSpace(RootElement.FindElement(CommentField).GetAttribute("value"));
 
     public void UploadImage(string fileName)
@@ -105,18 +124,6 @@ public class CommentComponent : BaseComponent
         });
     }
 
-    public void EnterEditComment(string text) =>
-        WaitAndTypeText(EditCommentField, text);
-
-    public void ClickSubmitReplyBtn() =>
-        WaitAndClick(SubmitReplyBtn);
-
-    public void ClickViewRepliesBtn() => 
-        WaitAndClick(ViewRepliesBtn);
-
-    public void ClickHideRepliesBtn() =>
-        WaitAndClick(HideRepliesBtn);
-
     public string? GetLastComment() =>
         RootElement.FindElements(CommentText).FirstOrDefault()?.Text;
 
@@ -125,21 +132,20 @@ public class CommentComponent : BaseComponent
         WaitUntilElementVisibleBy(ReplyCommentText);
         return RootElement.FindElements(ReplyCommentText).FirstOrDefault()?.Text;
     }
-    
+
 
     public bool IsEditedLabelDisplayed()
     {
         WaitUntilElementVisibleBy(EditedLabel);
-        return RootElement.FindElement(EditedLabel).Displayed; 
+        return RootElement.FindElement(EditedLabel).Displayed;
     }
 
-    public string GetReplyButtonAttribute() => 
+    public string GetReplyButtonAttribute() =>
         RootElement.FindElement(ReplyCommentBtn).GetAttribute("class");
 
-    public bool IsViewBtnDisplayed() => 
+    public bool IsViewBtnDisplayed() =>
         FindElements(ViewRepliesBtn).Any(e => e.Displayed);
-
-    public bool IsHideBtnDisplayed() => 
+    public bool IsHideBtnDisplayed() =>
         FindElements(HideRepliesBtn).Any(e => e.Displayed);
 }
 

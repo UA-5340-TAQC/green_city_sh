@@ -9,12 +9,12 @@ public class MaterialCheckboxComponent : BaseComponent
 {
     private readonly By _inputLocator = By.CssSelector("input[type='checkbox']");
 
-    public MaterialCheckboxComponent(IWebDriver driver, By rootLocator) 
+    public MaterialCheckboxComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
     {
     }
 
-    public MaterialCheckboxComponent(IWebDriver driver, IWebElement componentRoot) 
+    public MaterialCheckboxComponent(IWebDriver driver, IWebElement componentRoot)
         : base(driver, componentRoot)
     {
     }
@@ -24,13 +24,13 @@ public class MaterialCheckboxComponent : BaseComponent
             ? RootElement
             : RootElement.FindElement(_inputLocator);
 
-public bool IsChecked()
+    public bool IsChecked()
     {
         string classAttribute = RootElement.GetAttribute("class") ?? string.Empty;
-        
+
         // Modern MDC-based Angular Material applies "mat-mdc-checkbox-checked", 
         // while older versions apply "mat-checkbox-checked" directly to the host element.
-        return classAttribute.Contains("mat-mdc-checkbox-checked") || 
+        return classAttribute.Contains("mat-mdc-checkbox-checked") ||
                classAttribute.Contains("mat-checkbox-checked");
     }
 

@@ -4,7 +4,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
-public class HeaderComponent: BaseComponent
+public class HeaderComponent : BaseComponent
 {
     private By HeaderLogo => By.CssSelector(".header_logo");
     private By NavigationLinks => By.CssSelector(".header_navigation-menu-left a");
@@ -20,9 +20,9 @@ public class HeaderComponent: BaseComponent
     private By NotificationsOption => By.CssSelector("[aria-label='notifications']");
     private By CabinetOption => By.CssSelector("a[href*='/ubs/user/orders']");
     private By SignOutOption => By.CssSelector("[aria-label='sign-out']");
-    
+
     private By UserName = By.CssSelector("#header_user-wrp .user-name");
-    
+
     public HeaderComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
@@ -43,7 +43,7 @@ public class HeaderComponent: BaseComponent
 
         var allLinks = RootElement.FindElements(NavigationLinks);
 
-        var targetLink = allLinks.FirstOrDefault(link => 
+        var targetLink = allLinks.FirstOrDefault(link =>
             link.Text.Contains(tabName, StringComparison.OrdinalIgnoreCase));
 
         if (targetLink != null)
@@ -60,13 +60,13 @@ public class HeaderComponent: BaseComponent
 
     public HeaderComponent ChangeLanguage(string langCode)
     {
-        var dropdown = RootElement.FindElement(LanguageDropdown);       
+        var dropdown = RootElement.FindElement(LanguageDropdown);
 
         dropdown.Click();
 
         var options = RootElement.FindElements(LanguageDropdownOptions);
 
-        var targetOption = options.FirstOrDefault(link => 
+        var targetOption = options.FirstOrDefault(link =>
             link.Text.Contains(langCode, StringComparison.OrdinalIgnoreCase));
 
         targetOption?.Click();
@@ -87,13 +87,13 @@ public class HeaderComponent: BaseComponent
             return false;
         }
     }
-    
+
     public void WaitForUserLoggedIn()
     {
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(_ => IsUserLoggedIn());
     }
-    
+
     public SignInModalComponent ClickSignIn()
     {
         var signInLink = RootElement.FindElement(SignInLink);

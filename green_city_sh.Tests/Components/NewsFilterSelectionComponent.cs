@@ -17,7 +17,7 @@ public class NewsFilterSelectionComponent : BaseComponent
     public void SelectFilter(string filterName)
     {
     }
-    
+
     public void SelectFilters(params string[] filterNames)
     {
     }

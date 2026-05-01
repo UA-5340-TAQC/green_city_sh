@@ -10,12 +10,12 @@ public class DateTimePickerComponent : BaseComponent
     private readonly By _inputLocator = By.CssSelector("input.mat-datepicker-input");
     private readonly By _calendarToggleLocator = By.CssSelector("mat-datepicker-toggle button");
 
-    public DateTimePickerComponent(IWebDriver driver, By rootLocator) 
+    public DateTimePickerComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
     {
     }
 
-    public DateTimePickerComponent(IWebDriver driver, IWebElement componentRoot) 
+    public DateTimePickerComponent(IWebDriver driver, IWebElement componentRoot)
         : base(driver, componentRoot)
     {
     }

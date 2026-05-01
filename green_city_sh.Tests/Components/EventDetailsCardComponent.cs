@@ -16,10 +16,10 @@ public class EventDetailsCardComponent : BaseComponent
     private By CancelRequestButton => By.CssSelector("div.save-join-event-block button.secondary-global-button:nth-of-type(2)");
     private By JoinEventButton => By.CssSelector("div.save-join-event-block button.primary-global-button");
     private By BackToEventsButton => By.XPath(".//div[@class='button-text']");
-    private By EventTitle => By.CssSelector(".event-title"); 
+    private By EventTitle => By.CssSelector(".event-title");
     private By DateOnly => By.CssSelector("div.event-date-content > div:nth-child(1)");
     private By TimeOnly => By.CssSelector("div.event-date-content > div:nth-child(3)");
-    private By EventLocation => By.CssSelector("div.event-location"); 
+    private By EventLocation => By.CssSelector("div.event-location");
     private By EventAuthor => By.CssSelector("div.event-author");
 
     public bool IsEventSaved()
@@ -32,17 +32,17 @@ public class EventDetailsCardComponent : BaseComponent
 
     public bool IsJoinRequestSent()
     {
-            var cancelBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(CancelRequestButton));
-            return cancelBtn.Displayed;
+        var cancelBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(CancelRequestButton));
+        return cancelBtn.Displayed;
     }
     public bool IsJoinEventButtonVisible()
     {
-            var joinBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(JoinEventButton));
-            return joinBtn.Displayed;
+        var joinBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(JoinEventButton));
+        return joinBtn.Displayed;
     }
     public bool IsJoinRequestCancelled()
     {
-            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(CancelRequestButton));
+        return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(CancelRequestButton));
     }
     public void ClickSaveEvent()
     {
@@ -66,7 +66,7 @@ public class EventDetailsCardComponent : BaseComponent
     {
         var joinButton = RootElement.FindElement(JoinEventButton);
         joinButton.Click();
-    }    
+    }
 
     public void ClickCancelRequest()
     {
@@ -77,7 +77,7 @@ public class EventDetailsCardComponent : BaseComponent
     public void ClickBackToEvents()
     {
         var backButton = RootElement.FindElement(BackToEventsButton);
-        
+
         IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
         js.ExecuteScript("arguments[0].click();", backButton);
     }
@@ -92,7 +92,7 @@ public class EventDetailsCardComponent : BaseComponent
         string date = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(DateOnly)).Text.Trim();
         string time = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(TimeOnly)).Text.Trim();
 
-        return $"{date} | {time}"; 
+        return $"{date} | {time}";
     }
 
     public string GetEventLocation()

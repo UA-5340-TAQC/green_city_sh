@@ -70,7 +70,7 @@ public class EventsListComponent : BaseComponent
 
             if (currentCardKey.Equals(targetKey, StringComparison.OrdinalIgnoreCase))
             {
-                return card; 
+                return card;
             }
         }
 

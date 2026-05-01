@@ -10,10 +10,10 @@ namespace green_city_sh.Tests.Components;
 public class DropDownComponent : BaseComponent
 {
     private const string OptionNameNotFound = "Dropdown option not found";
-    
+
     private readonly By _searchLocator;
     // Updated to global scope (removed leading dot)
-    private static readonly By DefaultOptions = By.XPath("//div[contains(@class,'cdk-overlay-pane')]//mat-option");
+    private static readonly By DefaultOptions = By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
     private readonly By _selectedValueLocator = By.CssSelector(".mat-mdc-select-value-text");
 
     public DropDownComponent(IWebDriver driver, By rootLocator)
@@ -31,7 +31,7 @@ public class DropDownComponent : BaseComponent
     public string GetSelectedOptionText()
     {
         // Polling the element until Angular populates the text (prevents empty string assertions)
-        var selectedValueElement = wait.Until(driver => 
+        var selectedValueElement = wait.Until(driver =>
         {
             try
             {
@@ -43,7 +43,7 @@ public class DropDownComponent : BaseComponent
                 return null; // Ignore stale elements and keep polling
             }
         });
-        
+
         return selectedValueElement!.Text.Trim();
     }
 
@@ -66,12 +66,12 @@ public class DropDownComponent : BaseComponent
 
     private IWebElement GetDropDownOptionByPartialName(string partialName)
     {
-        if (string.IsNullOrWhiteSpace(partialName)) 
+        if (string.IsNullOrWhiteSpace(partialName))
             throw new ArgumentException("Option cannot be empty", nameof(partialName));
-        
+
         var options = GetOptionList();
 
-        return options.FirstOrDefault(option => 
+        return options.FirstOrDefault(option =>
                    option.Text.Contains(partialName, StringComparison.OrdinalIgnoreCase))
                ?? throw new NoSuchElementException($"{OptionNameNotFound}: {partialName}");
     }

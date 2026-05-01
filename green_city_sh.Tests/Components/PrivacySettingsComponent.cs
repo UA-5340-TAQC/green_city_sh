@@ -4,8 +4,8 @@ namespace green_city_sh.Tests.Components;
 
 public class PrivacySettingsComponent : BaseComponent
 {
-    private By PrivacyDropdown(string type) => By.XPath($".//li[.//div[contains(., '{type}')]]//mat-select"); 
-    
+    private By PrivacyDropdown(string type) => By.XPath($".//li[.//div[contains(., '{type}')]]//mat-select");
+
     public PrivacySettingsComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }

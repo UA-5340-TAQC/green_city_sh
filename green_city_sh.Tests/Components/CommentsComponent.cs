@@ -15,32 +15,32 @@ public class CommentsComponent : BaseComponent
     public CommentsComponent(IWebDriver driver, IWebElement componentRoot) : base(driver, componentRoot)
     {
     }
-    
-    
-    private static readonly By CommentInputLocator = 
+
+
+    private static readonly By CommentInputLocator =
         By.CssSelector("div.comment-textarea[contenteditable='true']");
-    
+
     private static readonly By SubmitButtonLocator =
         By.XPath(".//button[contains(normalize-space(.), 'Comment')]");
-    
-    private static readonly By CommentCountLocator = 
+
+    private static readonly By CommentCountLocator =
         By.CssSelector("span#total-count");
-    
-    private static readonly By CommentItemLocator = 
+
+    private static readonly By CommentItemLocator =
         By.CssSelector("div.comment-body-wrapper.wrapper-comment");
-    
+
     private static readonly By CommentTextLocator =
         By.CssSelector("div.comment-text");
 
     private static readonly By CommentAuthorLocator =
         By.CssSelector("span.author-name");
-    
+
     private static readonly By DeleteButtonLocator =
         By.XPath(".//button[contains(normalize-space(.), 'Delete')]");
 
     private static readonly By ConfirmDeleteButtonLocator =
         By.CssSelector("app-warning-pop-up .m-btn.primary-global-button");
-    
+
     public CommentsComponent ScrollToCounter()
     {
         var counter = driver.FindElement(By.CssSelector("div.counter"));
@@ -64,13 +64,13 @@ public class CommentsComponent : BaseComponent
                            return null;
                        })
                    ?? throw new WebDriverTimeoutException("Comments section did not become visible");
-        
+
         return new CommentsComponent(driver, root);
     }
 
     public CommentsComponent WaitForCommentVisible(string text)
     {
-        new WebDriverWait(driver,TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(_ => IsCommentVisible(text));
         return this;
     }
@@ -103,7 +103,7 @@ public class CommentsComponent : BaseComponent
         input.SendKeys(text);
         return this;
     }
-    
+
     public string GetCommentInputText()
     => RootElement.FindElement(CommentInputLocator).Text;
 
@@ -116,7 +116,7 @@ public class CommentsComponent : BaseComponent
                     var btn = RootElement.FindElement(SubmitButtonLocator);
                     return btn.Enabled && btn.Displayed ? btn : null;
                 });
-            
+
         submitButton!.Click();
     }
 
@@ -124,21 +124,21 @@ public class CommentsComponent : BaseComponent
     {
         var elements = driver.FindElements(CommentCountLocator);
         if (elements.Count == 0) return 0;
-        
+
         new Actions(driver)
             .ScrollToElement(elements[0])
             .Perform();
-        
+
         return int.TryParse(elements[0].Text.Trim(), out var count) ? count : 0;
     }
 
     public string GetFirstCommentText()
     {
-        var firstComment =  driver
+        var firstComment = driver
             .FindElements(CommentItemLocator)
             .FirstOrDefault(e => e.Displayed)
             ?? throw new NoSuchElementException("No visible comments found");
-        
+
         return firstComment.FindElement(CommentTextLocator).Text;
     }
 
@@ -148,7 +148,7 @@ public class CommentsComponent : BaseComponent
                                .FindElements(CommentItemLocator)
                                .FirstOrDefault(e => e.Displayed)
                            ?? throw new NoSuchElementException("No visible comments found.");
-        
+
         return firstComment.FindElement(CommentAuthorLocator).Text;
     }
 
@@ -158,10 +158,10 @@ public class CommentsComponent : BaseComponent
             .ScrollToElement(driver.FindElement(CommentItemLocator))
             .Perform();
 
-            return driver
-                .FindElements(CommentItemLocator)
-                .Any(c => c.Displayed && c.FindElements(CommentTextLocator)
-                    .Any(t => t.Text.Contains(text)));
+        return driver
+            .FindElements(CommentItemLocator)
+            .Any(c => c.Displayed && c.FindElements(CommentTextLocator)
+                .Any(t => t.Text.Contains(text)));
 
     }
 
@@ -174,21 +174,21 @@ public class CommentsComponent : BaseComponent
             && c.FindElements(DeleteButtonLocator).Any())
         ?? throw new NoSuchElementException(
             $"Comment with '{text}' was not found");
-        
+
         new Actions(driver)
             .ScrollToElement(comment)
             .Perform();
-        
+
         comment.FindElement(DeleteButtonLocator).Click();
-        
+
         new WebDriverWait(driver,
                 TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(drv =>
                 drv.FindElements(By.CssSelector("app-warning-pop-up"))
                     .Any(e => e.Displayed));
-        
+
         driver.FindElement(ConfirmDeleteButtonLocator).Click();
-        
+
         new WebDriverWait(driver,
             TimeSpan.FromSeconds(Configuration.DefaultTimeout))
             .Until(_ => !IsCommentVisible(text));

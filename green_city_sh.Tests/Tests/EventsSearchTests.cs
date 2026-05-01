@@ -29,19 +29,19 @@ public class EventsSearchTests : BaseTest
 
         eventsPage!.EventsTopBar.ClickSearchIcon();
         eventsPage.EventsTopBar.FillSearchInputField(searchKeyword);
-        eventsPage.EventList.WaitForCardsToLoad(); 
+        eventsPage.EventList.WaitForCardsToLoad();
 
         var searchResults = eventsPage.GetAllEventCards();
 
-        Assert.That(searchResults, Is.Not.Empty, 
+        Assert.That(searchResults, Is.Not.Empty,
             $"Expected to find at least one event matching the keyword '{searchKeyword}'.");
 
         foreach (var card in searchResults)
         {
             string title = card.GetTitle();
-            bool isRelevant = title.Contains(searchKeyword, StringComparison.OrdinalIgnoreCase );
+            bool isRelevant = title.Contains(searchKeyword, StringComparison.OrdinalIgnoreCase);
 
-            Assert.That(isRelevant, Is.True, 
+            Assert.That(isRelevant, Is.True,
                 $"Event card '{title}' did not contain the search keyword '{searchKeyword}'.");
         }
     }

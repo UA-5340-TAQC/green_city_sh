@@ -19,32 +19,32 @@ public class CreateUpdateEventPage : BasePage
     private By HeaderSignInButton => By.XPath("//*[contains(@class, 'sign-in') or contains(text(), 'Sign in')]");
     private By MyEventsTab => By.XPath("//div[@role='tab' and .//span[contains(text(), 'My Events')]]");
     private By AddEventButton => By.Id("create-button-event");
-    
+
     private By TitleField => By.CssSelector("input[formcontrolname='title']");
     private By DurationDropdown => By.CssSelector("mat-select[formcontrolname='duration']");
     private By EventTypeDropdown => By.CssSelector("mat-select[formcontrolname='open']");
     private By InviteDropdown => By.XPath("//mat-form-field[.//mat-label[contains(text(), 'Invite')]]//mat-select");
     private By DescriptionEditor => By.CssSelector("quill-editor[formcontrolname='description'] .ql-editor");
-    
+
     private By AddPictureButton => By.CssSelector("input[type='file']");
     private By UploadedImagePreview => By.CssSelector(".input-image-wrapper.selected img");
     private By ClosePictureIcon => By.CssSelector(".selected-delete");
     private By PictureCounter => By.XPath("//div[contains(@class, 'justify-content-between') and .//mat-label[normalize-space()='Picture']]//mat-label[contains(@class, 'xs-text')]");
     private By MainBadge => By.CssSelector(".selected-text");
-    
+
     private By DatePickerInput => By.XPath("//div[contains(@class, 'mat-mdc-text-field-wrapper') and .//input[@formcontrolname='day']]");
     private By StartTimeInput => By.CssSelector("input[formcontrolname='startTime']");
     private By EndTimeInput => By.CssSelector("input[formcontrolname='finishTime']");
     private By AllDayCheckbox => By.CssSelector("mat-checkbox[formcontrolname='allDay']");
     private By ApplyToAllDaysCheckbox => By.XPath("//mat-checkbox[contains(., 'Apply to all days')]");
-    
+
     private By PlaceLocationCheckbox => By.XPath("//mat-checkbox[contains(., 'Place')]");
     private By AddressField => By.CssSelector("input[formcontrolname='place']");
     private By FirstAddressSuggestion => By.CssSelector(".pac-container .pac-item");
-    
+
     private By OnlineLocationCheckbox => By.XPath("//mat-checkbox[contains(., 'Online')]");
     private By OnlineLinkField => By.CssSelector("input[formcontrolname='onlineLink']");
-    
+
     private By CancelLink => By.CssSelector("button.tertiary-global-button");
     private By PreviewButton => By.XPath("//button[contains(., 'Preview')]");
     private By PublishButton => By.XPath("//button[contains(., 'Publish')]");
@@ -227,7 +227,7 @@ public class CreateUpdateEventPage : BasePage
     {
         var timeInput = wait.Until(ExpectedConditions.ElementToBeClickable(locator));
         var jsExecutor = (IJavaScriptExecutor)driver;
-        
+
         string script = @"
             var element = arguments[0];
             var value = arguments[1];
@@ -278,14 +278,14 @@ public class CreateUpdateEventPage : BasePage
     {
         var js = (IJavaScriptExecutor)driver;
         js.ExecuteScript("document.activeElement.blur();");
-        
+
         var input = wait.Until(ExpectedConditions.ElementToBeClickable(AddressField));
         input.Click();
-        
+
         var suggestion = wait.Until(ExpectedConditions.ElementToBeClickable(FirstAddressSuggestion));
         suggestion.Click();
         input.SendKeys(Keys.Enter);
-        
+
         // Wait for input to be populated instead of Thread.Sleep
         wait.Until(d => !string.IsNullOrEmpty(d.FindElement(AddressField).GetAttribute("value")));
     }

@@ -31,7 +31,7 @@ public class SignUpModalComponent : BaseComponent
     {
     }
 
-    
+
     public static SignUpModalComponent WaitAndCreate(IWebDriver driver)
     {
         var modalRoot = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
@@ -49,7 +49,7 @@ public class SignUpModalComponent : BaseComponent
         return new SignUpModalComponent(driver, modalRoot);
     }
 
-    
+
     public void EnterEmail(string email)
     {
         var input = RootElement.FindElement(EmailInputLocator);
@@ -84,7 +84,7 @@ public class SignUpModalComponent : BaseComponent
         button.Click();
     }
 
-   
+
     public bool IsSignUpButtonEnabled()
     {
         var button = RootElement.FindElement(SignUpButtonLocator);

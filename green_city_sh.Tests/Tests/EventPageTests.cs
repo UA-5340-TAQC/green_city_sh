@@ -16,7 +16,7 @@ public class EventPageTests : BaseTest
         NavigateToBaseUrl();
 
         HomePage homePage = new HomePage(Driver!);
-        
+
         homePage.Header.ChangeLanguage("En");
     }
 

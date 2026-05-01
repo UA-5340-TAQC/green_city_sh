@@ -18,7 +18,7 @@ public class BookmarkTabComponent : BaseComponent
     {
         var allTabs = RootElement.FindElements(TabButtons);
 
-        var targetTab = allTabs.FirstOrDefault(tab => 
+        var targetTab = allTabs.FirstOrDefault(tab =>
             tab.Text.Contains(tabName, StringComparison.OrdinalIgnoreCase));
 
         if (targetTab != null)

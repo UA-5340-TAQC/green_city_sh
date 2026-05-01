@@ -27,12 +27,12 @@ public class HomePageTests : BaseTest
         });
     }
 
-    
-    
-     [TearDown]
-     public void TearDown()
-     {
-         Driver?.Quit();
+
+
+    [TearDown]
+    public void TearDown()
+    {
+        Driver?.Quit();
     }
 }
 
