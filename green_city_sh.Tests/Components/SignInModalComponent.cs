@@ -171,7 +171,7 @@ public class SignInModalComponent : BaseComponent
     {
         EnterEmail(email);
         EnterPassword(password);
-        ClickSignIn();
+        ClickSignInAndWaitClose();
     }
 
     /// <summary>
