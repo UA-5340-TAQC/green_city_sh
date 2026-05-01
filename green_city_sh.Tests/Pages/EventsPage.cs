@@ -9,7 +9,8 @@ public class EventsPage : BasePage
     private EventsTopBarComponent? eventsTopBar;
     private EventsFilterSectionComponent? filterSection;
     private EventsListComponent? eventList;
-    public EventsTopBarComponent EventsTopBar => eventsTopBar ??= new EventsTopBarComponent(driver, By.CssSelector(".event-header"));
+
+    public EventsTopBarComponent EventsTopBar => eventsTopBar ??= new EventsTopBarComponent(driver, By.CssSelector(".event-header"));    
     public EventsFilterSectionComponent FilterSection => filterSection ??= new EventsFilterSectionComponent(driver, By.CssSelector(".filter-container"));
     public EventsListComponent EventList => eventList ??= new EventsListComponent(driver, By.CssSelector(".event-list"));
 
@@ -62,6 +63,11 @@ public class EventsPage : BasePage
     {
         //Перевірити, чи активний list view (до елемента картки додається клас .list-view)
         return driver.FindElements(By.CssSelector(".list-view")).Count > 0;
+    }
+
+    public void ClickSearchButton()
+    {
+        EventsTopBar.ClickSearchIcon();
     }
 
     public void ApplyFilter(string category, string value)
