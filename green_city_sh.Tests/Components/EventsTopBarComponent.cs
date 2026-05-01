@@ -24,9 +24,19 @@ public class EventsTopBarComponent : BaseComponent
         return "";
     }
 
+    public bool IsSearchIconVisible()
+    {
+        return RootElement.FindElement(SearchIcon).Displayed;
+    }
+    public bool IsSearchIconEnabled()
+    {
+        var elements = RootElement.FindElements(SearchIcon);
+        return elements.Count > 0 && elements[0].Enabled;
+    }
+    
     public void ClickSearchIcon()
     {
-        //Реалізувати клік по іконці пошуку
+        RootElement.FindElement(SearchIcon).Click();
     }
 
     public void ClickBookmarkIcon()
@@ -39,13 +49,26 @@ public class EventsTopBarComponent : BaseComponent
         //Реалізувати клік по іконці "My events"
     }
 
+    public bool IsCreateEventButtonVisible()
+    {
+        return RootElement.FindElement(CreateEventButton).Displayed;
+    }
+
+    public bool IsCreateEventButtonEnable()
+    {
+        return RootElement.FindElement(CreateEventButton).Enabled;
+    }
+    
     public void ClickCreateEventButton()
     {
-        //Реалізувати клік по кнопці створення події
+        RootElement.FindElement(CreateEventButton).Click();
     }
 
     public void FillSearchInputField(string searchText)
     {
-        //Реалізувати введення тексту в поле пошуку
+        var searchInput = RootElement.FindElement(SearchInputField);
+        searchInput.Clear();
+        searchInput.SendKeys(searchText);
+        searchInput.SendKeys(Keys.Enter);    
     }
 }

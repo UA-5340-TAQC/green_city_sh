@@ -1,3 +1,4 @@
+using System;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -30,6 +31,7 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
+        new DriverManager().SetUpDriver(new ChromeConfig(), WebDriverManager.Helpers.VersionResolveStrategy.MatchingBrowser);
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
