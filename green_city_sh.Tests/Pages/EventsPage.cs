@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
+using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -29,6 +30,19 @@ public class EventsPage : BasePage
         string baseUrl = Configuration.BaseUrl.TrimEnd('/');
         string eventsUrl = $"{baseUrl}/events";
         driver.Navigate().GoToUrl(eventsUrl);
+    }
+
+    public void WaitForFirstCardVisible()
+    {
+        new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
+            .Until(drv => drv.FindElements(By.CssSelector("app-events-list-item:first-child"))
+                .Any(e => e.Displayed));
+    }
+
+    public EventCardComponent GetFirstEventCard()
+    {
+        var card = driver.FindElement(By.CssSelector("app-events-list-item:first-child"));
+        return new EventCardComponent(driver, card);
     }
 
     public string GetItemsFoundText()

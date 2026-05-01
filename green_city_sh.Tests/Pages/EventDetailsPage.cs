@@ -83,6 +83,36 @@ public class EventDetailsPage : BasePage
     {
         driver.Navigate().Refresh();
         return this;
+        driver.Navigate().GoToUrl($"{Configuration.BaseUrl}/events");
+        WaitUntilPageLoads();
+
+        var moreButton = wait.Until(drv =>
+                             drv.FindElements(MoreButtonLocator)
+                                 .FirstOrDefault(button => button.Displayed && button.Enabled))
+                         ?? throw new WebDriverTimeoutException("No visible event details button was found on the events page.");
+
+        moreButton.Click();
+        wait.Until(drv => drv.Url.Contains("/events/", StringComparison.OrdinalIgnoreCase));
+        WaitUntilPageLoads();
+
+        return this;
+    }
+
+    public EventDetailsPage RefreshPage()
+    {
+        driver.Navigate().GoToUrl($"{Configuration.BaseUrl}/events");
+        WaitUntilPageLoads();
+
+        var moreButton = wait.Until(drv =>
+                             drv.FindElements(MoreButtonLocator)
+                                 .FirstOrDefault(button => button.Displayed && button.Enabled))
+                         ?? throw new WebDriverTimeoutException("No visible event details button was found on the events page.");
+
+        moreButton.Click();
+        wait.Until(drv => drv.Url.Contains("/events/", StringComparison.OrdinalIgnoreCase));
+        WaitUntilPageLoads();
+
+        return this;
     }
 
     public EventDetailsCardComponent EventDetailsCard => eventDetailsCard ??=
@@ -93,4 +123,8 @@ public class EventDetailsPage : BasePage
 
     public CancelJoiningEventModal CancelModal => cancelModal ??=
         new CancelJoiningEventModal(driver, By.XPath(".//app-warning-pop-up[@class='ng-star-inserted']"));
+
+    public CommentsComponent GetCommentsComponent()
+        => CommentsComponent.WaitAndCreate(driver);
+
 }
