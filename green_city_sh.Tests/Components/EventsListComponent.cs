@@ -28,7 +28,7 @@ public class EventsListComponent : BaseComponent
 
     public void WaitForCardsToLoad()
     {
-        wait.Until(ExpectedConditions.InvisibilityOfElementLocated(LoadingSpinner));
+        wait.Until(d => GetEventCardsCount() > 0);
     }
 
     public List<EventCardComponent> GetAllEventCards()
