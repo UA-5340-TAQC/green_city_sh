@@ -10,7 +10,7 @@ public class TC001_AddCommentTests : BaseTest
 {
     private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
         ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
-    private static string TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD") 
+    private static string TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD")
                                                   ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
     private const string CommentText = "Cool!";
 
@@ -25,11 +25,11 @@ public class TC001_AddCommentTests : BaseTest
             .Header
             .ChangeLanguage("En")
             .ClickSignIn();
-        
-            SignInModalComponent
-                .WaitAndCreate(Driver!)
-                .Login(Configuration.TestEmail, Configuration.TestPassword);
-            
+
+        SignInModalComponent
+            .WaitAndCreate(Driver!)
+            .Login(Configuration.TestEmail, Configuration.TestPassword);
+
         eventDetailsPage = new EventDetailsPage(Driver!);
         eventDetailsPage.Open();
 
@@ -41,12 +41,12 @@ public class TC001_AddCommentTests : BaseTest
         try
         {
             if (Driver is null) return;
-            
+
             eventDetailsPage ??= new EventDetailsPage(Driver);
             eventDetailsPage.Open();
-            
+
             var freshComments = eventDetailsPage.GetCommentsComponent();
-            
+
             if (freshComments.IsCommentVisible(CommentText))
                 freshComments.DeleteComment(CommentText);
         }
@@ -61,7 +61,7 @@ public class TC001_AddCommentTests : BaseTest
     public void TC001_Step1_ClickCommentField_BecomesActive()
     {
         commentsComponent!.ClickCommentField();
-        
+
         Assert.That(
             commentsComponent.IsCommentFieldFocus(),
             Is.True,
@@ -75,7 +75,7 @@ public class TC001_AddCommentTests : BaseTest
         commentsComponent!
             .ClickCommentField()
             .EnterComment(CommentText);
-        
+
         Assert.That(commentsComponent.GetCommentInputText(),
             Is.EqualTo(CommentText),
             "Entered text should be visible in the comment input field.");
@@ -93,9 +93,9 @@ public class TC001_AddCommentTests : BaseTest
             .ClickCommentField()
             .EnterComment(CommentText)
             .SubmitComment();
-        
+
         commentsComponent.WaitForCommentVisible(CommentText);
-        
+
         commentsComponent.ScrollToCounter();
 
         Assert.That(commentsComponent.GetCommentCount(),
@@ -116,7 +116,7 @@ public class TC001_AddCommentTests : BaseTest
         eventDetailsPage!.RefreshPage();
         commentsComponent = eventDetailsPage.GetCommentsComponent();
 
-        
+
         Assert.That(commentsComponent.IsCommentVisible(CommentText),
             Is.True,
             "Comment should persist after page refresh.");

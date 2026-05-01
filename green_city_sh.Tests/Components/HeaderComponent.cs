@@ -85,7 +85,7 @@ public class HeaderComponent : BaseComponent
             return false;
         }
     }
-    
+
     public void WaitForUserLoggedIn()
     {
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))

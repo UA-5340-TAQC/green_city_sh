@@ -1,16 +1,16 @@
 ﻿name: CI for GreenCity (.NET + NUnit)
 
 on:
-  workflow_dispatch:
   push:
     branches: [ main ]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [ main ]
 
 permissions:
   pull-requests: write
-  contents: write
   checks: write
+  contents: write
 
 jobs:
   build:

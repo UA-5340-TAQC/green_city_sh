@@ -132,7 +132,7 @@ public class CommentComponent : BaseComponent
         WaitUntilElementVisibleBy(ReplyCommentText);
         return RootElement.FindElements(ReplyCommentText).FirstOrDefault()?.Text;
     }
-    
+
 
     public bool IsEditedLabelDisplayed()
     {
