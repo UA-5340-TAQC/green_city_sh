@@ -6,11 +6,11 @@ namespace green_city_sh.Tests.Pages;
 
 public class EventsPage : BasePage
 {
-    private EventsTopBarComponent? header;
+    private EventsTopBarComponent? eventsTopBar;
     private EventsFilterSectionComponent? filterSection;
     private EventsListComponent? eventList;
-
-    public EventsTopBarComponent Header => header ??= new EventsTopBarComponent(driver, By.CssSelector(".event-header"));
+   
+    public EventsTopBarComponent EventsTopBar => eventsTopBar ??= new EventsTopBarComponent(driver, By.CssSelector(".event-header"));
     public EventsFilterSectionComponent FilterSection => filterSection ??= new EventsFilterSectionComponent(driver, By.CssSelector(".filter-container"));
     public EventsListComponent EventList => eventList ??= new EventsListComponent(driver, By.CssSelector(".event-list"));
 
@@ -26,9 +26,9 @@ public class EventsPage : BasePage
 
     public void OpenEventsPage()
     {
-        string currentUrl = driver.Url;
-        Uri uri = new Uri(currentUrl);
-        driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/events");
+        string baseUrl = Configuration.BaseUrl.TrimEnd('/');
+        string eventsUrl = $"{baseUrl}/events";
+        driver.Navigate().GoToUrl(eventsUrl);
     }
 
     public string GetItemsFoundText()
@@ -65,6 +65,11 @@ public class EventsPage : BasePage
         return driver.FindElements(By.CssSelector(".list-view")).Count > 0;
     }
 
+    public void ClickSearchButton()
+    {
+        EventsTopBar.ClickSearchIcon();
+    }
+
     public void ApplyFilter(string category, string value)
     {
         //Застосувати фільтр за категорією та значенням
@@ -77,7 +82,7 @@ public class EventsPage : BasePage
 
     public void ClickCreateEvent()
     {
-        //Клікнути на кнопку створення події
+        EventsTopBar.ClickCreateEventButton();
     }
 
     public void JoinEventByIndex(int index)
