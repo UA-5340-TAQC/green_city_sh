@@ -12,17 +12,14 @@ public class SignUpModalComponent : BaseComponent
     private static readonly By UserNameInputLocator = By.CssSelector("input[formcontrolname='firstName']");
     private static readonly By PasswordInputLocator = By.CssSelector("input[formcontrolname='password']");
     private static readonly By ConfirmPasswordInputLocator = By.CssSelector("input[formcontrolname='repeatPassword']");
+
     private static readonly By SignUpButtonLocator = By.CssSelector("button[type='submit']");
+
     private static readonly By SuccessMessageLocator = By.CssSelector(".mat-mdc-snack-bar-label");
 
-    private static readonly By InvalidEmailMessageLocator =
-        By.CssSelector("app-error[controlname='email'] .margining");
-
-    private static readonly By PasswordMismatchMessageLocator =
-        By.XPath(".//div[contains(text(),'Passwords do not match')]");
-
-    private static readonly By UserAlreadyExistsMessageLocator =
-        By.XPath(".//input[contains(@class,'wrong-input')]");
+    private static readonly By InvalidEmailMessageLocator = By.CssSelector("app-error[controlname='email'] .margining");
+    private static readonly By PasswordMismatchMessageLocator = By.XPath(".//div[contains(text(),'Passwords do not match')]");
+    private static readonly By UserAlreadyExistsMessageLocator = By.XPath(".//input[contains(@class,'wrong-input')]");
 
     public SignUpModalComponent(IWebDriver driver, By rootLocator)
         : base(driver, rootLocator)
@@ -34,6 +31,7 @@ public class SignUpModalComponent : BaseComponent
     {
     }
 
+
     public static SignUpModalComponent WaitAndCreate(IWebDriver driver)
     {
         var modalRoot = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
@@ -42,11 +40,8 @@ public class SignUpModalComponent : BaseComponent
                 foreach (var modal in drv.FindElements(RootLocator))
                 {
                     if (modal.Displayed)
-                    {
                         return modal;
-                    }
                 }
-
                 return null;
             })
             ?? throw new WebDriverTimeoutException("Sign-up modal did not appear.");
@@ -54,38 +49,41 @@ public class SignUpModalComponent : BaseComponent
         return new SignUpModalComponent(driver, modalRoot);
     }
 
-    public void FillRegistrationForm(string email, string userName, string password)
-    {
-        EnterEmail(email);
-        EnterUserName(userName);
-        EnterPassword(password);
-        EnterConfirmPassword(password);
-    }
 
     public void EnterEmail(string email)
     {
-        WaitAndTypeText(EmailInputLocator, email);
+        var input = RootElement.FindElement(EmailInputLocator);
+        input.Clear();
+        input.SendKeys(email);
     }
 
     public void EnterUserName(string userName)
     {
-        WaitAndTypeText(UserNameInputLocator, userName);
+        var input = RootElement.FindElement(UserNameInputLocator);
+        input.Clear();
+        input.SendKeys(userName);
     }
 
     public void EnterPassword(string password)
     {
-        WaitAndTypeText(PasswordInputLocator, password);
+        var input = RootElement.FindElement(PasswordInputLocator);
+        input.Clear();
+        input.SendKeys(password);
     }
 
     public void EnterConfirmPassword(string password)
     {
-        WaitAndTypeText(ConfirmPasswordInputLocator, password);
+        var input = RootElement.FindElement(ConfirmPasswordInputLocator);
+        input.Clear();
+        input.SendKeys(password);
     }
 
     public void ClickSignUp()
     {
-        WaitAndClick(SignUpButtonLocator);
+        var button = RootElement.FindElement(SignUpButtonLocator);
+        button.Click();
     }
+
 
     public bool IsSignUpButtonEnabled()
     {
@@ -95,7 +93,7 @@ public class SignUpModalComponent : BaseComponent
 
     public string GetSuccessMessage()
     {
-        string? message = wait.Until(driver =>
+        var message = wait.Until(driver =>
         {
             try
             {
@@ -111,53 +109,37 @@ public class SignUpModalComponent : BaseComponent
         });
 
         if (string.IsNullOrWhiteSpace(message))
-        {
             throw new WebDriverTimeoutException("Success message was not displayed.");
-        }
 
         return message;
     }
 
-    private bool IsAnyElementDisplayed(By locator)
-    {
-        try
-        {
-            return wait.Until(_ =>
-                RootElement.FindElements(locator)
-                    .Any(e => e.Displayed));
-        }
-        catch (WebDriverTimeoutException)
-        {
-            return false;
-        }
-    }
-
     public bool IsInvalidEmailMessageDisplayed()
     {
-        return IsAnyElementDisplayed(InvalidEmailMessageLocator);
+        return RootElement.FindElements(InvalidEmailMessageLocator).Any(e => e.Displayed);
     }
 
     public bool IsPasswordMismatchMessageDisplayed()
     {
-        return IsAnyElementDisplayed(PasswordMismatchMessageLocator);
+        return RootElement.FindElements(PasswordMismatchMessageLocator).Any();
     }
 
     public bool IsUserAlreadyExistsErrorDisplayed()
     {
-        return IsAnyElementDisplayed(UserAlreadyExistsMessageLocator);
+        return RootElement.FindElements(UserAlreadyExistsMessageLocator).Any();
     }
 
     public bool IsModalVisible()
     {
-        try
-        {
-            return wait.Until(_ =>
-                driver.FindElements(RootLocator)
-                    .Any(e => e.Displayed));
-        }
-        catch (WebDriverTimeoutException)
-        {
-            return false;
-        }
+        return RootElement.Displayed;
+    }
+
+    public void FillRegistrationForm(string email, string userName, string password)
+    {
+        EnterEmail(email);
+        EnterUserName(userName);
+        EnterPassword(password);
+        EnterConfirmPassword(password);
     }
 }
+

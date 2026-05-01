@@ -19,8 +19,8 @@ public abstract class Base
         this.js = (IJavaScriptExecutor)driver;
     }
 
-    public string GetAccessTokenFromLocalStorage()
+    public string? GetAccessTokenFromLocalStorage()
     {
-        return (string)js.ExecuteScript("return window.localStorage.getItem('accessToken');");
+        return (string?)js.ExecuteScript("return window.localStorage.getItem('accessToken');");
     }
 }

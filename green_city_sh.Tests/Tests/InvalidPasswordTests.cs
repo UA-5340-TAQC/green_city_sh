@@ -6,6 +6,7 @@ using green_city_sh.Tests.Components;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class InvalidPasswordTests : BaseTest
 {
     private HomePage? _homePage;
@@ -24,7 +25,7 @@ public class InvalidPasswordTests : BaseTest
         const string invalidPassword = "wrongPassword123!";
 
         // Act
-        
+
         SignInModalComponent signInModal = _homePage!.Header.ClickSignIn();
 
         signInModal.EnterEmail(Configuration.TestEmail)

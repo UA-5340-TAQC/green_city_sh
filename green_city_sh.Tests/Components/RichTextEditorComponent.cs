@@ -2,7 +2,7 @@
 
 namespace green_city_sh.Tests.Components;
 
-public class RichTextEditorComponent: BaseComponent
+public class RichTextEditorComponent : BaseComponent
 {
     public RichTextEditorComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {

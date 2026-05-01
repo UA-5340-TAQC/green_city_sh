@@ -3,9 +3,10 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Interactions;
+using System;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
-using WebDriverManager.Helpers;
 
 namespace green_city_sh.Tests.Drivers;
 
@@ -20,8 +21,10 @@ public static class DriverFactory
             BrowserType.Edge => CreateEdgeDriver(),
             _ => throw new ArgumentException($"Browser type {browserType} is not supported")
         };
-
-        driver.Manage().Window.Maximize();
+        if (!Configuration.HeadlessMode)
+        {
+            driver.Manage().Window.Maximize();
+        }
         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Configuration.DefaultTimeout);
         driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Configuration.PageLoadTimeout);
 
@@ -30,28 +33,28 @@ public static class DriverFactory
 
     private static IWebDriver CreateChromeDriver()
     {
+        new DriverManager().SetUpDriver(new ChromeConfig(), WebDriverManager.Helpers.VersionResolveStrategy.MatchingBrowser);
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         options.AddArgument("--disable-notifications");
         options.AddArgument("--disable-popup-blocking");
+        options.AddArgument("--window-size=1920,1080");
         if (Configuration.HeadlessMode)
         {
             options.AddArgument("--headless");
-            options.AddArgument("--window-size=1920,1080");
         }
+
         return new ChromeDriver(options);
     }
 
     private static IWebDriver CreateFirefoxDriver()
     {
-        new DriverManager().SetUpDriver(new FirefoxConfig());
         var options = new FirefoxOptions();
         return new FirefoxDriver(options);
     }
 
     private static IWebDriver CreateEdgeDriver()
     {
-        new DriverManager().SetUpDriver(new EdgeConfig());
         var options = new EdgeOptions();
         options.AddArgument("--start-maximized");
         return new EdgeDriver(options);
