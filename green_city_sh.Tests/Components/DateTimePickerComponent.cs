@@ -42,6 +42,6 @@ public class DateTimePickerComponent : BaseComponent
 
     public string GetSelectedDate()
     {
-        return FindElement(_inputLocator).GetAttribute("value");
+        return FindElement(_inputLocator).GetAttribute("value") ?? string.Empty;
     }
 }

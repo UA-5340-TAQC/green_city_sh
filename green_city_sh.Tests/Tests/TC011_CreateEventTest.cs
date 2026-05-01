@@ -6,6 +6,7 @@ using OpenQA.Selenium;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class TC011_CreateEventTest : BaseTest
 {
     private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
@@ -44,7 +45,7 @@ public class TC011_CreateEventTest : BaseTest
     }
 
     [TearDown]
-    public void TearDown()
+    public new void TearDown()
     {
         try
         {
