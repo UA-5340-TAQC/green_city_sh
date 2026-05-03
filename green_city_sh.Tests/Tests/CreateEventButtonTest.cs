@@ -16,7 +16,6 @@ public class CreateEventButtonTest : BaseTest
         NavigateToBaseUrl();
 
         eventsPage = new EventsPage(Driver!);
-        
         eventsPage.Header.ChangeLanguage("en");
         eventsPage.Header.ClickSignIn();
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
