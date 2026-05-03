@@ -93,7 +93,7 @@ public class NewsListComponent : BaseComponent
     /// Waits while news cards are loading.
     /// </summary>
     public void WaitForCardsToLoad()
-        {
-            wait.Until(driver => GetNewsCards() > 0);
-        }
+    {
+        wait.Until(driver => GetNewsCards() > 0);
     }
+}
