@@ -17,6 +17,8 @@ public class SearchTypeAndDateRangeTest : BaseTest
 
         eventsPage = new EventsPage(Driver!);
         eventsPage.Header.ChangeLanguage("en");
+        eventsPage.OpenEventsPage();
+
 
     }
 
@@ -26,7 +28,6 @@ public class SearchTypeAndDateRangeTest : BaseTest
     [Category("Smoke")]
     public void SearchTypeAndDateRange()
     {
-        eventsPage.OpenEventsPage();
 
         Assert.That(eventsPage.EventsTopBar.IsSearchIconVisible(), "Search icon should be visible on the events page.");
         Assert.That(eventsPage.EventsTopBar.IsSearchIconEnabled(), "Search button should be visible on the events page.");
