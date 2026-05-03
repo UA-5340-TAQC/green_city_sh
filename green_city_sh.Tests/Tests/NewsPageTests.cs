@@ -1,10 +1,9 @@
 ﻿using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -32,6 +31,8 @@ public class NewsPageTests : BaseTest
     }
 
     [Test]
+    [AllureIssue("28")]
+    [AllureDescription("Filter news by tags - verify each tag shows relevant news and counter updates correctly")]
     [Description("Filter news by tags - verify each tag shows relevant news and counter updates correctly")]
     [Category("Smoke")]
     public void FilterNewsByTags_ShowsOnlyNewsWithThatTag()
