@@ -1,4 +1,5 @@
-﻿using green_city_sh.Tests.Infrastructure;
+﻿using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -48,8 +49,10 @@ public class EventCardComponent : BaseComponent
     // --- Essential Methods ---
     #region Data Extraction
 
+    [AllureStep("Get the title of the event card")]
     public string GetTitle() => RootElement.FindElement(TitleLocator).Text.Trim();
 
+    [AllureStep("Get the date and time of the event")]
     public string GetDateAndTime()
     {
         string date = RootElement.FindElement(DateLocator).Text.Trim();
@@ -57,26 +60,35 @@ public class EventCardComponent : BaseComponent
         return $"{date} {time}".Trim();
     }
 
+    [AllureStep("Get the date of the event")]
     public string GetDate() => RootElement.FindElement(DateLocator).Text.Trim();
+
+    [AllureStep("Get the time of the event")]
     public string GetTime() => RootElement.FindElement(TimeLocator).Text.Trim();
 
+    [AllureStep("Get the author's name from the event card")]
     public string GetAuthorName()
     {
         return RootElement.FindElement(AuthorNameLocator).Text.Trim();
     }
 
+    [AllureStep("Get the location of the event")]
     public string GetLocation() => RootElement.FindElement(LocationLocator).Text.Trim();
 
+    [AllureStep("Get the status of the event")]
     public string GetStatus() => RootElement.FindElement(StatusLabelLocator).Text.Trim();
 
+    [AllureStep("Get the number of rating stars for the event")]
     public int GetRating() => RootElement.FindElements(RatingStarsLocator).Count;
 
     #endregion
 
     #region Interactions
 
+    [AllureStep("Click the 'More' button on the event card")]
     public void ClickMore() => RootElement.FindElement(MoreButtonLocator).Click();
 
+    [AllureStep("Click the bookmark button on the event card")]
     public void ClickBookmark()
     {
         var bookmarkButtons = RootElement.FindElements(BookmarkButtonLocator);
@@ -91,6 +103,7 @@ public class EventCardComponent : BaseComponent
         }
     }
 
+    [AllureStep("Click the 'Join Event' button on the event card")]
     public void ClickJoinEvent()
     {
         var joinButtons = RootElement.FindElements(JoinButtonLocator);
@@ -110,9 +123,11 @@ public class EventCardComponent : BaseComponent
 
     #region State Verification
 
+    [AllureStep("Check if the event is marked as Closed")]
     public bool IsClosed() =>
         GetStatus().Equals("Closed", StringComparison.OrdinalIgnoreCase);
 
+    [AllureStep("Check if user has joined the event")]
     public bool IsJoined()
     {
         try
@@ -122,16 +137,17 @@ public class EventCardComponent : BaseComponent
         }
         catch (NoSuchElementException)
         {
-            // If the join button doesn't exist on the card, we assume the user isn't joined
             return false;
         }
     }
 
     #endregion
 
+    [AllureStep("Get the image element of the event card")]
     public IWebElement GetImage() =>
         RootElement.FindElement(ImageLocator);
 
+    [AllureStep("Check if the event image is loaded successfully")]
     public bool IsImageLoaded()
     {
         var image = GetImage();
@@ -141,26 +157,33 @@ public class EventCardComponent : BaseComponent
                     "return arguments[0].complete && arguments[0].naturalWidth > 0", image) ?? false);
     }
 
+    [AllureStep("Get the source URL of the event image")]
     public string GetImageSrc() =>
     GetImage().GetAttribute("src") ?? string.Empty;
 
+    [AllureStep("Get the category text from the event card")]
     public string GetCategoryText() =>
     RootElement.FindElement(CategoryLocator).Text.Trim();
 
+    [AllureStep("Get the date of the event")]
     public string GetDateText() =>
     RootElement.FindElement(DateLocator).Text.Trim();
 
+    [AllureStep("Get the time of the event")]
     public string GetTimeText() =>
     RootElement.FindElement(TimeLocator).Text.Trim();
 
+    [AllureStep("Get the status of the event")]
     public string GetStatusTest() =>
     RootElement.FindElement(StatusLabelLocator).Text.Trim();
 
+    [AllureStep("Get the texts of all action buttons on the event card")]
     public IReadOnlyList<string> GetActionButtonTexts() =>
         RootElement.FindElements(ActionButtonLocator)
             .Select(e => e.Text.Trim())
             .ToList();
 
+    [AllureStep("Check if all action buttons on the event card are enabled")]
     public bool AreAllActionButtonsEnabled() =>
         RootElement.FindElements(ActionButtonLocator).All(b => b.Enabled);
 }
