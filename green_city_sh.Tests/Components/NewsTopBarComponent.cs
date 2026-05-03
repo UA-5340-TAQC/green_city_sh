@@ -5,7 +5,7 @@ namespace green_city_sh.Tests.Components;
 public class NewsTopBarComponent : BaseComponent
 {
     private By TopBarTitle => By.CssSelector(".main-header");
-    private By SearchIcon => By.XPath(".//span[@class='search-img']/..");
+    private By SearchIcon => By.XPath(".//div[contains(@class, 'container-img') and .//span[@class='search-img']]");
     private By SearchInputField => By.CssSelector(".place-input");
     private By BookmarkIcon => By.XPath(".//span[@class='bookmark-img']/..");
     private By MyNewsIcon => By.XPath(".//img[@class='my-events-img']/..");
@@ -21,16 +21,19 @@ public class NewsTopBarComponent : BaseComponent
 
     public void OpenSearch()
     {
-        var searchBtn = RootElement.FindElement(SearchIcon);
-        searchBtn.Click();
+        wait.Until(d => d.FindElement(SearchIcon)).Click();
     }
 
     public void SearchNews(string searchTerm)
     {
         OpenSearch();
-        var searchInput = RootElement.FindElement(SearchInputField);
-        searchInput.SendKeys(searchTerm);
-        searchInput.SendKeys(Keys.Enter);
+        var searchInput = wait.Until(d => d.FindElement(SearchInputField));
+        searchInput.Clear();
+        foreach (char c in searchTerm)
+        {
+            searchInput.SendKeys(c.ToString());
+            Thread.Sleep(100);
+        }
     }
 
     public void OpenSavedNews()
