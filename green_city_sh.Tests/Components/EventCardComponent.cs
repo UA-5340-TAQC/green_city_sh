@@ -1,4 +1,5 @@
 ﻿using green_city_sh.Tests.Infrastructure;
+using Allure.Net.Commons.Attributes;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -75,8 +76,10 @@ public class EventCardComponent : BaseComponent
 
     #region Interactions
 
+    [AllureStep("Click the 'More' button on the event card")]
     public void ClickMore() => RootElement.FindElement(MoreButtonLocator).Click();
 
+    [AllureStep("Click the bookmark button on the event card")]
     public void ClickBookmark()
     {
         var bookmarkButtons = RootElement.FindElements(BookmarkButtonLocator);

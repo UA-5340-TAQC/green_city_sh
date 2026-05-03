@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Net.Commons.Attributes;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
@@ -72,6 +73,7 @@ public class CommentComponent : BaseComponent
     public void ClickReplyCommentBtn() =>
         WaitAndClick(ReplyCommentBtn);
 
+    [AllureStep("Click the upload image button in the comment section")]
     public void ClickUploadImgBtn() =>
         WaitAndClick(UploadImgBtn);
 
@@ -96,9 +98,11 @@ public class CommentComponent : BaseComponent
     public bool DoesTextContain(string text) =>
         GetTextComment().Contains(text, StringComparison.OrdinalIgnoreCase);
 
+    [AllureStep("Check if the comment field is empty")]
     public bool IsCommentFieldEmpty() =>
         string.IsNullOrWhiteSpace(RootElement.FindElement(CommentField).GetAttribute("value"));
 
+    [AllureStep("Upload an image to the comment section")]
     public void UploadImage(string fileName)
     {
         string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -108,6 +112,7 @@ public class CommentComponent : BaseComponent
         fileInputElement.SendKeys(filePath);
     }
 
+    [AllureStep("Check if the comment button is disabled")]
     public bool IsCommentButtonDisabled()
     {
         var btn = RootElement.FindElement(SubmitCommentBtn);
@@ -115,6 +120,7 @@ public class CommentComponent : BaseComponent
         return !btn.Enabled || btn.GetAttribute("disabled") != null;
     }
 
+    [AllureStep("Check if the image preview is displayed")]
     public bool IsImagePreviewDisplayed()
     {
         return wait.Until(driver =>

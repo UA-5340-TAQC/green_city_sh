@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Net.Commons.Attributes;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Components;
 
@@ -22,6 +23,7 @@ public class EventDetailsCardComponent : BaseComponent
     private By EventLocation => By.CssSelector("div.event-location");
     private By EventAuthor => By.CssSelector("div.event-author");
 
+    [AllureStep("Check if the event is saved by inspecting the save button text")]
     public bool IsEventSaved()
     {
         var btn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SaveEventButton));
@@ -30,20 +32,24 @@ public class EventDetailsCardComponent : BaseComponent
         return btnText.Contains("unsave") || btnText.Contains("відмінити");
     }
 
+    [AllureStep("If a join request is sent, the cancel button should be visible")]
     public bool IsJoinRequestSent()
     {
         var cancelBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(CancelRequestButton));
         return cancelBtn.Displayed;
     }
+    [AllureStep("Check if the join event button is visible, indicating that the user can send a join request")]
     public bool IsJoinEventButtonVisible()
     {
         var joinBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(JoinEventButton));
         return joinBtn.Displayed;
     }
+    [AllureStep("Check if the join request is cancelled")]
     public bool IsJoinRequestCancelled()
     {
         return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(CancelRequestButton));
     }
+    [AllureStep("Click the save event button if the event is not already saved")]
     public void ClickSaveEvent()
     {
         if (!IsEventSaved())
@@ -62,18 +68,21 @@ public class EventDetailsCardComponent : BaseComponent
         }
     }
 
+    [AllureStep("Click the join event button to send a join request")]
     public void ClickJoinEvent()
     {
         var joinButton = RootElement.FindElement(JoinEventButton);
         joinButton.Click();
     }
 
+    [AllureStep("Click the cancel request button")]
     public void ClickCancelRequest()
     {
         var cancelButton = RootElement.FindElement(CancelRequestButton);
         cancelButton.Click();
     }
 
+    [AllureStep("Click the 'Back to Events' button")]
     public void ClickBackToEvents()
     {
         var backButton = RootElement.FindElement(BackToEventsButton);
@@ -105,6 +114,7 @@ public class EventDetailsCardComponent : BaseComponent
         return RootElement.FindElement(EventAuthor).Text.Trim();
     }
 
+    [AllureStep("Return event information as a formatted string")]
     public string GetEventInfo()
     {
         string title = GetEventTitle();
