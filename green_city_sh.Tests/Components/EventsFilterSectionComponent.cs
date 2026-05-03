@@ -81,7 +81,6 @@ public class EventsFilterSectionComponent : BaseComponent
     {
         //Вибрати опцію в дропдауні "Status" ("Any status", "Open", "Closed", "Joined", "Created", "Saved")
     }
-    
     [AllureStep("Verify that select type dropdown is displayed")]
     public bool IsSelectTypeDisplayed()
     {
@@ -111,7 +110,6 @@ public class EventsFilterSectionComponent : BaseComponent
     {
         new OpenQA.Selenium.Interactions.Actions(driver).SendKeys(Keys.Escape).Perform();
     }
-    
     [AllureStep("Verify that date range dropdown is enabled")]
     public bool IsDateRangeEnabled()
     {
