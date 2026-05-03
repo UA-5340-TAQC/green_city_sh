@@ -42,11 +42,10 @@ public class NewsTopBarComponent : BaseComponent
     [AllureStep("Open saved news")]
 public void OpenSavedNews()
 {
-    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
     var bookmarkBtn = wait.Until(d => d.FindElement(BookmarkIcon));
-    
-    IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-    js.ExecuteScript("arguments[0].click();", bookmarkBtn);
+        
+        IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+        js.ExecuteScript("arguments[0].click();", bookmarkBtn);
 }
 
     [AllureStep("Open my news")]
