@@ -27,7 +27,7 @@ public class NewsInfoComponent : BaseComponent
 
     public string GetAuthorText() =>
         FindElement(AuthorLabel).Text;
-    
+
     [AllureStep("Click 'Like news' button")]
     public void ClickLikeBtn() =>
         WaitAndClick(LikeBtn);
