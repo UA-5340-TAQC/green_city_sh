@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System.Globalization;
 using SeleniumExtras.WaitHelpers;
+using Allure.Net.Commons.Attributes;
 
 namespace green_city_sh.Tests.Components;
 
@@ -80,17 +81,20 @@ public class EventsFilterSectionComponent : BaseComponent
     {
         //Вибрати опцію в дропдауні "Status" ("Any status", "Open", "Closed", "Joined", "Created", "Saved")
     }
-
+    
+    [AllureStep("Verify that select type dropdown is displayed")]
     public bool IsSelectTypeDisplayed()
     {
         return RootElement.FindElement(TypeDropdown).Displayed;
     }
 
+    [AllureStep("Verify that select type dropdown is enabled")]
     public bool isSelectTypeEnabled()
     {
         return RootElement.FindElement(TypeDropdown).Enabled;
     }
 
+    [AllureStep("Click the select type dropdown")]
     public void ClickSelectTypeDropdown()
     {
         RootElement.FindElement(TypeDropdown).Click();
@@ -101,21 +105,27 @@ public class EventsFilterSectionComponent : BaseComponent
         optionElement.Click();
     }
 
+    [AllureStep("Close the select type dropdown")]
+
     public void CloseSelectTypeDropdown()
     {
         new OpenQA.Selenium.Interactions.Actions(driver).SendKeys(Keys.Escape).Perform();
     }
+    
+    [AllureStep("Verify that date range dropdown is enabled")]
     public bool IsDateRangeEnabled()
     {
         return driver.FindElement(DateRangeDropdown).Enabled;
     }
 
+    [AllureStep("click the date range dropdown")]
     public void ClickDateRangeDropdown()
     {
         var arrow = wait.Until(ExpectedConditions.ElementToBeClickable(DateRangeDropdown));
         arrow.Click();
     }
 
+    [AllureStep("select date range")]
     public void SelectDateRange(DateTime start, DateTime end)
     {
         PickDate(start);

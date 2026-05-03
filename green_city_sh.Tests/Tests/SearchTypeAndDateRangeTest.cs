@@ -1,3 +1,4 @@
+using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
@@ -20,6 +21,8 @@ public class SearchTypeAndDateRangeTest : BaseTest
     }
 
     [Test]
+    [AllureIssue("14")]
+    [AllureDescription("Filter and Search Functionality")]
     [Category("Smoke")]
     public void SearchTypeAndDateRange()
     {

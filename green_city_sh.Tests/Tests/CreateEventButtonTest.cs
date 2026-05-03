@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
@@ -15,17 +16,19 @@ public class CreateEventButtonTest : BaseTest
         NavigateToBaseUrl();
 
         eventsPage = new EventsPage(Driver!);
-
+        
+        eventsPage.Header.ChangeLanguage("en");
         eventsPage.Header.ClickSignIn();
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
-        eventsPage.Header.ChangeLanguage("en");
 
         eventsPage.OpenEventsPage();
 
     }
 
     [Test]
+    [AllureIssue("36")]
+    [AllureDescription("Verify that \"Create event\" button redirects to the event creation")]
     [Category("Smoke")]
     public void CreateEventTest()
     {
