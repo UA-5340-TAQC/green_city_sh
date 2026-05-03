@@ -40,13 +40,13 @@ public class NewsTopBarComponent : BaseComponent
     }
 
     [AllureStep("Open saved news")]
-public void OpenSavedNews()
-{
-    var bookmarkBtn = wait.Until(d => d.FindElement(BookmarkIcon));
-        
+    public void OpenSavedNews()
+    {
+        var bookmarkBtn = wait.Until(d => d.FindElement(BookmarkIcon));
+
         IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
         js.ExecuteScript("arguments[0].click();", bookmarkBtn);
-}
+    }
 
     [AllureStep("Open my news")]
     public void OpenMyNews()
@@ -66,17 +66,17 @@ public void OpenSavedNews()
     public int GetItemsFoundCount()
     {
         var countElements = driver.FindElements(By.XPath("//h2[contains(text(), 'item')]"));
-        
+
         if (countElements.Count == 0) return -1;
-        
-        string text = countElements[0].Text.Trim(); 
-        string numberOnly = text.Split(' ')[0]; 
-        
+
+        string text = countElements[0].Text.Trim();
+        string numberOnly = text.Split(' ')[0];
+
         if (int.TryParse(numberOnly, out int result))
         {
             return result;
         }
-        
+
         return 0;
     }
 

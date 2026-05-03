@@ -18,7 +18,7 @@ public class LoginTests : BaseTest
 
     protected override void OnSetup()
     {
-        NavigateToBaseUrl(); 
+        NavigateToBaseUrl();
         homePage = new HomePage(Driver!);
     }
 

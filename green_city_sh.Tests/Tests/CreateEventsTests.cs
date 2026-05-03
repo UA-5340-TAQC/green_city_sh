@@ -24,7 +24,7 @@ public class CreateEventsTests : BaseTest
     }
 
     // Dynamically generating tomorrow's date formatted to exactly match the expected input
-        string dynamicDateValue = DateTime.Today.AddDays(1).ToString("MMMM d, yyyy", new CultureInfo("en-US"));
+    string dynamicDateValue = DateTime.Today.AddDays(1).ToString("MMMM d, yyyy", new CultureInfo("en-US"));
 
     // Evaluated at runtime using '=>', guaranteeing .env is loaded first
     private static string TestEmail => GetRequiredEnv("GC_TEST_EMAIL");

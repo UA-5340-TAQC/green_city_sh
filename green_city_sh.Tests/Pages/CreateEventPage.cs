@@ -36,7 +36,7 @@ public class CreateEventPage : BasePage
                 drv.FindElements(TitleInput).Any(el => el.Displayed));
     }
 
-    
+
     [AllureStep("Enter event title")]
     public CreateEventPage EnterTitle(string title)
     {
@@ -135,7 +135,7 @@ public class CreateEventPage : BasePage
 
     [AllureStep("Check if 'Publish' button is enabled")]
     public bool IsPublishButtonEnabled() => driver.FindElement(PublishButton).Enabled;
-    
+
     [AllureStep("Check if title error is visible")]
     public bool IsTitleErrorVisible() => driver.FindElements(TitleError).Any(e => e.Displayed);
 

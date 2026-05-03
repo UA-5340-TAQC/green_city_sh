@@ -18,7 +18,7 @@ public class EventPlannerButtonTests : BaseTest
 
     protected override void OnSetup()
     {
-        NavigateToBaseUrl(); 
+        NavigateToBaseUrl();
         homePage = new HomePage(Driver!);
 
         homePage.Header.ClickSignIn();
@@ -40,7 +40,7 @@ public class EventPlannerButtonTests : BaseTest
     public void VerifyEventPlannerAndSearchButtonWork()
     {
         var wait = new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
-        
+
         By searchIconLocator = By.CssSelector("img.my-events-img");
 
         var searchIcon = wait.Until(ExpectedConditions.ElementToBeClickable(searchIconLocator));

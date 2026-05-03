@@ -44,7 +44,7 @@ namespace green_city_sh.Tests.Components
         {
             return RootElement.FindElement(TitleLocator).Text.Trim();
         }
-        
+
         [AllureStep("Check if news card is bookmarked")]
         public bool IsBookmarked()
         {
