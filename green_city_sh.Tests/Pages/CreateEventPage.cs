@@ -2,6 +2,11 @@ using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
+
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
+
+
 namespace green_city_sh.Tests.Pages;
 
 public class CreateEventPage : BasePage
@@ -33,7 +38,8 @@ public class CreateEventPage : BasePage
             .Until(drv =>
                 drv.FindElements(TitleInput).Any(el => el.Displayed));
     }
-
+    
+    [AllureStep("Enter title: '{0}'")]
     public CreateEventPage EnterTitle(string title)
     {
         var input = driver.FindElement(TitleInput);
@@ -47,7 +53,8 @@ public class CreateEventPage : BasePage
         driver.FindElement(By.CssSelector("body")).Click();
         return this;
     }
-
+    
+    [AllureStep("Enter Description")]
     public CreateEventPage EnterDescription(string text)
     {
         var field = driver.FindElement(DescriptionInput);
@@ -63,7 +70,8 @@ public class CreateEventPage : BasePage
         input.SendKeys(date);
         return this;
     }
-
+    
+    [AllureStep("Enter Start Time")]
     public CreateEventPage EnterStartTimeInput(string time)
     {
         var input = driver.FindElement(StartTimeInput);
@@ -73,6 +81,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter Finish Time")]
     public CreateEventPage EnterEndTimeInput(string time)
     {
         var input = driver.FindElement(EndTimeInput);
@@ -83,6 +92,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Select invite option")]
     public CreateEventPage SelectInvite()
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -97,6 +107,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Click online checkbox")]
     public CreateEventPage ClickOnlineCheckbox()
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -110,6 +121,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter online link")]
     public CreateEventPage EnterOnlineLink(string url)
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
