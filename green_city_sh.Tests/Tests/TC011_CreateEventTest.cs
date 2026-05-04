@@ -19,11 +19,6 @@ namespace green_city_sh.Tests.Tests;
 [AllureIssue("12")]
 public class TC011_CreateEventTest : BaseTest
 {
-    private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
-                                      ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
-    private static string TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD")
-                                         ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
-
     private const string WhitespaceTitle = "   ";
     private const string ValidDescription = "Test description for the event";
     private const string ValidStartTime = "23:30";
@@ -58,13 +53,7 @@ public class TC011_CreateEventTest : BaseTest
     [TearDown]
     public new void TearDown()
     {
-        try
-        {
-            Driver?.Quit();
-        }
-        catch
-        {
-        }
+        Driver?.Quit();
     }
 
 

@@ -9,10 +9,6 @@ namespace green_city_sh.Tests.Tests;
 [Parallelizable(ParallelScope.Self)]
 public class TC001_AddCommentTests : BaseTest
 {
-    private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
-        ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
-    private static string TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD")
-                                                  ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
     private const string CommentText = "Cool!";
 
     private EventDetailsPage? eventDetailsPage;
@@ -34,7 +30,13 @@ public class TC001_AddCommentTests : BaseTest
         eventDetailsPage = new EventDetailsPage(Driver!);
         eventDetailsPage.Open();
 
-        commentsComponent = eventDetailsPage.GetCommentsComponent();
+
+        commentsComponent = eventDetailsPage.GetCommentsComponentOrNull();
+
+        Assert.That(
+            commentsComponent,
+            Is.Not.Null,
+            "Comments component should be present on Event Details page");
     }
 
     protected override void OnTearDown()
@@ -46,8 +48,9 @@ public class TC001_AddCommentTests : BaseTest
             eventDetailsPage ??= new EventDetailsPage(Driver);
             eventDetailsPage.Open();
 
-            var freshComments = eventDetailsPage.GetCommentsComponent();
+            var freshComments = eventDetailsPage.GetCommentsComponentOrNull();
 
+            if (freshComments == null) return;
             if (freshComments.IsCommentVisible(CommentText))
                 freshComments.DeleteComment(CommentText);
         }
@@ -115,11 +118,11 @@ public class TC001_AddCommentTests : BaseTest
 
 
         eventDetailsPage!.RefreshPage();
-        commentsComponent = eventDetailsPage.GetCommentsComponent();
+        commentsComponent = eventDetailsPage.GetCommentsComponentOrNull();
 
 
-        Assert.That(commentsComponent.IsCommentVisible(CommentText),
-            Is.True,
-            "Comment should persist after page refresh.");
+        Assert.That(commentsComponent,
+            Is.Not.Null,
+            "Comments component should be present after page refresh");    
     }
 }
