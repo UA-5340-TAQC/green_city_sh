@@ -1,0 +1,5 @@
+"BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
+"13","","2","","20","0","","0"
+"0","","0","Login","1","0","TC-025: Attempt to login with invalid password","0"
+"0","","0","Registration","1","0","TC-023: Successful registration of a new user with valid data","0"
+"0","","0","Login","1","0","TC-027: Successful logout from the site (Sign Out)","0"
