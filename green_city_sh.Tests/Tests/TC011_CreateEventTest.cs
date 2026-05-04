@@ -32,7 +32,7 @@ public class TC011_CreateEventTest : BaseTest
 
     private CreateEventPage? createEventPage;
 
-    
+
     protected override void OnSetup()
     {
         NavigateToBaseUrl();
