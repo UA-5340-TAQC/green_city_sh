@@ -5,6 +5,10 @@ using green_city_sh.Tests.Modals;
 using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 
+// using Allure.NUnit;
+using Allure.NUnit.Attributes;
+
+
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]

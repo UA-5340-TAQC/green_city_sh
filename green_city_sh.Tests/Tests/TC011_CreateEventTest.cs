@@ -1,12 +1,8 @@
-
-using Allure.Net.Commons;
 using NUnit.Framework;
-
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
-
 
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
@@ -36,6 +32,7 @@ public class TC011_CreateEventTest : BaseTest
 
     private CreateEventPage? createEventPage;
 
+    
     protected override void OnSetup()
     {
         NavigateToBaseUrl();
@@ -84,8 +81,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureSeverity(SeverityLevel.minor)]
-    [AllureStory("Inability to save an event with a whitespace value in 'Title' field")]
+    // [AllureStory("Inability to save an event with a whitespace value in 'Title' field")]
     public void TC011_Step1_EnterWhitespaceInTitle_WhitespaceIsAccepted()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -95,8 +91,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureSeverity(SeverityLevel.critical)]
-    [AllureStory("Title validation")]
+    // [AllureStory("Title validation")]
     public void TC011_Step2_ValidationErrorAppears_WhenOtherFieldsFilled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -109,8 +104,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureSeverity(SeverityLevel.critical)]
-    [AllureStory("Title validation")]
+    // [AllureStory("Title validation")]
     public void TC011_Step3_PublishButton_RemainsDisabled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
