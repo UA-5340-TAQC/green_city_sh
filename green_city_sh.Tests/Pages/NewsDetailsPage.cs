@@ -147,6 +147,7 @@ public class NewsDetailsPage : BasePage
         return allComments;
     }
 
+    [AllureStep("Wait for comment counter visible")]
     public int WaitForCommentCounterVisible()
     {
 
@@ -171,6 +172,7 @@ public class NewsDetailsPage : BasePage
         return value;
     }
 
+    [AllureStep("Wait for comment counter to change from: {0}")]
     public int WaitForCommentCounterToChange(int previousValue)
     {
         var newValue = 0;
