@@ -3,6 +3,8 @@ using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using Allure.NUnit.Attributes;
+using Allure.Net.Commons;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -23,8 +25,15 @@ public class LogoutTests : BaseTest
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
     }
 
+
     [Test]
-    [Category("Logout")]
+    [Description("TC-027: Successful logout from the site (Sign Out)")]
+    [Category("Smoke")]
+    [Category("Regression")]
+    [AllureFeature("Login")]
+    [AllureStory("TC-027: Successful logout from the site (Sign Out)")]
+    [AllureSeverity(SeverityLevel.critical)]
+    [AllureDescription("Verify that user can successfully log out from the system and session is terminated.")]
     public void Logout_AfterSuccessfulLogin_ShouldEndUserSession()
     {
         const int userId = 1205;

@@ -4,6 +4,9 @@ using OpenQA.Selenium.Support.UI;
 
 namespace green_city_sh.Tests.Components;
 
+using Allure.NUnit.Attributes;
+using Allure.Net.Commons;
+
 public class SignUpModalComponent : BaseComponent
 {
     public static readonly By RootLocator = By.CssSelector("app-sign-up");
@@ -49,7 +52,7 @@ public class SignUpModalComponent : BaseComponent
         return new SignUpModalComponent(driver, modalRoot);
     }
 
-
+    [AllureStep("Enter email")]
     public void EnterEmail(string email)
     {
         var input = RootElement.FindElement(EmailInputLocator);
@@ -57,6 +60,7 @@ public class SignUpModalComponent : BaseComponent
         input.SendKeys(email);
     }
 
+    [AllureStep("Enter user name")]
     public void EnterUserName(string userName)
     {
         var input = RootElement.FindElement(UserNameInputLocator);
@@ -64,6 +68,7 @@ public class SignUpModalComponent : BaseComponent
         input.SendKeys(userName);
     }
 
+    [AllureStep("Enter password")]
     public void EnterPassword(string password)
     {
         var input = RootElement.FindElement(PasswordInputLocator);
@@ -71,6 +76,7 @@ public class SignUpModalComponent : BaseComponent
         input.SendKeys(password);
     }
 
+    [AllureStep("Enter confirm password")]
     public void EnterConfirmPassword(string password)
     {
         var input = RootElement.FindElement(ConfirmPasswordInputLocator);
@@ -78,19 +84,21 @@ public class SignUpModalComponent : BaseComponent
         input.SendKeys(password);
     }
 
+    [AllureStep("Click 'Sign Up' button")]
     public void ClickSignUp()
     {
         var button = RootElement.FindElement(SignUpButtonLocator);
         button.Click();
     }
 
-
+    [AllureStep("Check if 'Sign Up' button is enabled")]
     public bool IsSignUpButtonEnabled()
     {
         var button = RootElement.FindElement(SignUpButtonLocator);
         return button.Enabled;
     }
 
+    [AllureStep("Get success message text")]
     public string GetSuccessMessage()
     {
         var message = wait.Until(driver =>
@@ -114,26 +122,31 @@ public class SignUpModalComponent : BaseComponent
         return message;
     }
 
+    [AllureStep("Check if invalid email message is displayed")]
     public bool IsInvalidEmailMessageDisplayed()
     {
         return RootElement.FindElements(InvalidEmailMessageLocator).Any(e => e.Displayed);
     }
 
+    [AllureStep("Check if password mismatch message is displayed")]
     public bool IsPasswordMismatchMessageDisplayed()
     {
         return RootElement.FindElements(PasswordMismatchMessageLocator).Any();
     }
 
+    [AllureStep("Check if user already exists error is displayed")]
     public bool IsUserAlreadyExistsErrorDisplayed()
     {
         return RootElement.FindElements(UserAlreadyExistsMessageLocator).Any();
     }
 
+    [AllureStep("Check if modal is visible")]
     public bool IsModalVisible()
     {
         return RootElement.Displayed;
     }
 
+    [AllureStep("Fill registration form")]
     public void FillRegistrationForm(string email, string userName, string password)
     {
         EnterEmail(email);

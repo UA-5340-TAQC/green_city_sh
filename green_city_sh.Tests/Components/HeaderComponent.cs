@@ -171,5 +171,9 @@ public class HeaderComponent : BaseComponent
         signOutButton!.Click();
     }
 
+    public IWebElement GetSignOutOption()
+    {
+        return FindElement(SignOutOption);
+    }
 }
 

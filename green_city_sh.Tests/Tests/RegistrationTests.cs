@@ -2,6 +2,8 @@
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using green_city_sh.Tests.Components;
+using Allure.NUnit.Attributes;
+using Allure.Net.Commons;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -19,7 +21,16 @@ public class RegistrationTests : BaseTest
     }
 
     [Test]
+    [Order(1)]
     [Category("Registration")]
+    [Category("Smoke")]
+    [Category("Regression")]
+    [Description("TC-023: Successful registration of a new user with valid data")]
+    [AllureFeature("Registration")]
+    [AllureStory("TC-023: Successful registration of a new user with valid data")]
+    [AllureSeverity(SeverityLevel.critical)]
+    [AllureDescription("Verify that a new user can successfully register with valid data and receives a confirmation message.")]
+
     public void Register_WithValidData_ShouldShowSuccessMessage()
     {
         var email = $"greencitytest_{DateTime.Now:yyyyMMddHHmmss}@hotmail.com";
