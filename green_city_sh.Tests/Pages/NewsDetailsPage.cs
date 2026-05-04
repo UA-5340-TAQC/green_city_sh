@@ -150,15 +150,27 @@ public class NewsDetailsPage : BasePage
     [AllureStep("Wait for comment counter visible")]
     public int WaitForCommentCounterVisible()
     {
-
         var value = 0;
+        var previousValue = -1;
+
         wait.Until(_ =>
         {
             try
             {
                 var el = driver.FindElement(CommentCounter);
+                if (!el.Displayed) return false;
                 var digits = new string(el.Text.Where(char.IsDigit).ToArray());
-                return int.TryParse(digits, out value) && digits.Length > 0;
+                if (!int.TryParse(digits, out var current) || digits.Length == 0)
+                    return false;
+
+                if (current == previousValue)
+                {
+                    value = current;
+                    return true;
+                }
+
+                previousValue = current;
+                return false;
             }
             catch (NoSuchElementException)
             {
@@ -169,6 +181,7 @@ public class NewsDetailsPage : BasePage
                 return false;
             }
         });
+
         return value;
     }
 
@@ -176,13 +189,29 @@ public class NewsDetailsPage : BasePage
     public int WaitForCommentCounterToChange(int previousValue)
     {
         var newValue = 0;
+        var lastSeen = -1;
         wait.Until(_ =>
         {
             try
             {
-                var digits = new string(driver.FindElement(CommentCounter).Text
-                    .Where(char.IsDigit).ToArray());
-                return int.TryParse(digits, out newValue) && newValue != previousValue;
+                var el = driver.FindElement(CommentCounter);
+                if (!el.Displayed)
+                    return false;
+                var digits = new string(el.Text.Where(char.IsDigit).ToArray());
+                if (!int.TryParse(digits, out var current) || digits.Length == 0)
+                    return false;
+                if (current == lastSeen && current != previousValue)
+                {
+                    newValue = current;
+                    return true;
+                }
+
+                lastSeen = current;
+                return false;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
             }
             catch (StaleElementReferenceException)
             {

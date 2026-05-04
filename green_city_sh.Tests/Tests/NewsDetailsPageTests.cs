@@ -4,8 +4,6 @@ using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -77,7 +75,8 @@ public class NewsDetailsPageTests : BaseTest
         newsDetailsPage
             .DeleteComment()
             .ClickYesDelete();
-        Driver.Navigate().Refresh();
+        
+        newsDetailsPage.Refresh();
         var afterDelete = newsDetailsPage.WaitForCommentCounterToChange(afterAdd);
 
         Assert.Multiple(() =>
