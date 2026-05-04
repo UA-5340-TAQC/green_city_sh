@@ -48,7 +48,7 @@ public class CreateEventPage : BasePage
         driver.FindElement(By.CssSelector("body")).Click();
         return this;
     }
-    
+
     // [AllureStep("Enter Description")]
     public CreateEventPage EnterDescription(string text)
     {
@@ -65,7 +65,7 @@ public class CreateEventPage : BasePage
         input.SendKeys(date);
         return this;
     }
-    
+
     // [AllureStep("Enter Start Time")]
     public CreateEventPage EnterStartTimeInput(string time)
     {
