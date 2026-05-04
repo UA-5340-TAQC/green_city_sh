@@ -75,7 +75,7 @@ public class NewsDetailsPageTests : BaseTest
         newsDetailsPage
             .DeleteComment()
             .ClickYesDelete();
-        
+
         newsDetailsPage.Refresh();
         var afterDelete = newsDetailsPage.WaitForCommentCounterToChange(afterAdd);
 
