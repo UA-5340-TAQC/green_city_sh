@@ -85,15 +85,25 @@ public class CommentComponent : BaseComponent
     [AllureStep("Click 'delete' comment button")]
     public void ClickDeleteCommentBtn()
     {
-        wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
-
-        var deleteBtn = wait.Until(d =>
+        wait.Until(d =>
         {
-            var elements = d.FindElements(DeleteCommentBtn);
-            return elements.Count > 0 ? elements[0] : null;
+            try
+            {
+                var btn = RootElement.FindElement(DeleteCommentBtn);
+                if (!btn.Displayed || !btn.Enabled) 
+                    return false;
+                btn.Click();
+                return true;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return false; 
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
         });
-
-        deleteBtn.Click();
     }
 
     [AllureStep("Click 'view reply' button")]
