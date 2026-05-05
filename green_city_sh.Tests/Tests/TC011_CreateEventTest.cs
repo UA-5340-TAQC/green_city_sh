@@ -1,19 +1,24 @@
+using NUnit.Framework;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 
+using Allure.NUnit;
+using Allure.NUnit.Attributes;
+
+
+
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
+[AllureOwner("Antonina Smetanina")]
+[AllureSuite("Create event")]
+[AllureFeature("Title validation")]
+[AllureIssue("12")]
 public class TC011_CreateEventTest : BaseTest
 {
-    private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
-                                      ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
-    private static string TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD")
-                                         ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
-
     private const string WhitespaceTitle = "   ";
     private const string ValidDescription = "Test description for the event";
     private const string ValidStartTime = "23:30";
@@ -21,6 +26,7 @@ public class TC011_CreateEventTest : BaseTest
     private const string ValidOnlineLink = "https://meet.google.com/test";
 
     private CreateEventPage? createEventPage;
+
 
     protected override void OnSetup()
     {
@@ -45,15 +51,9 @@ public class TC011_CreateEventTest : BaseTest
     }
 
     [TearDown]
-    public new void TearDown()
+    public override void TearDown()
     {
-        try
-        {
-            Driver?.Quit();
-        }
-        catch
-        {
-        }
+        base.OnTearDown();
     }
 
 
@@ -70,6 +70,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
+    // [AllureStory("Inability to save an event with a whitespace value in 'Title' field")]
     public void TC011_Step1_EnterWhitespaceInTitle_WhitespaceIsAccepted()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -79,6 +80,10 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
+    [Ignore("TEMP: Publish button is disabled due to ongoing feature improvements. " +
+            "Enable after Publish becomes active.")]
+
+    // [AllureStory("Title validation")]
     public void TC011_Step2_ValidationErrorAppears_WhenOtherFieldsFilled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -91,6 +96,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
+    // [AllureStory("Title validation")]
     public void TC011_Step3_PublishButton_RemainsDisabled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);

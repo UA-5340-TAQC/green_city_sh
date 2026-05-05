@@ -1,8 +1,10 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using Allure.NUnit.Attributes;
+
 
 namespace green_city_sh.Tests.Components;
 
@@ -148,7 +150,7 @@ public class SignInModalComponent : BaseComponent
     /// Handles <see cref="StaleElementReferenceException"/>
     /// as a successful close - the element was removed before the check ran.
     /// </summary>
-    [AllureStep("Close the modal")]
+    [AllureStep("Close the sign-in modal")]
     public void CloseModal()
     {
         var currentModal = RootElement;
@@ -233,7 +235,6 @@ public class SignInModalComponent : BaseComponent
         return error.Text.Trim();
     }
 
-    [AllureStep("Get email error message text")]
     public string GetEmailErrorMessage()
     {
         WaitUntilElementVisibleBy(EmailErrorLocator);
