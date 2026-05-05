@@ -65,4 +65,36 @@ public class NewsPageTests : BaseTest
             newsPage.TagsFilter.SelectTagWithRealClick(tag);
         }
     }
+
+    [Test]
+    [AllureIssue("29")]
+    [AllureDescription("Search news by keyword - verify that only news containing the keyword are displayed and the counter updates")]
+    [Category("Smoke")]
+    public void SearchNewsByKeyword_ShowsOnlyNewsWithKeyword()
+    {
+        string keyword = "climate";
+        Assert.That(newsPage, Is.Not.Null, "NewsPage was not initialized");
+
+        int countBefore = newsPage.GetItemsFoundCount();
+
+        newsPage.Search(keyword);
+
+        newsPage.WaitForSearchResultsToUpdate(countBefore);
+
+        var displayedCards = newsPage.List.GetAllNewsCardsAsComponents();
+
+        Assert.That(displayedCards, Is.Not.Empty,
+            $"At least one news card should be displayed after searching for '{keyword}'");
+
+        foreach (var card in displayedCards)
+        {
+            string title = card.GetTitle();
+            Assert.That(title, Does.Contain(keyword).IgnoreCase,
+                $"The news title '{title}' does not contain the keyword '{keyword}'");
+        }
+
+        int itemsFound = newsPage.GetItemsFoundCount();
+        Assert.That(itemsFound, Is.GreaterThan(0),
+            $"Items found count should be greater than 0 after search");
+    }
 }
