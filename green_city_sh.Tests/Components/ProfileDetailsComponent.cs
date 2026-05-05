@@ -31,7 +31,8 @@ public class ProfileDetailsComponent : BaseComponent
         //dropdown.WaitUntilVisible();
         wait.Until(d =>
         {
-            return dropdown.GetOptionList().Count > 0;
+           // return dropdown.GetOptionList().Count > 0;
+            return dropdown.GetListOptionsText().Count > 0;
         });
         dropdown.ClickDropDownOptionByPartialName(name);
     }

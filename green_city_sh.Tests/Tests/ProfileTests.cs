@@ -26,9 +26,6 @@ public class ProfileTests : BaseTest
     [Category("Regression")]
     [Description("TC-034: Editing user profile")]
     [AllureFeature("Profile")]
-    [AllureStory("TC-034: Editing user profile")]
-    [AllureSeverity(SeverityLevel.critical)]
-    [AllureDescription("Verify that user can edit personal information in profile, save changes, and revert them successfully.")]
     public void EditProfile_ShouldSaveAndRevertChanges()
     {
         const string updatedName = "TestA";
@@ -70,6 +67,8 @@ public class ProfileTests : BaseTest
             "Save button should be enabled after profile changes.");
 
         editPage.SaveEditedProfile();
+
+
 
         TestContext.WriteLine("Updated profile saved");
 

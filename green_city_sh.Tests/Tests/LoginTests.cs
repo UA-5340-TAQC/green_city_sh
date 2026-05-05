@@ -84,10 +84,6 @@ public class LoginTests : BaseTest
     [Description("TC-025: Attempt to login with invalid password")]
     [Category("Smoke")]
     [Category("Regression")]
-    [AllureFeature("Login")]
-    [AllureStory("TC-025: Attempt to login with invalid password")]
-    [AllureSeverity(SeverityLevel.critical)]
-    [AllureDescription("Verify that user cannot log in with a valid email and invalid password.")]
     public void AttemptToLoginWithInvalidPassword()
     {
         string invalidPassword = "WrongPassword123!";

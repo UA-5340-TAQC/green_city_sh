@@ -31,9 +31,6 @@ public class LogoutTests : BaseTest
     [Category("Smoke")]
     [Category("Regression")]
     [AllureFeature("Login")]
-    [AllureStory("TC-027: Successful logout from the site (Sign Out)")]
-    [AllureSeverity(SeverityLevel.critical)]
-    [AllureDescription("Verify that user can successfully log out from the system and session is terminated.")]
     public void Logout_AfterSuccessfulLogin_ShouldEndUserSession()
     {
         var configuredUserId = Convert.ToString(Configuration.TestUserId)?.Trim();
