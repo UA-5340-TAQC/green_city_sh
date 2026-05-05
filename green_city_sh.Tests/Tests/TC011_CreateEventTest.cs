@@ -70,7 +70,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    // [AllureStory("Inability to save an event with a whitespace value in 'Title' field")]
+    [AllureStory("Inability to save an event with a whitespace value in 'Title' field")]
     public void TC011_Step1_EnterWhitespaceInTitle_WhitespaceIsAccepted()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -83,7 +83,7 @@ public class TC011_CreateEventTest : BaseTest
     [Ignore("TEMP: Publish button is disabled due to ongoing feature improvements. " +
             "Enable after Publish becomes active.")]
 
-    // [AllureStory("Title validation")]
+    [AllureStory("Title validation")]
     public void TC011_Step2_ValidationErrorAppears_WhenOtherFieldsFilled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -96,7 +96,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    // [AllureStory("Title validation")]
+    [AllureStory("Title validation")]
     public void TC011_Step3_PublishButton_RemainsDisabled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
