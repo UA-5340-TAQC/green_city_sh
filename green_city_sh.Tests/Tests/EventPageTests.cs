@@ -31,7 +31,7 @@ public class EventPageTests : BaseTest
     [Category("Regression")]
     [Category("Security")]
     [Category("Negative")]
-    [AllureIssue("4")]
+    [AllureIssue("17")]
     [AllureSeverity(SeverityLevel.normal)]
     [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
