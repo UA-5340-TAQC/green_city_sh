@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Net.Commons.Attributes;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Components;
 
@@ -14,6 +15,7 @@ public class BookmarkTabComponent : BaseComponent
 
     private By TabButtons => By.CssSelector(".tabs button");
 
+    [AllureStep("Switch to the specified tab: {0}")]
     public void SwitchToTab(string tabName)
     {
         var allTabs = RootElement.FindElements(TabButtons);
