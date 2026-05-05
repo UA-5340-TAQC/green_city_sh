@@ -76,8 +76,7 @@ public class ProfileTests : BaseTest
         
         editPage = new ProfileEditPage(Driver!);
         editPage.OpenProfileEditPage(Configuration.TestUserId);
-        //wait.Until(driver => driver.Url.Contains($"/profile/{Configuration.TestUserId}/edit"));
-
+        wait.Until(driver => driver.Url.Contains($"/profile/{Configuration.TestUserId}/edit"));
 
         editPage.EnterName(originalName);
         editPage.EnterCity(originalCity);
