@@ -33,5 +33,14 @@ namespace green_city_sh.Tests.Components
 
             return tags;
         }
+
+        /// <summary>
+        /// Returns a title for the current news card.
+        /// </summary>
+        public string GetTitle()
+        {
+            By titleLocator = By.CssSelector(".title-list h3");
+            return RootElement.FindElement(titleLocator).Text.Trim();
+        }
     }
 }

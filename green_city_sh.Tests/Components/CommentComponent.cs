@@ -9,6 +9,7 @@ public class CommentComponent : BaseComponent
 {
     private By ReplyCommentField =>
         By.XPath(".//div[contains(@class, 'comment-body-wrapper')]//div[@class='comment-textarea']");
+
     private By EditCommentField => By.XPath(".//div[@class='comment-textarea']");
     private By UploadImgBtn => By.XPath(".//button[contains(@class, 'image-upload-btn')]");
     private By EmojiBtn => By.XPath(".//*[contains(@class, 'emoji-picker-btn')]");
@@ -19,10 +20,16 @@ public class CommentComponent : BaseComponent
     private By ReplyCommentBtn => By.XPath(".//button[contains(@class, 'reply')]");
     private By DateComment => By.XPath(".//*[contains(@class, 'comment-date-month')]");
     private By CommentText => By.XPath(".//*[@class='comment-text']");
-    private By ViewRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
-    private By HideRepliesBtn => By.XPath(".//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
+
+    private By ViewRepliesBtn =>
+        By.XPath(".//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
+
+    private By HideRepliesBtn =>
+        By.XPath(".//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
+
     private By ReplyCommentText =>
         By.XPath(".//div[contains(@class, 'wrapper-reply ng-star-inserted')]//div[@class='comment-text']");
+
     private By CancelEditBtn => By.XPath(".//button[contains(@class, 'cancel-edit')]");
     private By SaveEditBtn => By.XPath(".//button[contains(@class, 'save-edit')]");
     private By RepliesLocator => By.XPath(".//div[contains(@class, 'wrapper-reply')]");
@@ -33,6 +40,9 @@ public class CommentComponent : BaseComponent
     private By FileInput => By.XPath(".//input[@type='file']");
     private By ImagePreview => By.XPath(".//img[@class='image-preview']");
 
+    private By SubmitCommentButton =>
+        By.XPath(".//button[contains(text(), 'Коментар') or contains(text(), 'Comment')]");
+
     public CommentComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
     }
@@ -41,6 +51,7 @@ public class CommentComponent : BaseComponent
     {
     }
 
+    [AllureStep("Enter reply comment text: {0}")]
     public void EnterReplyComment(string text)
     {
         wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
@@ -54,35 +65,55 @@ public class CommentComponent : BaseComponent
         });
     }
 
+    [AllureStep("Enter edited comment text: {0}")]
     public void EnterEditComment(string text) =>
         WaitAndTypeText(EditCommentField, text);
 
+    [AllureStep("Click 'submit reply' button")]
     public void ClickSubmitReplyBtn() =>
         WaitAndClick(SubmitReplyBtn);
 
+    [AllureStep("Enter comment text: {0}")]
+    public void EnterComment(string text) =>
+        WaitAndTypeText(CommentField, text);
+
+    [AllureStep("Click 'submit' comment button")]
+    public void ClickSubmitCommentBtn() =>
+        WaitAndClick(SubmitCommentButton);
+
+    [AllureStep("Click 'delete' comment button")]
     public void ClickDeleteCommentBtn() =>
         WaitAndClick(DeleteCommentBtn);
+
+    [AllureStep("Click 'view reply' button")]
     public void ClickViewRepliesBtn() =>
-        WaitAndClick(ViewRepliesBtn);
+            WaitAndClick(ViewRepliesBtn);
+
+    [AllureStep("Click 'hide reply' button")]
     public void ClickHideRepliesBtn() =>
         WaitAndClick(HideRepliesBtn);
 
+    [AllureStep("Click 'edit' comment button")]
     public void ClickEditCommentBtn() =>
         WaitAndClick(EditCommentBtn);
 
+    [AllureStep("Click 'reply' comment button")]
     public void ClickReplyCommentBtn() =>
         WaitAndClick(ReplyCommentBtn);
 
-    [AllureStep("Click the upload image button in the comment section")]
+    [AllureStep("Click 'upload image' button")]
     public void ClickUploadImgBtn() =>
         WaitAndClick(UploadImgBtn);
 
+    [AllureStep("Click 'emoji' button")]
     public void ClickEmojiBtn() =>
         WaitAndClick(EmojiBtn);
 
+    [AllureStep("Click 'cancel edit' button")]
     public void ClickCancelEditBtn() =>
         WaitAndClick(CancelEditBtn);
 
+    [AllureStep("Click 'save edit' button")]
     public void ClickSaveEditBtn() =>
         WaitAndClick(SaveEditBtn);
 
@@ -101,7 +132,7 @@ public class CommentComponent : BaseComponent
     public bool IsCommentFieldEmpty() =>
         string.IsNullOrWhiteSpace(RootElement.FindElement(CommentField).GetAttribute("value"));
 
-    [AllureStep("Upload an image to the comment section")]
+    [AllureStep("Upload image in comment section: {0}")]
     public void UploadImage(string fileName)
     {
         string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -136,7 +167,6 @@ public class CommentComponent : BaseComponent
         return RootElement.FindElements(ReplyCommentText).FirstOrDefault()?.Text;
     }
 
-
     public bool IsEditedLabelDisplayed()
     {
         WaitUntilElementVisibleBy(EditedLabel);
@@ -148,6 +178,7 @@ public class CommentComponent : BaseComponent
 
     public bool IsViewBtnDisplayed() =>
         FindElements(ViewRepliesBtn).Any(e => e.Displayed);
+
     public bool IsHideBtnDisplayed() =>
         FindElements(HideRepliesBtn).Any(e => e.Displayed);
 }

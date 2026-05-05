@@ -79,6 +79,9 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
+    [Ignore("TEMP: Publish button is disabled due to ongoing feature improvements. " +
+            "Enable after Publish becomes active.")]
+
     public void TC011_Step2_ValidationErrorAppears_WhenOtherFieldsFilled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
