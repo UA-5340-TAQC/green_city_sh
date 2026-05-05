@@ -34,7 +34,7 @@ public class CreateEventPage : BasePage
             .Until(drv =>
                 drv.FindElements(TitleInput).Any(el => el.Displayed));
     }
-    
+
     // [AllureStep("Enter title: '{0}'")]
     public CreateEventPage EnterTitle(string title)
     {

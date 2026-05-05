@@ -83,7 +83,7 @@ public class CommentsComponent : BaseComponent
         }
         if (root == null)
             return null;
-        
+
         var commnets = driver.FindElements(CommentItemLocator);
         if (commnets.Any())
         {
@@ -93,7 +93,7 @@ public class CommentsComponent : BaseComponent
         }
         return new CommentsComponent(driver, root);
     }
-    
+
     public CommentsComponent WaitForCommentVisible(string text)
     {
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
@@ -163,7 +163,7 @@ public class CommentsComponent : BaseComponent
         var firstComment = driver
             .FindElements(CommentItemLocator)
             .FirstOrDefault(e => e.Displayed);
-        if(firstComment == null)
+        if (firstComment == null)
             throw new InvalidOperationException("Expected at least one visible comment");
 
         return firstComment.FindElement(CommentTextLocator).Text;
@@ -184,12 +184,12 @@ public class CommentsComponent : BaseComponent
         var comments = driver.FindElements(CommentItemLocator);
         if (!comments.Any())
             return false;
-        
+
         new Actions(driver)
             .ScrollToElement(comments.First())
             .Perform();
 
-        return comments.Any(c => 
+        return comments.Any(c =>
                 c.Displayed && c.FindElements(CommentTextLocator)
                     .Any(t => t.Text.Contains(text)));
     }
@@ -204,7 +204,7 @@ public class CommentsComponent : BaseComponent
                     .Any(t => string.Equals(t.Text.Trim(), text, StringComparison.Ordinal)) &&
                 c.FindElements(DeleteButtonLocator).Any());
         ;
-        if (comment == null) 
+        if (comment == null)
             throw new InvalidOperationException($"Comment with '{text}' was not found");
 
         new Actions(driver)

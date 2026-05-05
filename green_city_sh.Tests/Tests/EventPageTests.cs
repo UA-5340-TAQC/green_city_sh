@@ -1,3 +1,4 @@
+
 using AngleSharp.Dom.Events;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
@@ -5,14 +6,18 @@ using green_city_sh.Tests.Modals;
 using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 
-// using Allure.NUnit;
-using Allure.NUnit.Attributes;
+using Allure.NUnit;
+using Allure.Net.Commons.Attributes;
+using Allure.Net.Commons;
+
 
 
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
+[AllureOwner("Petro Derlytsia")]
+[AllureFeature("Event Page")]
 public class EventPageTests : BaseTest
 {
     protected override void OnSetup()
@@ -26,9 +31,16 @@ public class EventPageTests : BaseTest
 
     [Test]
     [Order(1)]
-    [Description("Verify that the user can save an event and view it in bookmarks")]
+    [AllureDescription("Verify guest restrictions on Event page")]
     [Retry(2)]
-    [Category("Smoke")]
+    [Category("Regression")]
+    [Category("Security")]
+    [Category("Negative")]
+    [AllureIssue("17")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Format")]
+    [AllureTag("UI", "Sanity")]
     public void VerifyGuestRestrictionsOnEventPage()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events");
