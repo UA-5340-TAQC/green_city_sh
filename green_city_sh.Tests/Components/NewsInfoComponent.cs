@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Allure.Net.Commons.Attributes;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 
@@ -26,6 +27,8 @@ public class NewsInfoComponent : BaseComponent
 
     public string GetAuthorText() =>
         FindElement(AuthorLabel).Text;
+
+    [AllureStep("Click 'Like news' button")]
     public void ClickLikeBtn() =>
         WaitAndClick(LikeBtn);
 

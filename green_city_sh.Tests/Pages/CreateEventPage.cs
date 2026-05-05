@@ -12,6 +12,7 @@ public class CreateEventPage : BasePage
     private static readonly By TitleInput = By.CssSelector("input[formcontrolname='title']");
     private static readonly By TitleError = By.CssSelector("mat-error.mat-mdc-form-field-error");
     private static readonly By DescriptionInput = By.CssSelector(".ql-editor");
+    private static readonly By DescriptionError = By.CssSelector(".quill-counter.quill-valid");
     private static readonly By DateInput = By.CssSelector("input[placeholder='Choose a date']");
     private static readonly By StartTimeInput = By.CssSelector("input[formcontrolname='startTime']");
     private static readonly By EndTimeInput = By.CssSelector("input[formcontrolname='finishTime']");
@@ -102,8 +103,6 @@ public class CreateEventPage : BasePage
         wait.Until(drv => drv.FindElements(InviteOption).Any(e => e.Displayed));
         driver.FindElement(InviteOption).Click();
 
-        wait.Until(d => !d.FindElements(InviteOption).Any());
-
         return this;
     }
 
@@ -138,6 +137,8 @@ public class CreateEventPage : BasePage
 
     [AllureStep("Check if title error is visible")]
     public bool IsTitleErrorVisible() => driver.FindElements(TitleError).Any(e => e.Displayed);
+    public bool IsDescriptionErrorVisible() => driver.FindElements(DescriptionError).Any();
+
 
     [AllureStep("Get title error text")]
     public string GetTitleErrorText()

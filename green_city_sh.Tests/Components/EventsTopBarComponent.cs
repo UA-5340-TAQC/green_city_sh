@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using Allure.Net.Commons.Attributes;
 
 namespace green_city_sh.Tests.Components;
 
@@ -33,15 +34,19 @@ public class EventsTopBarComponent : BaseComponent
     {
     }
 
+    [AllureStep("Verify that the create event button is displayed")]
     public bool IsCreateEventButtonVisible()
     {
         return RootElement.FindElement(CreateEventButton).Displayed;
     }
 
+    [AllureStep("Verify that the create event button is enabled")]
     public bool IsCreateEventButtonEnable()
     {
         return RootElement.FindElement(CreateEventButton).Enabled;
     }
+
+    [AllureStep("Click the create event button")]
 
     public void ClickCreateEventButton()
     {

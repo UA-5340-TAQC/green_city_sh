@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
+
 namespace green_city_sh.Tests.Components;
 
 public class CommentsComponent : BaseComponent
@@ -65,6 +66,31 @@ public class CommentsComponent : BaseComponent
                        })
                    ?? throw new WebDriverTimeoutException("Comments section did not become visible");
 
+        return new CommentsComponent(driver, root);
+    }
+
+    public static CommentsComponent? TryWaitAndCreate(IWebDriver driver)
+    {
+        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
+        IWebElement? root = null;
+        try
+        {
+            root = wait.Until(drv => drv.FindElements(RootLocator).FirstOrDefault(e => e.Displayed));
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return null;
+        }
+        if (root == null)
+            return null;
+
+        var commnets = driver.FindElements(CommentItemLocator);
+        if (commnets.Any())
+        {
+            new Actions(driver)
+                .ScrollToElement(commnets.First())
+                .Perform();
+        }
         return new CommentsComponent(driver, root);
     }
 
@@ -136,8 +162,9 @@ public class CommentsComponent : BaseComponent
     {
         var firstComment = driver
             .FindElements(CommentItemLocator)
-            .FirstOrDefault(e => e.Displayed)
-            ?? throw new NoSuchElementException("No visible comments found");
+            .FirstOrDefault(e => e.Displayed);
+        if (firstComment == null)
+            throw new InvalidOperationException("Expected at least one visible comment");
 
         return firstComment.FindElement(CommentTextLocator).Text;
     }
@@ -154,26 +181,31 @@ public class CommentsComponent : BaseComponent
 
     public bool IsCommentVisible(string text)
     {
+        var comments = driver.FindElements(CommentItemLocator);
+        if (!comments.Any())
+            return false;
+
         new Actions(driver)
-            .ScrollToElement(driver.FindElement(CommentItemLocator))
+            .ScrollToElement(comments.First())
             .Perform();
 
-        return driver
-            .FindElements(CommentItemLocator)
-            .Any(c => c.Displayed && c.FindElements(CommentTextLocator)
-                .Any(t => t.Text.Contains(text)));
-
+        return comments.Any(c =>
+                c.Displayed && c.FindElements(CommentTextLocator)
+                    .Any(t => t.Text.Contains(text)));
     }
 
     public void DeleteComment(string text)
     {
         var comment = driver
             .FindElements(CommentItemLocator)
-            .FirstOrDefault(c => c.Displayed && c.FindElements(CommentTextLocator)
-                .Any(t => string.Equals(t.Text.Trim(), text, StringComparison.Ordinal))
-            && c.FindElements(DeleteButtonLocator).Any())
-        ?? throw new NoSuchElementException(
-            $"Comment with '{text}' was not found");
+            .FirstOrDefault(c =>
+                c.Displayed &&
+                c.FindElements(CommentTextLocator)
+                    .Any(t => string.Equals(t.Text.Trim(), text, StringComparison.Ordinal)) &&
+                c.FindElements(DeleteButtonLocator).Any());
+        ;
+        if (comment == null)
+            throw new InvalidOperationException($"Comment with '{text}' was not found");
 
         new Actions(driver)
             .ScrollToElement(comment)

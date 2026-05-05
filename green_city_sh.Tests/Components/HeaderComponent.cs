@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -11,7 +12,7 @@ public class HeaderComponent : BaseComponent
     private By SearchBtn => By.CssSelector(".search-icon");
     private By LanguageDropdown => By.CssSelector(".header_lang-switcher-wrp");
     private By LanguageDropdownOptions => By.CssSelector(".header_lang-switcher-wrp li");
-    private By SignInLink => By.CssSelector(".header_sign-in-link");
+    private By SignInLink => By.XPath(".//a[contains(@class, 'header_sign-in-link')] | .//img[@alt='sing in button']");
     private By SignInModalRootLocator = By.CssSelector("app-auth-modal");
     private By SignUpLink => By.CssSelector(".header_sign-up-btn");
     private By BookmarkBtn => By.CssSelector(".bookmark-icon");
@@ -96,7 +97,19 @@ public class HeaderComponent : BaseComponent
 
     public SignInModalComponent ClickSignIn()
     {
-        var signInLink = RootElement.FindElement(SignInLink);
+        //var signInLink = RootElement.FindElement(SignInLink);
+        var signInLink = wait.Until(d =>
+        {
+            try
+            {
+                var element = RootElement.FindElement(SignInLink);
+                return element.Displayed ? element : null;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return null;
+            }
+        });
         signInLink.Click();
         var signInModal = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(SignInModalRootLocator));
         return new SignInModalComponent(driver, signInModal);
@@ -106,6 +119,7 @@ public class HeaderComponent : BaseComponent
         var signUpLink = RootElement.FindElement(SignUpLink);
         signUpLink.Click();
     }
+    [AllureStep("Click the bookmarks button")]
     public void ClickBookmarks()
     {
         var bookmarksBtn = RootElement.FindElement(BookmarkBtn);
