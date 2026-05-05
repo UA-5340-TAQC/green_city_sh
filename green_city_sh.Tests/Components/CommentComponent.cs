@@ -98,7 +98,6 @@ public class CommentComponent : BaseComponent
     public bool DoesTextContain(string text) =>
         GetTextComment().Contains(text, StringComparison.OrdinalIgnoreCase);
 
-    [AllureStep("Check if the comment field is empty")]
     public bool IsCommentFieldEmpty() =>
         string.IsNullOrWhiteSpace(RootElement.FindElement(CommentField).GetAttribute("value"));
 
@@ -112,7 +111,6 @@ public class CommentComponent : BaseComponent
         fileInputElement.SendKeys(filePath);
     }
 
-    [AllureStep("Check if the comment button is disabled")]
     public bool IsCommentButtonDisabled()
     {
         var btn = RootElement.FindElement(SubmitCommentBtn);
@@ -120,7 +118,6 @@ public class CommentComponent : BaseComponent
         return !btn.Enabled || btn.GetAttribute("disabled") != null;
     }
 
-    [AllureStep("Check if the image preview is displayed")]
     public bool IsImagePreviewDisplayed()
     {
         return wait.Until(driver =>
