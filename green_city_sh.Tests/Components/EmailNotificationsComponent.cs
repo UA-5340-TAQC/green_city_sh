@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Components;
 
@@ -19,6 +20,7 @@ public class EmailNotificationsComponent : BaseComponent
     {
     }
 
+    [AllureStep("Set notification frequency for {type} to {frequency}")]
     public void SetNotificationFrequency(string type, string frequency)
     {
         FindElement(NotificationDropdown(type)).Click();
@@ -26,6 +28,7 @@ public class EmailNotificationsComponent : BaseComponent
         dropdown.ClickDropDownOptionByPartialName(frequency);
     }
 
+    [AllureStep("Toggle notification frequency for email")]
     public void ToggleNotificationFrequency(string type, bool enabled)
     {
         var checkbox = FindElement(CheckboxBtn(type));
