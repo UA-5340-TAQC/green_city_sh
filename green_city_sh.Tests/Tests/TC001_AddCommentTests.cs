@@ -12,6 +12,9 @@ namespace green_city_sh.Tests.Tests;
 [AllureOwner("Antonina Smetanina")]
 [AllureSuite("Comments")]
 [AllureFeature("Add comment")]
+[AllureIssue("1")]
+[AllureSuite("GreenCity")]
+[AllureTag("UI", "Smoke")]
 public class TC001_AddCommentTests : BaseTest
 {
     private const string CommentText = "Cool!";
@@ -67,7 +70,7 @@ public class TC001_AddCommentTests : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Comment field becomes active after click")]
+    [AllureDescription("Comment field becomes active after click")]
     public void TC001_Step1_ClickCommentField_BecomesActive()
     {
         commentsComponent!.ClickCommentField();
@@ -80,7 +83,7 @@ public class TC001_AddCommentTests : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Entered valid text is displayed")]
+    [AllureDescription("Entered valid text is displayed")]
     public void TC001_Step2_EnterValidText_IsDisplayedInInput()
     {
         commentsComponent!
@@ -94,7 +97,7 @@ public class TC001_AddCommentTests : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Submitted comment increases counter")]
+    [AllureDescription("Submitted comment increases counter")]
     public void TC001_Step3_SubmitsComment_CountIncreasedByOne()
     {
         commentsComponent!.ScrollToCounter();
@@ -117,6 +120,7 @@ public class TC001_AddCommentTests : BaseTest
 
     [Test]
     [Category("Smoke")]
+    [AllureDescription("Comment visible after refresh")]
     public void TC001_Step4_AfterPageRefresh_CommentRemainsVisible()
     {
         commentsComponent!

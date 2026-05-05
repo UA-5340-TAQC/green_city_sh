@@ -16,12 +16,11 @@ namespace green_city_sh.Tests.Tests;
 [AllureOwner("Antonina Smetanina")]
 [AllureSuite("Events")]
 [AllureFeature("Event card UI")]
+[AllureIssue("37")]
+[AllureSuite("GreenCity")]
+[AllureTag("UI", "Smoke")]
 public class TC037_EventCardUITest : BaseTest
 {
-    private string TestEmail = null!;
-    private string TestPassword = null!;
-
-
     private static readonly HashSet<string> AllowedCategories =
         new(StringComparer.OrdinalIgnoreCase) { "Environmental", "Social", "Economic" };
 
@@ -46,7 +45,7 @@ public class TC037_EventCardUITest : BaseTest
 
         SignInModalComponent
             .WaitAndCreate(Driver!)
-            .Login(TestEmail, TestPassword);
+            .Login(Configuration.TestEmail, Configuration.TestPassword);
 
         header.WaitForUserLoggedIn();
 
@@ -59,7 +58,7 @@ public class TC037_EventCardUITest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Event card is visible")]
+    [AllureDescription("Event card is visible")]
     public void TC037_Step1_FirstEventCard_IsVisible()
     {
         Assert.That(firstCard!.GetImage().Displayed,
@@ -68,7 +67,7 @@ public class TC037_EventCardUITest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Event image is present")]
+    [AllureDescription("Event image is present")]
     public void TC037_Step2_EventImage_IsPresentAndLoaded()
     {
         Assert.That(firstCard!.GetImage().Displayed,
@@ -83,7 +82,7 @@ public class TC037_EventCardUITest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Event category tag is valid")]
+    [AllureDescription("Event category tag is valid")]
     public void TC037_Step3_CategoryTag_IsValidValue()
     {
 
@@ -97,7 +96,7 @@ public class TC037_EventCardUITest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Date time format is valid")]
+    [AllureDescription("Date time format is valid")]
     public void TC037_Step4_DateTimeFormat_IsValid()
     {
         var dateText = firstCard!.GetDateText();
@@ -118,7 +117,7 @@ public class TC037_EventCardUITest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Event status is open or closed")]
+    [AllureDescription("Event status is open or closed")]
     public void TC037_Step5_EventStatus_IsOpenOrClosed()
     {
         var statusText = firstCard!.GetStatusTest();
@@ -131,7 +130,7 @@ public class TC037_EventCardUITest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    [AllureStory("Action button is enabled")]
+    [AllureDescription("Action button is enabled")]
     public void TC037_Step6_ActionButtons_ArePresentAndEnabled()
     {
         var buttonTexts = firstCard!.GetActionButtonTexts();
