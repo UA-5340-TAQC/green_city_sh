@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using OpenQA.Selenium;
 
@@ -17,12 +18,15 @@ public class CancelJoiningEventModal : BaseModal
     {
     }
 
+    [AllureStep("Click the 'Yes' button in the cancel joining event modal")]
     public void ClickYesButton() =>
         RootElement.FindElement(YesButton).Click();
 
+    [AllureStep("Click the 'No' button in the cancel joining event modal")]
     public void ClickNoButton() =>
         RootElement.FindElement(NoButton).Click();
 
+    [AllureStep("Click the 'Cancel' button in the cancel joining event modal")]
     public void ClickCancelButton() =>
         RootElement.FindElement(CancelButton).Click();
 }

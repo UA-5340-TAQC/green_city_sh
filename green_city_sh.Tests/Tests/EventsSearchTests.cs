@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
@@ -24,6 +25,8 @@ public class EventsSearchTests : BaseTest
 
     [Test]
     [Category("Smoke")]
+    [AllureIssue("39")]
+    [AllureDescription("Verify that searching for events using a keyword returns cards contain the searched keyword in their title")]
     public void SearchByKeywordReturnsMatchingEvents()
     {
         string searchKeyword = Configuration.SmokeSearchKeyword;

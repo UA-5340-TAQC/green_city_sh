@@ -1,11 +1,15 @@
 using System.Reflection;
 using System.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
+using Allure.Net.Commons.Attributes;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -16,21 +20,27 @@ public class NewsDetailsPage : BasePage
     private CommentComponent? commentInput;
     private NewsInfoComponent? newsInfo;
 
-
     private By CommentsLocator => By.XPath("//div[contains(@class, 'wrapper-comment')]");
     private By RepliesLocator => By.XPath("//div[contains(@class, 'wrapper-reply')]");
     private By ViewRepliesBtn => By.XPath("//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
     private By HideRepliesBtn => By.XPath("//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
     private By CommentCounter => By.Id("total-count");
+
+    // --- News Details & Deletion Locators ---
+    private By NewsTitle => By.CssSelector(".news-title-container .news-title");
+    private By DeleteNewsButton => By.CssSelector(".edit-delete-block .delete-news-button");
+    private By DeleteConfirmYesButton => By.CssSelector("app-dialog-pop-up .primary-global-button");
+
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
     }
 
     private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list/div"));
-
     private DeleteCommentModal DeleteCommentModal => deleteComment ??= new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
     private CommentComponent CommentInput => commentInput ??= new CommentComponent(driver, By.XPath("//app-add-comment"));
     private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
+
+    [AllureStep("Open News Details Page by ID: {0}")]
     public void OpenNewsDetailsPage(int newsId)
     {
         var currentUrl = driver.Url;
@@ -57,18 +67,21 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
+    [AllureStep("Delete Comment")]
     public NewsDetailsPage DeleteComment()
     {
         Comment.ClickDeleteCommentBtn();
         return this;
     }
 
+    [AllureStep("Click Cancel Delete")]
     public NewsDetailsPage ClickCancelDelete()
     {
         DeleteCommentModal.ClickCancelDeleteBtn();
         return this;
     }
 
+    [AllureStep("Reply to Comment: '{0}'")]
     public NewsDetailsPage ReplyComment(string text)
     {
         Comment.ClickReplyCommentBtn();
@@ -77,7 +90,7 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
-
+    [AllureStep("Click Yes to Delete Comment")]
     public NewsDetailsPage ClickYesDelete()
     {
         DeleteCommentModal.ClickYesDeleteBtn();
@@ -85,18 +98,21 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
+    [AllureStep("Click View Replies")]
     public NewsDetailsPage ClickViewReplies()
     {
         Comment.ClickViewRepliesBtn();
         return this;
     }
 
+    [AllureStep("Click Hide Replies")]
     public NewsDetailsPage ClickHideReplies()
     {
         Comment.ClickHideRepliesBtn();
         return this;
     }
 
+    [AllureStep("Get Comments")]
     public IList<CommentComponent> GetComments()
     {
         IList<IWebElement> commentsList = driver.FindElements(CommentsLocator);
@@ -110,6 +126,7 @@ public class NewsDetailsPage : BasePage
         return comments;
     }
 
+    [AllureStep("Get Replies")]
     public IList<CommentComponent> GetReplies()
     {
         var allReplies = new List<CommentComponent>();
@@ -136,6 +153,7 @@ public class NewsDetailsPage : BasePage
         return allReplies;
     }
 
+    [AllureStep("Get All Comments With Replies")]
     public IList<CommentComponent> GetAllCommentsWithReplies()
     {
         var allComments = GetComments().ToList();
@@ -221,24 +239,46 @@ public class NewsDetailsPage : BasePage
         return newValue;
     }
 
-    public string? GetLastComment() =>
-        Comment.GetLastComment();
+    [AllureStep("Get Last Comment")]
+    public string? GetLastComment() => Comment.GetLastComment();
 
-    public string? GetLastReplyComment() =>
-        Comment.GetLastReplyComment();
-    public bool IsEditedLabelDisplayed() =>
-        Comment.IsEditedLabelDisplayed();
+    [AllureStep("Get Last Reply Comment")]
+    public string? GetLastReplyComment() => Comment.GetLastReplyComment();
 
-    public string GetDateText() =>
-        NewsInfo.GetDateText();
+    [AllureStep("Check if Edited Label Displayed")]
+    public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed();
 
-    public bool IsViewReplyBtnDisplayed() =>
-        Comment.IsViewBtnDisplayed();
+    [AllureStep("Get Date Text")]
+    public string GetDateText() => NewsInfo.GetDateText();
 
-    public bool IsHideReplyBtnDisplayed() =>
-        Comment.IsHideBtnDisplayed();
+    [AllureStep("Check if View Reply Button Displayed")]
+    public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed();
 
-    public string GetAttributeReplyButton() =>
-        Comment.GetReplyButtonAttribute();
+    [AllureStep("Check if Hide Reply Button Displayed")]
+    public bool IsHideReplyBtnDisplayed() => Comment.IsHideBtnDisplayed();
 
+    [AllureStep("Get Reply Button Attribute")]
+    public string GetAttributeReplyButton() => Comment.GetReplyButtonAttribute();
+
+    // --- News Postcondition & Extraction Methods ---
+
+    [AllureStep("Get News Title Text")]
+    public string GetNewsTitleText()
+    {
+        return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitle)).Text.Trim();
+    }
+
+    [AllureStep("Click Delete News Button")]
+    public NewsDetailsPage ClickDeleteNewsButton()
+    {
+        wait.Until(ExpectedConditions.ElementToBeClickable(DeleteNewsButton)).Click();
+        return this;
+    }
+
+    [AllureStep("Confirm Deletion")]
+    public void ConfirmDeletion()
+    {
+        wait.Until(ExpectedConditions.ElementToBeClickable(DeleteConfirmYesButton)).Click();
+        wait.Until(ExpectedConditions.UrlContains("/news"));
+    }
 }
