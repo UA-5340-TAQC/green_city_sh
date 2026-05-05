@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
@@ -16,14 +17,17 @@ public class SearchTypeAndDateRangeTest : BaseTest
 
         eventsPage = new EventsPage(Driver!);
         eventsPage.Header.ChangeLanguage("en");
+        eventsPage.OpenEventsPage();
+
 
     }
 
     [Test]
+    [AllureIssue("14")]
+    [AllureDescription("Filter and Search Functionality")]
     [Category("Smoke")]
     public void SearchTypeAndDateRange()
     {
-        eventsPage.OpenEventsPage();
 
         Assert.That(eventsPage.EventsTopBar.IsSearchIconVisible(), "Search icon should be visible on the events page.");
         Assert.That(eventsPage.EventsTopBar.IsSearchIconEnabled(), "Search button should be visible on the events page.");
