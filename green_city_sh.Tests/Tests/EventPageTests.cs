@@ -1,11 +1,16 @@
-using Allure.Net.Commons;
-using Allure.Net.Commons.Attributes;
+
 using AngleSharp.Dom.Events;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Modals;
 using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
+
+using Allure.NUnit;
+using Allure.Net.Commons.Attributes;
+using Allure.Net.Commons;
+
+
 
 namespace green_city_sh.Tests.Tests;
 

@@ -24,7 +24,7 @@ namespace green_city_sh.Tests.Infrastructure
 
         [TearDown]
         [AllureStep("Tear Down Test Environment")]
-        public void TearDown()
+        public virtual void TearDown()
         {
             try
             {
