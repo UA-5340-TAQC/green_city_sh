@@ -21,11 +21,6 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
 
     protected override void OnSetup()
     {
-        TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
-                    ?? throw new InvalidOperationException("TEST_EMAIL is not configured.");
-        TestPassword = Environment.GetEnvironmentVariable("TEST_PASSWORD")
-                       ?? throw new InvalidOperationException("TEST_PASSWORD is not configured.");
-
         NavigateToBaseUrl();
 
         var homePage = new HomePage(Driver!);
@@ -41,17 +36,6 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
 
         createEventPage = new CreateEventPage(Driver!);
         createEventPage.Open();
-    }
-
-    protected override void OnTearDown()
-    {
-        try
-        {
-            Driver?.Quit();
-        }
-        catch
-        {
-        }
     }
 
     private void FillMandatoryFieldsExceptDescription()
