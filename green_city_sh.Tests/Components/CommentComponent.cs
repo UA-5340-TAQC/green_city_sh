@@ -90,14 +90,14 @@ public class CommentComponent : BaseComponent
             try
             {
                 var btn = RootElement.FindElement(DeleteCommentBtn);
-                if (!btn.Displayed || !btn.Enabled) 
+                if (!btn.Displayed || !btn.Enabled)
                     return false;
                 btn.Click();
                 return true;
             }
             catch (StaleElementReferenceException)
             {
-                return false; 
+                return false;
             }
             catch (NoSuchElementException)
             {
