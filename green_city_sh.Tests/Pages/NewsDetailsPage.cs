@@ -1,4 +1,7 @@
+using System.Reflection;
+using System.Security;
 using System.Text.RegularExpressions;
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
 using OpenQA.Selenium;
@@ -10,7 +13,7 @@ public class NewsDetailsPage : BasePage
 {
     private CommentComponent? comment;
     private DeleteCommentModal? deleteComment;
-    private CommentInputComponent? commentInput;
+    private CommentComponent? commentInput;
     private NewsInfoComponent? newsInfo;
 
 
@@ -26,7 +29,7 @@ public class NewsDetailsPage : BasePage
     private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list/div"));
 
     private DeleteCommentModal DeleteCommentModal => deleteComment ??= new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
-    private CommentInputComponent CommentInput => commentInput ??= new CommentInputComponent(driver, By.XPath("//app-add-comment"));
+    private CommentComponent CommentInput => commentInput ??= new CommentComponent(driver, By.XPath("//app-add-comment"));
     private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
     public void OpenNewsDetailsPage(int newsId)
     {
@@ -35,6 +38,7 @@ public class NewsDetailsPage : BasePage
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/{newsId}");
     }
 
+    [AllureStep("Add comment with text: {0}")]
     public NewsDetailsPage AddComment(string text)
     {
         CommentInput.EnterComment(text);
@@ -44,6 +48,7 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
+    [AllureStep("Edit comment with text: {0}")]
     public NewsDetailsPage EditComment(string text)
     {
         Comment.ClickEditCommentBtn();
@@ -142,17 +147,30 @@ public class NewsDetailsPage : BasePage
         return allComments;
     }
 
+    [AllureStep("Wait for comment counter visible")]
     public int WaitForCommentCounterVisible()
     {
-
         var value = 0;
+        var previousValue = -1;
+
         wait.Until(_ =>
         {
             try
             {
                 var el = driver.FindElement(CommentCounter);
+                if (!el.Displayed) return false;
                 var digits = new string(el.Text.Where(char.IsDigit).ToArray());
-                return int.TryParse(digits, out value) && digits.Length > 0;
+                if (!int.TryParse(digits, out var current) || digits.Length == 0)
+                    return false;
+
+                if (current == previousValue)
+                {
+                    value = current;
+                    return true;
+                }
+
+                previousValue = current;
+                return false;
             }
             catch (NoSuchElementException)
             {
@@ -163,19 +181,37 @@ public class NewsDetailsPage : BasePage
                 return false;
             }
         });
+
         return value;
     }
 
+    [AllureStep("Wait for comment counter to change from: {0}")]
     public int WaitForCommentCounterToChange(int previousValue)
     {
         var newValue = 0;
+        var lastSeen = -1;
         wait.Until(_ =>
         {
             try
             {
-                var digits = new string(driver.FindElement(CommentCounter).Text
-                    .Where(char.IsDigit).ToArray());
-                return int.TryParse(digits, out newValue) && newValue != previousValue;
+                var el = driver.FindElement(CommentCounter);
+                if (!el.Displayed)
+                    return false;
+                var digits = new string(el.Text.Where(char.IsDigit).ToArray());
+                if (!int.TryParse(digits, out var current) || digits.Length == 0)
+                    return false;
+                if (current == lastSeen && current != previousValue)
+                {
+                    newValue = current;
+                    return true;
+                }
+
+                lastSeen = current;
+                return false;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
             }
             catch (StaleElementReferenceException)
             {
