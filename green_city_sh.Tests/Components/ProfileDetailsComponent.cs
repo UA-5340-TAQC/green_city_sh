@@ -28,6 +28,11 @@ public class ProfileDetailsComponent : BaseComponent
     {
         WaitAndTypeText(CityNameField, name);
         var dropdown = new DropDownComponent(driver, By.TagName("body"));
+        //dropdown.WaitUntilVisible();
+        wait.Until(d =>
+        {
+            return dropdown.GetOptionList().Count > 0;
+        });
         dropdown.ClickDropDownOptionByPartialName(name);
     }
 

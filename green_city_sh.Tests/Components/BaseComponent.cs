@@ -38,7 +38,8 @@ public abstract class BaseComponent : Base
     protected void WaitAndTypeText(By locator, string text)
     {
         var element = wait.Until(d => RootElement.FindElement(locator));
-        element.Clear();
+        element.SendKeys(Keys.Control + "a");
+        element.SendKeys(Keys.Backspace);
         element.SendKeys(text);
     }
 
