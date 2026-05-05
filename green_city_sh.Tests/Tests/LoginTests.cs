@@ -1,13 +1,8 @@
-using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
-using System;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using Allure.NUnit.Attributes;
-using Allure.Net.Commons;
 
 namespace green_city_sh.Tests.Tests;
 
@@ -52,6 +47,8 @@ public class LoginTests : BaseTest
 
     // Attempt to login with invalid email format
     [Test]
+    [AllureIssue("26")]
+    [AllureDescription("Verify that login with invalid email format shows error and disables Sign In button")]
     [Category("Smoke")]
     [Category("Regression")]
     public void AttemptToLoginWithInvalidEmail()

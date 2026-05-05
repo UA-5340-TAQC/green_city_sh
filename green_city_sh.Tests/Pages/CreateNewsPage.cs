@@ -26,6 +26,15 @@ public class CreateNewsPage : BasePage
 
         NewsForm.EnterTitle(title);
     }
+    public void ClearAndBlurTitleField()
+    {
+        NewsForm.ClearAndBlurTitleField();
+    }
+
+    public void WaitForUrlToContain(string substring)
+    {
+        NewsForm.WaitForUrlToContain(substring);
+    }
 
     public void ClickTitleField()
     {

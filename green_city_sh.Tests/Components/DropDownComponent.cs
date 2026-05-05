@@ -47,7 +47,7 @@ public class DropDownComponent : BaseComponent
         return selectedValueElement!.Text.Trim();
     }
 
-    public IList<IWebElement> GetOptionList() =>
+    private IList<IWebElement> GetOptionList() =>
         wait.Until(drv =>
         {
             try
