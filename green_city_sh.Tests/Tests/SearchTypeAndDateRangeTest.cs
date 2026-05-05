@@ -5,6 +5,7 @@ using green_city_sh.Tests.Pages;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class SearchTypeAndDateRangeTest : BaseTest
 {
     private EventsPage? eventsPage;
@@ -26,7 +27,7 @@ public class SearchTypeAndDateRangeTest : BaseTest
 
         Assert.That(eventsPage.EventsTopBar.IsSearchIconVisible(), "Search icon should be visible on the events page.");
         Assert.That(eventsPage.EventsTopBar.IsSearchIconEnabled(), "Search button should be visible on the events page.");
-        eventsPage!.ClickSearchButton();
+        eventsPage.ClickSearchButton();
         eventsPage.EventsTopBar.FillSearchInputField("Community");
         var searchResults = new List<EventCardComponent>();
         if (eventsPage.EventsTopBar.IsSearchIconEnabled())

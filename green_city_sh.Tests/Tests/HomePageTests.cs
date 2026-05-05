@@ -4,6 +4,7 @@ using green_city_sh.Tests.Pages;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class HomePageTests : BaseTest
 {
     private HomePage? _homePage;
@@ -30,7 +31,7 @@ public class HomePageTests : BaseTest
 
 
     [TearDown]
-    public void TearDown()
+    public new void TearDown()
     {
         Driver?.Quit();
     }

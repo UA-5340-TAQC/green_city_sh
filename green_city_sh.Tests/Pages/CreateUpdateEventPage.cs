@@ -119,12 +119,12 @@ public class CreateUpdateEventPage : BasePage
 
     public string GetTitleValue()
     {
-        return wait.Until(ExpectedConditions.ElementIsVisible(TitleField)).GetAttribute("value");
+        return wait.Until(ExpectedConditions.ElementIsVisible(TitleField)).GetAttribute("value") ?? string.Empty;
     }
 
     public string GetDurationText()
     {
-        return DurationDropdownComp.GetSelectedOptionText();
+        return DurationDropdownComp.GetSelectedOptionText() ?? string.Empty;
     }
 
     public void SelectInitiativeType(string type)
@@ -250,9 +250,9 @@ public class CreateUpdateEventPage : BasePage
 
     public void SetEndTime(string time) => SetTimeByJS(EndTimeInput, time);
 
-    public string GetStartTimeValue() => wait.Until(ExpectedConditions.ElementIsVisible(StartTimeInput)).GetAttribute("value");
+    public string GetStartTimeValue() => wait.Until(ExpectedConditions.ElementIsVisible(StartTimeInput)).GetAttribute("value") ?? string.Empty;
 
-    public string GetEndTimeValue() => wait.Until(ExpectedConditions.ElementIsVisible(EndTimeInput)).GetAttribute("value");
+    public string GetEndTimeValue() => wait.Until(ExpectedConditions.ElementIsVisible(EndTimeInput)).GetAttribute("value") ?? string.Empty;
 
     public void CheckAllDay() => AllDayCheckboxComp.Check();
 
@@ -307,7 +307,7 @@ public class CreateUpdateEventPage : BasePage
         input.SendKeys(url);
     }
 
-    public string GetOnlineLinkValue() => wait.Until(ExpectedConditions.ElementIsVisible(OnlineLinkField)).GetAttribute("value");
+    public string GetOnlineLinkValue() => wait.Until(ExpectedConditions.ElementIsVisible(OnlineLinkField)).GetAttribute("value") ?? string.Empty;
 
     // --- Action Methods: Buttons ---
 

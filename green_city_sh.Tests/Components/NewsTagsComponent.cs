@@ -26,7 +26,7 @@ public class NewsTagsComponent : TagsComponent
     {
         var tagButton = RootElement.FindElement(TagButtonByName(name));
         tagButton.Click();
-        wait.Until(driver => tagButton.GetAttribute("class").Contains("global-tag-clicked"));
+        wait.Until(driver => tagButton.GetAttribute("class")?.Contains("global-tag-clicked") ?? false);
     }
 
     public void SelectTags(params string[] tags)
@@ -40,7 +40,7 @@ public class NewsTagsComponent : TagsComponent
     {
         var allTagButtons = RootElement.FindElements(TagButtons);
 
-        IWebElement targetButton = null;
+        IWebElement? targetButton = null;
         foreach (var button in allTagButtons)
         {
             var tagText = button.FindElement(By.CssSelector(".text")).Text.Trim();

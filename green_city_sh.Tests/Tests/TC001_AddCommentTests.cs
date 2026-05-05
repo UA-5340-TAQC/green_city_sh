@@ -6,6 +6,7 @@ using OpenQA.Selenium;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class TC001_AddCommentTests : BaseTest
 {
     private static string TestEmail = Environment.GetEnvironmentVariable("TEST_EMAIL")
@@ -21,7 +22,7 @@ public class TC001_AddCommentTests : BaseTest
     {
         NavigateToBaseUrl();
 
-        new HomePage(Driver)
+        new HomePage(Driver!)
             .Header
             .ChangeLanguage("En")
             .ClickSignIn();

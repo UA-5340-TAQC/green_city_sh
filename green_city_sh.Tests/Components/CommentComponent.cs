@@ -141,7 +141,7 @@ public class CommentComponent : BaseComponent
     }
 
     public string GetReplyButtonAttribute() =>
-        RootElement.FindElement(ReplyCommentBtn).GetAttribute("class");
+        RootElement.FindElement(ReplyCommentBtn).GetAttribute("class") ?? string.Empty;
 
     public bool IsViewBtnDisplayed() =>
         FindElements(ViewRepliesBtn).Any(e => e.Displayed);

@@ -136,9 +136,9 @@ public class EventCardComponent : BaseComponent
     {
         var image = GetImage();
         return new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
-            .Until(drv => (bool)((IJavaScriptExecutor)drv)
+            .Until(drv => (bool?)((IJavaScriptExecutor)drv)
                 .ExecuteScript(
-                    "return arguments[0].complete && arguments[0].naturalWidth > 0", image));
+                    "return arguments[0].complete && arguments[0].naturalWidth > 0", image) ?? false);
     }
 
     public string GetImageSrc() =>

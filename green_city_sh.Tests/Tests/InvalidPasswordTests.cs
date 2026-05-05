@@ -6,6 +6,7 @@ using green_city_sh.Tests.Components;
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Self)]
 public class InvalidPasswordTests : BaseTest
 {
     private HomePage? _homePage;
