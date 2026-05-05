@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using green_city_sh.Tests.Infrastructure;
@@ -63,7 +63,6 @@ public class DropDownComponent : BaseComponent
                 return null; // Implicit protection against DOM changes during filtering
             }
         })!;
-    }
 
     private IWebElement GetDropDownOptionByPartialName(string partialName)
     {
@@ -76,8 +75,6 @@ public class DropDownComponent : BaseComponent
                    option.Text.Contains(partialName, StringComparison.OrdinalIgnoreCase))
                ?? throw new NoSuchElementException($"{OptionNameNotFound}: {partialName}");
     }
-
-
 
     public IList<string> GetListOptionsText() =>
         GetOptionList().Select(e => e.Text.Trim()).ToList();

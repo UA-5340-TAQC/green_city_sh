@@ -1,14 +1,16 @@
 ﻿using System.Text.RegularExpressions;
+using Allure.Net.Commons;
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
+[AllureOwner("Dmytro Syadro")]
+[AllureFeature("News Details")]
 public class NewsDetailsPageTests : BaseTest
 {
     private NewsDetailsPage? newsDetailsPage;
@@ -30,8 +32,10 @@ public class NewsDetailsPageTests : BaseTest
 
     [Test]
     [Order(1)]
-    [Description("Verify that the comments are displayed down the news page section")]
-    [Category("Smoke")]
+    [AllureDescription("Verify that the comments are displayed down the news page section")]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Comment")]
+    [AllureTag("UI", "Smoke")]
     public void VerifyCommentsCount()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10326");
@@ -48,9 +52,12 @@ public class NewsDetailsPageTests : BaseTest
     [Test]
     [TestCase("Awesome")]
     [Order(2)]
-    [Description("Verify that the user can delete their comment and the counter updates")]
-    [Retry(1)]
-    [Category("Comment")]
+    [AllureIssue("19")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Comment")]
+    [AllureDescription("Verify that the user can delete their comment and the counter updates")]
+    [AllureTag("UI", "Sanity")]
     public void VerifyDeletingUserCommentAndCounterUpdates(string comment)
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
@@ -68,7 +75,8 @@ public class NewsDetailsPageTests : BaseTest
         newsDetailsPage
             .DeleteComment()
             .ClickYesDelete();
-        Driver.Navigate().Refresh();
+
+        newsDetailsPage.Refresh();
         var afterDelete = newsDetailsPage.WaitForCommentCounterToChange(afterAdd);
 
         Assert.Multiple(() =>
@@ -88,8 +96,12 @@ public class NewsDetailsPageTests : BaseTest
 
     [Test]
     [TestCaseSource(nameof(EditTestDataConfig))]
-    [Description("Verify that the user can successfully edit their own comment")]
-    [Category("Comment")]
+    [AllureIssue("19")]
+    [AllureDescription("Verify that the user can successfully edit their own comment")]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Comment")]
+    [AllureSeverity(SeverityLevel.critical)]
+    [AllureTag("UI", "Sanity")]
     public void VerifyThatUserCanEditTheirOwnComment(string addText, string editText)
     {
 
@@ -113,8 +125,13 @@ public class NewsDetailsPageTests : BaseTest
 
     [Test]
     [TestCaseSource(nameof(ReplyTestDataConfig))]
-    [Category("Comment")]
-    [Description("Verify that the user can reply to another user's comment")]
+    [AllureDescription("Verify that the user can reply to another user's comment")]
+    [AllureIssue("20")]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Comment")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureTag("UI", "Sanity")]
+
     public void VerifyThatUserCanReplyToAnotherUserComment(string addText, string replyText)
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
@@ -149,8 +166,12 @@ public class NewsDetailsPageTests : BaseTest
 
     [Test]
     [Order(5)]
-    [Description("Verify publication date is displayed in American format")]
-    [Category("Smoke")]
+    [AllureDescription("Verify publication date is displayed in American format")]
+    [AllureIssue("18")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Format")]
+    [AllureTag("UI", "Smoke")]
     public void VerifyPublicationDateIsDisplayedInAmericanFormat()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/news/10412");
@@ -165,8 +186,12 @@ public class NewsDetailsPageTests : BaseTest
 
     [Test]
     [Order(6)]
-    [Description("Verify publication date is displayed in Ukrainian format")]
-    [Category("Smoke")]
+    [AllureDescription("Verify publication date is displayed in Ukrainian format")]
+    [AllureIssue("18")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Format")]
+    [AllureTag("UI", "Smoke")]
     public void VerifyPublicationDateIsDisplayedInUkrainianFormat()
     {
         homePage = new HomePage(Driver!);

@@ -1,3 +1,5 @@
+using Allure.Net.Commons;
+using Allure.NUnit.Attributes;
 using AngleSharp.Dom.Events;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
@@ -9,6 +11,8 @@ namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
+[AllureOwner("Petro Derlytsia")]
+[AllureFeature("Event Details")]
 public class EventDetailsPageTests : BaseTest
 {
     protected override void OnSetup()
@@ -27,9 +31,15 @@ public class EventDetailsPageTests : BaseTest
 
     [Test]
     [Order(1)]
-    [Description("Verify that the user can save an event and view it in bookmarks")]
+    [AllureDescription("Verify that the user can save an event and view it in bookmarks")]
     [Retry(2)]
-    [Category("Smoke")]
+    [Category("E2E")]
+    [Category("Regression")]
+    [AllureIssue("2")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Format")]
+    [AllureTag("UI", "E2E")]
     public void VerifySavingEventAndViewingInBookmarks()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events/42");
@@ -65,9 +75,15 @@ public class EventDetailsPageTests : BaseTest
 
     [Test]
     [Order(2)]
-    [Description("Verify that the user cannot submit a comment with an uploaded image only")]
+    [AllureDescription("Verify that the user cannot submit a comment with an uploaded image only")]
     [Retry(2)]
-    [Category("Smoke")]
+    [Category("Negative")]
+    [Category("Regression")]
+    [AllureIssue("3")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Format")]
+    [AllureTag("UI", "Comment")]
     public void VerifyCommentSubmissionWithImageOnly()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events/36");
@@ -86,9 +102,15 @@ public class EventDetailsPageTests : BaseTest
 
     [Test]
     [Order(3)]
-    [Description("Verify that the user can cancel joining an event")]
+    [AllureDescription("Verify that the user can cancel joining an event")]
     [Retry(2)]
-    [Category("Smoke")]
+    [Category("Functional")]
+    [Category("Regression")]
+    [AllureIssue("4")]
+    [AllureSeverity(SeverityLevel.normal)]
+    [AllureSuite("GreenCity")]
+    [AllureSubSuite("Format")]
+    [AllureTag("UI", "E2E")]
     public void VerifyCancelJoiningEvent()
     {
         Driver!.Navigate().GoToUrl(BaseUrl + "/events/42");
