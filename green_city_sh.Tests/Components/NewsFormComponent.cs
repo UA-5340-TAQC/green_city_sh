@@ -99,7 +99,7 @@ public class NewsFormComponent : BaseComponent
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput)).Click();
     }
-    
+
     [AllureStep("Enter Content")]
     public void EnterContent(string text)
     {
@@ -123,29 +123,29 @@ public class NewsFormComponent : BaseComponent
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(PreviewButton)).Click();
     }
-    
+
     [AllureStep("Click Cancel")]
     public void ClickCancel()
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(CancelButton)).Click();
     }
-    
+
     [AllureStep("Check if Title Field is Invalid")]
     public bool IsTitleFieldInvalid()
     {
         var element = wait.Until(ExpectedConditions.ElementExists(NewsTitleTextarea));
         return element.GetAttribute("class")?.Contains("ng-invalid") ?? false;
     }
-    
+
     [AllureStep("Check if Title Field is Touched and Invalid")]
     public bool IsTitleFieldTouchedAndInvalid()
     {
         var element = wait.Until(ExpectedConditions.ElementExists(NewsTitleTextarea));
         var classAttr = element.GetAttribute("class");
-        
+
         return (classAttr?.Contains("ng-invalid") ?? false) && (classAttr?.Contains("ng-touched") ?? false);
     }
-    
+
     [AllureStep("Check if Source Field is Valid")]
     public bool IsSourceFieldValid()
     {
@@ -159,7 +159,7 @@ public class NewsFormComponent : BaseComponent
         var element = wait.Until(ExpectedConditions.ElementExists(SourceInput));
         return element.GetAttribute("class")?.Contains("ng-invalid") ?? false;
     }
-    
+
     [AllureStep("Check if Publish Button is Enabled")]
     public bool IsPublishButtonEnabled()
     {

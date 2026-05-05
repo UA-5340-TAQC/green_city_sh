@@ -45,7 +45,7 @@ public class CreateNewsTitleValidationTests : BaseTest
     {
         // --- Arrange ---
         PerformLogin();
-        
+
         createNewsPage = new CreateNewsPage(Driver!);
         createNewsPage.OpenCreateNewsPage();
 
@@ -54,16 +54,16 @@ public class CreateNewsTitleValidationTests : BaseTest
         string title171 = new string('A', 171);
 
         // --- Act (Checkpoint 1: Form Validation & Empty State) ---
-        string initialTitle = createNewsPage.NewsForm.GetTitleValue(); 
+        string initialTitle = createNewsPage.NewsForm.GetTitleValue();
         createNewsPage.EnterContent(validContent);
         createNewsPage.SelectTags("News");
         bool isPublishEnabledInitially = createNewsPage.IsPublishButtonEnabled();
-        
+
         createNewsPage.FocusAndBlurTitleField();
         bool isTitleTouchedAndInvalidAfterBlur = createNewsPage.IsTitleFieldTouchedAndInvalid();
 
         createNewsPage.EnterTitle("Temp");
-        createNewsPage.ClearAndBlurTitleField(); 
+        createNewsPage.ClearAndBlurTitleField();
         bool isTitleInvalidAfterDelete = createNewsPage.IsTitleFieldTouchedAndInvalid();
 
         // --- Assert (Checkpoint 1) ---
@@ -80,7 +80,7 @@ public class CreateNewsTitleValidationTests : BaseTest
         bool isTitleInvalidFor171 = createNewsPage.IsTitleFieldInvalid();
         bool isPublishEnabledFor171 = createNewsPage.IsPublishButtonEnabled();
 
-        createNewsPage.EnterTitle(title170); 
+        createNewsPage.EnterTitle(title170);
         bool isTitleInvalidFor170 = createNewsPage.IsTitleFieldInvalid();
         bool isPublishEnabledFor170 = createNewsPage.IsPublishButtonEnabled();
 
@@ -95,9 +95,9 @@ public class CreateNewsTitleValidationTests : BaseTest
 
         // --- Act (Checkpoint 3: Creation & Redirection) ---
         createNewsPage.ClickPublish();
-        
+
         createNewsPage.WaitForUrlToContain("/ubs");
-        
+
         isNewsCreated = true;
 
         Driver!.Navigate().GoToUrl(BaseUrl + "/#/greenCity/news");

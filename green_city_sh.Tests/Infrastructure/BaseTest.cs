@@ -3,6 +3,7 @@ using green_city_sh.Tests.Drivers;
 using NUnit.Framework;
 using Allure.Net.Commons;
 using System.IO;
+using Allure.Net.Commons.Attributes;
 
 namespace green_city_sh.Tests.Infrastructure
 {
@@ -14,6 +15,7 @@ namespace green_city_sh.Tests.Infrastructure
         protected string BaseUrl { get; set; } = Configuration.BaseUrl;
 
         [SetUp]
+        [AllureStep("Setup Test Environment")]
         public void Setup()
         {
             Driver = DriverFactory.CreateDriver(BrowserType.Chrome);
@@ -21,7 +23,8 @@ namespace green_city_sh.Tests.Infrastructure
         }
 
         [TearDown]
-        public void TearDown()
+        [AllureStep("Tear Down Test Environment")]
+        public virtual void TearDown()
         {
             try
             {
@@ -45,6 +48,7 @@ namespace green_city_sh.Tests.Infrastructure
         protected virtual void OnSetup() { }
         protected virtual void OnTearDown() { }
 
+        [AllureStep("Navigate to Base URL")]
         protected void NavigateToBaseUrl() => Driver?.Navigate().GoToUrl(BaseUrl);
 
         protected void TakeScreenshot(string testName)

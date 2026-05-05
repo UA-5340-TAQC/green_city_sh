@@ -1,7 +1,10 @@
+using System.Reflection;
+using System.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
 using OpenQA.Selenium;
@@ -14,7 +17,7 @@ public class NewsDetailsPage : BasePage
 {
     private CommentComponent? comment;
     private DeleteCommentModal? deleteComment;
-    private CommentInputComponent? commentInput;
+    private CommentComponent? commentInput;
     private NewsInfoComponent? newsInfo;
 
     private By CommentsLocator => By.XPath("//div[contains(@class, 'wrapper-comment')]");
@@ -22,7 +25,7 @@ public class NewsDetailsPage : BasePage
     private By ViewRepliesBtn => By.XPath("//button[.//span[contains(text(), 'View') or contains(text(), 'Переглянути')]]");
     private By HideRepliesBtn => By.XPath("//button[.//span[contains(text(), 'Hide') or contains(text(), 'Сховати')]]");
     private By CommentCounter => By.Id("total-count");
-    
+
     // --- News Details & Deletion Locators ---
     private By NewsTitle => By.CssSelector(".news-title-container .news-title");
     private By DeleteNewsButton => By.CssSelector(".edit-delete-block .delete-news-button");
@@ -34,7 +37,7 @@ public class NewsDetailsPage : BasePage
 
     private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list/div"));
     private DeleteCommentModal DeleteCommentModal => deleteComment ??= new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
-    private CommentInputComponent CommentInput => commentInput ??= new CommentInputComponent(driver, By.XPath("//app-add-comment"));
+    private CommentComponent CommentInput => commentInput ??= new CommentComponent(driver, By.XPath("//app-add-comment"));
     private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
 
     [AllureStep("Open News Details Page by ID: {0}")]
@@ -45,7 +48,7 @@ public class NewsDetailsPage : BasePage
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/{newsId}");
     }
 
-    [AllureStep("Add Comment: '{0}'")]
+    [AllureStep("Add comment with text: {0}")]
     public NewsDetailsPage AddComment(string text)
     {
         CommentInput.EnterComment(text);
@@ -55,7 +58,7 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
-    [AllureStep("Edit Comment: '{0}'")]
+    [AllureStep("Edit comment with text: {0}")]
     public NewsDetailsPage EditComment(string text)
     {
         Comment.ClickEditCommentBtn();
@@ -162,17 +165,30 @@ public class NewsDetailsPage : BasePage
         return allComments;
     }
 
-    [AllureStep("Wait For Comment Counter Visible")]
+    [AllureStep("Wait for comment counter visible")]
     public int WaitForCommentCounterVisible()
     {
         var value = 0;
+        var previousValue = -1;
+
         wait.Until(_ =>
         {
             try
             {
                 var el = driver.FindElement(CommentCounter);
+                if (!el.Displayed) return false;
                 var digits = new string(el.Text.Where(char.IsDigit).ToArray());
-                return int.TryParse(digits, out value) && digits.Length > 0;
+                if (!int.TryParse(digits, out var current) || digits.Length == 0)
+                    return false;
+
+                if (current == previousValue)
+                {
+                    value = current;
+                    return true;
+                }
+
+                previousValue = current;
+                return false;
             }
             catch (NoSuchElementException)
             {
@@ -183,20 +199,37 @@ public class NewsDetailsPage : BasePage
                 return false;
             }
         });
+
         return value;
     }
 
-    [AllureStep("Wait For Comment Counter To Change from {0}")]
+    [AllureStep("Wait for comment counter to change from: {0}")]
     public int WaitForCommentCounterToChange(int previousValue)
     {
         var newValue = 0;
+        var lastSeen = -1;
         wait.Until(_ =>
         {
             try
             {
-                var digits = new string(driver.FindElement(CommentCounter).Text
-                    .Where(char.IsDigit).ToArray());
-                return int.TryParse(digits, out newValue) && newValue != previousValue;
+                var el = driver.FindElement(CommentCounter);
+                if (!el.Displayed)
+                    return false;
+                var digits = new string(el.Text.Where(char.IsDigit).ToArray());
+                if (!int.TryParse(digits, out var current) || digits.Length == 0)
+                    return false;
+                if (current == lastSeen && current != previousValue)
+                {
+                    newValue = current;
+                    return true;
+                }
+
+                lastSeen = current;
+                return false;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
             }
             catch (StaleElementReferenceException)
             {

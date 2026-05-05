@@ -13,6 +13,7 @@ public class NewsPage : BasePage
     private By TopBarRoot => By.CssSelector(".main-header");
     private By FilterRoot => By.CssSelector(".ul-eco-buttons");
     private By ListRoot => By.CssSelector(".list-wrapper");
+    private By ItemsFoundCounter => By.CssSelector("app-remaining-count h2");
 
     public NewsPage(IWebDriver driver) : base(driver)
     {
@@ -50,4 +51,35 @@ public class NewsPage : BasePage
 
     public void OpenSaved()
         => TopBar.OpenSavedNews();
+
+    /// <summary>
+    /// Returns a text for the items found counter.
+    /// </summary>
+    public string GetItemsFoundText()
+    {
+        wait.Until(driver => driver.FindElement(ItemsFoundCounter).Text.Length > 0);
+        return driver.FindElement(ItemsFoundCounter).Text.Trim();
+    }
+
+    /// <summary>
+    /// Returns a number for the items found counter.
+    /// </summary>
+    public int GetItemsFoundCount()
+    {
+        var text = GetItemsFoundText();
+        var parts = text.Split(' ');
+        if (int.TryParse(parts[0], out int count))
+        {
+            return count;
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// Waits until the items found counter updates to a different number than the provided previous count.
+    /// </summary>
+    public void WaitForSearchResultsToUpdate(int previousCount)
+    {
+        wait.Until(driver => GetItemsFoundCount() != previousCount);
+    }
 }
