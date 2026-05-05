@@ -1,8 +1,8 @@
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-namespace green_city_sh.Tests.Components;
 using Allure.NUnit.Attributes;
+namespace green_city_sh.Tests.Components;
 
 public class SignUpModalComponent : BaseComponent
 {
@@ -109,13 +109,13 @@ public class SignUpModalComponent : BaseComponent
     [AllureStep("Check if password mismatch message is displayed")]
     public bool IsPasswordMismatchMessageDisplayed()
     {
-        return RootElement.FindElements(PasswordMismatchMessageLocator).Any();
+        return RootElement.FindElements(PasswordMismatchMessageLocator).Any(e => e.Displayed);
     }
 
     [AllureStep("Check if user already exists error is displayed")]
     public bool IsUserAlreadyExistsErrorDisplayed()
     {
-        return RootElement.FindElements(UserAlreadyExistsMessageLocator).Any();
+        return RootElement.FindElements(UserAlreadyExistsMessageLocator).Any(e => e.Displayed);
     }
 
     [AllureStep("Check if modal is visible")]

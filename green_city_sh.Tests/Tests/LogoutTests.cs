@@ -36,7 +36,11 @@ public class LogoutTests : BaseTest
     [AllureDescription("Verify that user can successfully log out from the system and session is terminated.")]
     public void Logout_AfterSuccessfulLogin_ShouldEndUserSession()
     {
-        const int userId = 1205;
+        var configuredUserId = Convert.ToString(Configuration.TestUserId)?.Trim();
+        Assert.That(
+            int.TryParse(configuredUserId, out var userId) && userId > 0,
+            Is.True,
+            "Configuration.TestUserId must be a valid positive integer.");
         var protectedProfileUrl = $"{BaseUrl}/profile/{userId}";
 
         Assert.That(_homePage!.Header.WaitUntilUserLoggedIn(), Is.True,

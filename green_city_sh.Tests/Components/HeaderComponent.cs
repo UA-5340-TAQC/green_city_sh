@@ -150,20 +150,34 @@ public class HeaderComponent : BaseComponent
     }
     public bool WaitUntilUserLoggedIn()
     {
-        return wait.Until(_ =>
+        try
         {
-            var profileButtons = driver.FindElements(UserProfileButton);
-            return profileButtons.Any(button => button.Displayed);
-        });
+            return wait.Until(_ =>
+            {
+                var profileButtons = driver.FindElements(UserProfileButton);
+                return profileButtons.Any(button => button.Displayed);
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
     }
 
     public bool WaitUntilUserLoggedOut()
     {
-        return wait.Until(_ =>
+        try
         {
-            var signInLinks = driver.FindElements(SignInLink);
-            return signInLinks.Any(link => link.Displayed);
-        });
+            return wait.Until(_ =>
+            {
+                var signInLinks = driver.FindElements(SignInLink);
+                return signInLinks.Any(link => link.Displayed);
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
     }
 
     public void SignOut()
