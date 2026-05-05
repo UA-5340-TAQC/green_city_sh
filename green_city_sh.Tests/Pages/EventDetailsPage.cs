@@ -103,8 +103,8 @@ public class EventDetailsPage : BasePage
 
     public CommentsComponent GetCommentsComponent()
         => CommentsComponent.WaitAndCreate(driver);
-    
-    
+
+
     public CommentsComponent? GetCommentsComponentOrNull()
     {
         return CommentsComponent.TryWaitAndCreate(driver);

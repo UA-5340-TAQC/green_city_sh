@@ -123,6 +123,6 @@ public class TC001_AddCommentTests : BaseTest
 
         Assert.That(commentsComponent,
             Is.Not.Null,
-            "Comments component should be present after page refresh");    
+            "Comments component should be present after page refresh");
     }
 }
