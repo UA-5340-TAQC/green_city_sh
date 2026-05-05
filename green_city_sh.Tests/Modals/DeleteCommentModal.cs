@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Net.Commons.Attributes;
+using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Modals;
@@ -17,12 +18,14 @@ public class DeleteCommentModal : BaseModal
     {
     }
 
+    [AllureStep("Click 'yes delete' button")]
     public void ClickYesDeleteBtn()
     {
         WaitAndClick(YesBtn);
         wait.Until(ExpectedConditions.InvisibilityOfElementLocated(YesBtn));
     }
 
+    [AllureStep("Click 'cancel' button")]
     public void ClickCancelDeleteBtn() =>
         WaitAndClick(CancelBtn);
     public string GetWarningText() =>
