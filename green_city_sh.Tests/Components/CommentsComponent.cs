@@ -49,7 +49,7 @@ public class CommentsComponent : BaseComponent
         new Actions(driver).ScrollToElement(counter).Perform();
         return this;
     }
-    
+
     [AllureStep("Wait and scroll to comments")]
     public static CommentsComponent WaitAndCreate(IWebDriver driver)
     {
@@ -70,7 +70,7 @@ public class CommentsComponent : BaseComponent
 
         return new CommentsComponent(driver, root);
     }
-    
+
     [AllureStep("Create comment")]
     public static CommentsComponent? TryWaitAndCreate(IWebDriver driver)
     {
@@ -112,7 +112,7 @@ public class CommentsComponent : BaseComponent
         var activeElement = driver.SwitchTo().ActiveElement();
         return commentField.Equals(activeElement);
     }
-    
+
     [AllureStep("Click on comment field")]
     public CommentsComponent ClickCommentField()
     {

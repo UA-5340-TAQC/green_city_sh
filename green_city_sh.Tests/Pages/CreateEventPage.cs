@@ -28,7 +28,7 @@ public class CreateEventPage : BasePage
     public CreateEventPage(IWebDriver driver) : base(driver)
     {
     }
-    
+
     [AllureStep("Open Create Event Page")]
     public void Open()
     {
@@ -61,7 +61,7 @@ public class CreateEventPage : BasePage
         field.SendKeys(text);
         return this;
     }
-    
+
     public CreateEventPage EnterDate(string date)
     {
         var input = driver.FindElement(DateInput);
@@ -129,13 +129,13 @@ public class CreateEventPage : BasePage
         input.SendKeys(url);
         return this;
     }
-    
+
     [AllureStep("Is publish button clicked")]
     public bool IsPublishButtonEnabled() => driver.FindElement(PublishButton).Enabled;
-    
+
     [AllureStep("Is title error visible")]
     public bool IsTitleErrorVisible() => driver.FindElements(TitleError).Any(e => e.Displayed);
-    
+
     [AllureStep("Is description error visible")]
     public bool IsDescriptionErrorVisible() => driver.FindElements(DescriptionError).Any();
 
