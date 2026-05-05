@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -106,6 +107,7 @@ public class HeaderComponent : BaseComponent
         var signUpLink = RootElement.FindElement(SignUpLink);
         signUpLink.Click();
     }
+    [AllureStep("Click the bookmarks button")]
     public void ClickBookmarks()
     {
         var bookmarksBtn = RootElement.FindElement(BookmarkBtn);
