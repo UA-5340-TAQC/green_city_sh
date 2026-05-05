@@ -23,7 +23,6 @@ public class EventDetailsCardComponent : BaseComponent
     private By EventLocation => By.CssSelector("div.event-location");
     private By EventAuthor => By.CssSelector("div.event-author");
 
-    [AllureStep("Check if the event is saved by inspecting the save button text")]
     public bool IsEventSaved()
     {
         var btn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SaveEventButton));
@@ -32,19 +31,16 @@ public class EventDetailsCardComponent : BaseComponent
         return btnText.Contains("unsave") || btnText.Contains("відмінити");
     }
 
-    [AllureStep("If a join request is sent, the cancel button should be visible")]
     public bool IsJoinRequestSent()
     {
         var cancelBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(CancelRequestButton));
         return cancelBtn.Displayed;
     }
-    [AllureStep("Check if the join event button is visible, indicating that the user can send a join request")]
     public bool IsJoinEventButtonVisible()
     {
         var joinBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(JoinEventButton));
         return joinBtn.Displayed;
     }
-    [AllureStep("Check if the join request is cancelled")]
     public bool IsJoinRequestCancelled()
     {
         return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(CancelRequestButton));
