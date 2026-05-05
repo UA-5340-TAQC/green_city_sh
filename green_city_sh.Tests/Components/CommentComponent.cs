@@ -142,15 +142,13 @@ public class CommentComponent : BaseComponent
         fileInputElement.SendKeys(filePath);
     }
 
-    [AllureStep("Verify if comment button is disabled")]
     public bool IsCommentButtonDisabled()
     {
         var btn = RootElement.FindElement(SubmitCommentBtn);
 
         return !btn.Enabled || btn.GetAttribute("disabled") != null;
     }
-
-    [AllureStep("Verify if image preview is displayed")]
+    
     public bool IsImagePreviewDisplayed()
     {
         return wait.Until(driver =>
@@ -168,8 +166,7 @@ public class CommentComponent : BaseComponent
         WaitUntilElementVisibleBy(ReplyCommentText);
         return RootElement.FindElements(ReplyCommentText).FirstOrDefault()?.Text;
     }
-
-    [AllureStep("Verify if 'edited' label is displayed")]
+    
     public bool IsEditedLabelDisplayed()
     {
         WaitUntilElementVisibleBy(EditedLabel);
@@ -178,12 +175,10 @@ public class CommentComponent : BaseComponent
 
     public string GetReplyButtonAttribute() =>
         RootElement.FindElement(ReplyCommentBtn).GetAttribute("class") ?? string.Empty;
-
-    [AllureStep("Verify if 'View reply' button is displayed")]
+    
     public bool IsViewBtnDisplayed() =>
         FindElements(ViewRepliesBtn).Any(e => e.Displayed);
-
-    [AllureStep("Verify if 'Hide reply' button is displayed")]
+    
     public bool IsHideBtnDisplayed() =>
         FindElements(HideRepliesBtn).Any(e => e.Displayed);
 }
