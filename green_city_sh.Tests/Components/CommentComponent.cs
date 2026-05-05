@@ -148,7 +148,7 @@ public class CommentComponent : BaseComponent
 
         return !btn.Enabled || btn.GetAttribute("disabled") != null;
     }
-    
+
     public bool IsImagePreviewDisplayed()
     {
         return wait.Until(driver =>
@@ -166,7 +166,7 @@ public class CommentComponent : BaseComponent
         WaitUntilElementVisibleBy(ReplyCommentText);
         return RootElement.FindElements(ReplyCommentText).FirstOrDefault()?.Text;
     }
-    
+
     public bool IsEditedLabelDisplayed()
     {
         WaitUntilElementVisibleBy(EditedLabel);
@@ -175,10 +175,10 @@ public class CommentComponent : BaseComponent
 
     public string GetReplyButtonAttribute() =>
         RootElement.FindElement(ReplyCommentBtn).GetAttribute("class") ?? string.Empty;
-    
+
     public bool IsViewBtnDisplayed() =>
         FindElements(ViewRepliesBtn).Any(e => e.Displayed);
-    
+
     public bool IsHideBtnDisplayed() =>
         FindElements(HideRepliesBtn).Any(e => e.Displayed);
 }
