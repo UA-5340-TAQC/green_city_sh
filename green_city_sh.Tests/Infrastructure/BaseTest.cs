@@ -21,7 +21,7 @@ namespace green_city_sh.Tests.Infrastructure
         }
 
         [TearDown]
-        public void TearDown()
+        public virtual void TearDown()
         {
             try
             {

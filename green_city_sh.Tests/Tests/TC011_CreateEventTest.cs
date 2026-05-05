@@ -51,9 +51,9 @@ public class TC011_CreateEventTest : BaseTest
     }
 
     [TearDown]
-    public new void TearDown()
+    public override void TearDown()
     {
-        Driver?.Quit();
+        base.OnTearDown();
     }
 
 
