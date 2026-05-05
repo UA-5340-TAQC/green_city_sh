@@ -33,9 +33,7 @@ public class LoginTests : BaseTest
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
         MySpacePage spacePage = new MySpacePage(Driver!);
 
-
-
-        string accessToken = spacePage.GetAccessTokenFromLocalStorage();
+        string? accessToken = spacePage.GetAccessTokenFromLocalStorage();
         Assert.IsFalse(string.IsNullOrEmpty(accessToken), "Session token was not created in LocalStorage.");
 
         spacePage.WaitUntilPageLoads();

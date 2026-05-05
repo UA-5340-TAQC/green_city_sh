@@ -127,7 +127,7 @@ public class ProfileEditPage : BasePage
         return this;
     }
 
-        public IWebElement? GetSuccessMessage()
+    public IWebElement? GetSuccessMessage()
     {
         return wait.Until(driver =>
             driver.FindElements(SuccessMessage)

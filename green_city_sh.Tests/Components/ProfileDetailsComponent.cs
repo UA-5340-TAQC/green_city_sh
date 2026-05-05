@@ -33,7 +33,8 @@ public class ProfileDetailsComponent : BaseComponent
         wait.Until(d =>
         {
             return dropdown.GetOptionList().Count > 0;
-              //.Any(o => o.Displayed && o.Text.Contains(name)));
+            //.Any(o => o.Displayed && o.Text.Contains(name)));
+
         });
         dropdown.ClickDropDownOptionByPartialName(name);
     }

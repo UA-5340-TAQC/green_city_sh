@@ -13,7 +13,7 @@ public class DropDownComponent : BaseComponent
 
     private readonly By _searchLocator;
     // Updated to global scope (removed leading dot)
-    private static readonly By DefaultOptions = By.XPath(",//div[contains(@class,'cdk-overlay-pane')]//mat-option"); //.
+    private static readonly By DefaultOptions = By.XPath(".//div[contains(@class,'cdk-overlay-pane')]//mat-option");
     private readonly By _selectedValueLocator = By.CssSelector(".mat-mdc-select-value-text");
 
     public DropDownComponent(IWebDriver driver, By rootLocator)

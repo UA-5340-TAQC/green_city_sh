@@ -68,11 +68,8 @@ public class ProfileTests : BaseTest
 
         editPage.SaveEditedProfile();
 
-
-
         TestContext.WriteLine("Updated profile saved");
 
-        
         editPage = new ProfileEditPage(Driver!);
         editPage.OpenProfileEditPage(Configuration.TestUserId);
         wait.Until(driver => driver.Url.Contains($"/profile/{Configuration.TestUserId}/edit"));
