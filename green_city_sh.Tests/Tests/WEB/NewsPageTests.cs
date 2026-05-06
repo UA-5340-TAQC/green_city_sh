@@ -22,7 +22,7 @@ public class NewsPageTests : BaseTest
         header = new HomePage(Driver!).Header;
 
         header.ChangeLanguage("En");
-        
+
         var signInModal = header.ClickSignIn();
 
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
