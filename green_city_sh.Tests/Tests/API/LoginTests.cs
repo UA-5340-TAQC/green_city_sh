@@ -2,6 +2,7 @@ using green_city_sh.Tests.Infrastructure;
 using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using Allure.NUnit;
+using Allure.Net.Commons;
 
 namespace green_city_sh.Tests.Tests.API;
 
@@ -22,6 +23,7 @@ public class LoginAPITests
 
 
     [Test]
+    [AllureTag("Positive", "API"), AllureSeverity(SeverityLevel.critical)]
     public void VerifySuccessSignIn()
     {
         var response = _client.SignIn(Configuration.TestEmail, Configuration.TestPassword);

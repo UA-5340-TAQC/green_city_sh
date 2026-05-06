@@ -52,7 +52,7 @@ public class CommentComponent : BaseComponent
     {
     }
 
-    [AllureStep("Enter reply comment text: {0}")]
+    [AllureStep("Enter reply comment text: {text}")]
     public void EnterReplyComment(string text)
     {
         wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
@@ -66,7 +66,7 @@ public class CommentComponent : BaseComponent
         });
     }
 
-    [AllureStep("Enter edited comment text: {0}")]
+    [AllureStep("Enter edited comment text: {text}")]
     public void EnterEditComment(string text) =>
         WaitAndTypeText(EditCommentField, text);
 
@@ -74,7 +74,7 @@ public class CommentComponent : BaseComponent
     public void ClickSubmitReplyBtn() =>
         WaitAndClick(SubmitReplyBtn);
 
-    [AllureStep("Enter comment text: {0}")]
+    [AllureStep("Enter comment text: {text}")]
     public void EnterComment(string text) =>
         WaitAndTypeText(CommentField, text);
 
@@ -135,7 +135,7 @@ public class CommentComponent : BaseComponent
     public bool IsCommentFieldEmpty() =>
         string.IsNullOrWhiteSpace(RootElement.FindElement(CommentField).GetAttribute("value"));
 
-    [AllureStep("Upload image in comment section: {0}")]
+    [AllureStep("Upload image in comment section: {fileName}")]
     public void UploadImage(string fileName)
     {
         string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;

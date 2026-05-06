@@ -45,7 +45,7 @@ public class EventsListComponent : BaseComponent
         return eventCards;
     }
 
-    [AllureStep("Get the event card by its index: {0}")]
+    [AllureStep("Get the event card by its index: {index}")]
     public EventCardComponent GetEventCardByIndex(int index)
     {
         IWebElement eventCardRoot = RootElement.FindElement(EventCardByIndex(index));
@@ -57,7 +57,7 @@ public class EventsListComponent : BaseComponent
         var endPageMessages = driver.FindElements(EndPageMessage);
         return endPageMessages.Count > 0 && endPageMessages[0].Displayed;
     }
-    [AllureStep("Get the saved event card by its key: {0}")]
+    [AllureStep("Get the saved event card by its key: {targetKey}")]
     public EventCardComponent GetSavedEventCard(string targetKey)
     {
         var eventCards = GetAllEventCards();

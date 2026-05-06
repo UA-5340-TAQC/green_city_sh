@@ -15,7 +15,7 @@ public class BookmarkTabComponent : BaseComponent
 
     private By TabButtons => By.CssSelector(".tabs button");
 
-    [AllureStep("Switch to the specified tab: {0}")]
+    [AllureStep("Switch to the specified tab: {tabName}")]
     public void SwitchToTab(string tabName)
     {
         var allTabs = RootElement.FindElements(TabButtons);

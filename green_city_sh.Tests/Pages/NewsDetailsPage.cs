@@ -40,7 +40,7 @@ public class NewsDetailsPage : BasePage
     private CommentComponent CommentInput => commentInput ??= new CommentComponent(driver, By.XPath("//app-add-comment"));
     private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
 
-    [AllureStep("Open News Details Page by ID: {0}")]
+    [AllureStep("Open News Details Page by ID: {newsId}")]
     public void OpenNewsDetailsPage(int newsId)
     {
         var currentUrl = driver.Url;
@@ -48,7 +48,7 @@ public class NewsDetailsPage : BasePage
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/{newsId}");
     }
 
-    [AllureStep("Add comment with text: {0}")]
+    [AllureStep("Add comment with text: {text}")]
     public NewsDetailsPage AddComment(string text)
     {
         CommentInput.EnterComment(text);
@@ -58,7 +58,7 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
-    [AllureStep("Edit comment with text: {0}")]
+    [AllureStep("Edit comment with text: {text}")]
     public NewsDetailsPage EditComment(string text)
     {
         Comment.ClickEditCommentBtn();
@@ -81,7 +81,7 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
-    [AllureStep("Reply to Comment: '{0}'")]
+    [AllureStep("Reply to Comment: '{text}'")]
     public NewsDetailsPage ReplyComment(string text)
     {
         Comment.ClickReplyCommentBtn();
@@ -203,7 +203,7 @@ public class NewsDetailsPage : BasePage
         return value;
     }
 
-    [AllureStep("Wait for comment counter to change from: {0}")]
+    [AllureStep("Wait for comment counter to change from: {previousValue}")]
     public int WaitForCommentCounterToChange(int previousValue)
     {
         var newValue = 0;

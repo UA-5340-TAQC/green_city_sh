@@ -48,7 +48,7 @@ public class NewsFormComponent : BaseComponent
         ImageUpload = new NewsImageUploadComponent(driver, RootElement.FindElement(By.CssSelector(".image-block")));
     }
 
-    [AllureStep("Enter Title: '{0}'")]
+    [AllureStep("Enter Title: '{title}'")]
     public void EnterTitle(string title)
     {
         var element = wait.Until(ExpectedConditions.ElementToBeClickable(NewsTitleTextarea));
@@ -86,7 +86,7 @@ public class NewsFormComponent : BaseComponent
         Tags.SelectTags(tags);
     }
 
-    [AllureStep("Enter Source: '{0}'")]
+    [AllureStep("Enter Source: '{url}'")]
     public void EnterSource(string url)
     {
         var element = wait.Until(ExpectedConditions.ElementIsVisible(SourceInput));
@@ -197,7 +197,7 @@ public class NewsFormComponent : BaseComponent
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitleTextarea)).GetAttribute("value") ?? string.Empty;
     }
 
-    [AllureStep("Wait For URL To Contain: '{0}'")]
+    [AllureStep("Wait For URL To Contain: '{substring}'")]
     public void WaitForUrlToContain(string substring)
     {
         wait.Until(ExpectedConditions.UrlContains(substring));
