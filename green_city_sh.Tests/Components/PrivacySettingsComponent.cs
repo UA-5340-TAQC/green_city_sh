@@ -1,4 +1,5 @@
 using OpenQA.Selenium;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Components;
 
@@ -14,6 +15,7 @@ public class PrivacySettingsComponent : BaseComponent
     {
     }
 
+    [AllureStep("Select option for privacy setting")]
     public void SelectPrivacy(string category, string value)
     {
         WaitAndClick(PrivacyDropdown(category));
