@@ -159,7 +159,7 @@ public class NewsDetailsPageTests : BaseTest
         finally
         {
             newsDetailsPage
-                .DeleteComment(replyText)
+                .DeleteComment(addText)
                 .ClickYesDelete();
         }
     }
