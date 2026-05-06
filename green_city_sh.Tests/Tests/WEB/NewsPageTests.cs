@@ -18,18 +18,17 @@ public class NewsPageTests : BaseTest
 
     protected override void OnSetup()
     {
-        Driver!.Manage().Window.Maximize();
         NavigateToBaseUrl();
-        header = new HeaderComponent(Driver, Driver!.FindElement(By.CssSelector("header")));
+        header = new HomePage(Driver!).Header;
 
         header.ChangeLanguage("En");
-        header.ClickSignIn();
-        var signInModal = SignInModalComponent.WaitAndCreate(Driver);
+        
+        var signInModal = header.ClickSignIn();
 
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
 
-        Driver.Navigate().GoToUrl("https://www.greencity.cx.ua/#/greenCity/news");
-        newsPage = new NewsPage(Driver);
+        Driver!.Navigate().GoToUrl($"{Configuration.BaseUrl}/news");
+        newsPage = new NewsPage(Driver!);
     }
 
     [Test]

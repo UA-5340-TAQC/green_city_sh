@@ -34,7 +34,6 @@ public static class Configuration
 
     public static string TestEmail => GetRequiredEnv("TEST_EMAIL");
     public static string TestPassword => GetRequiredEnv("TEST_PASSWORD");
-    public static string SmokeSearchKeyword => GetRequiredEnv("SMOKE_SEARCH_KEYWORD");
     public static int TestUserId
     {
         get
