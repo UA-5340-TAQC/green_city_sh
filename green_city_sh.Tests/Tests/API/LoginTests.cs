@@ -17,7 +17,7 @@ public class LoginAPITests
     [OneTimeSetUp]
     protected void OneTimeSetUp()
     {
-       _client = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
+        _client = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
     }
 
 

@@ -15,7 +15,8 @@ namespace green_city_sh.Tests.Api.Clients.GreencityUser
         {
         }
 
-        public RestResponse SignIn(string email, string password, string projectName = "GREENCITY") { 
+        public RestResponse SignIn(string email, string password, string projectName = "GREENCITY")
+        {
 
 
             var body = new
