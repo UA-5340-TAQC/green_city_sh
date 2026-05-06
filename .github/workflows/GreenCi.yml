@@ -79,6 +79,9 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           TEST_USER_ID: ${{ secrets.TEST_USER_ID }}
+          API_USER_BASE_URL: ${{ secrets.API_USER_BASE_URL }}
+          API_GREENCITY_BASE_URL: ${{ secrets.API_GREENCITY_BASE_URL }}
+          API_TIME_OUT: ${{ secrets.API_TIME_OUT }}
 
       # 📦 Зберігаємо стандартні результати (обов'язково!)
       - name: Upload TRX results
