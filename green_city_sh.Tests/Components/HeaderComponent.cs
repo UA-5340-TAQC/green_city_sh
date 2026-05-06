@@ -1,7 +1,8 @@
-using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Allure.NUnit.Attributes;
+
 
 namespace green_city_sh.Tests.Components;
 
@@ -59,6 +60,7 @@ public class HeaderComponent : BaseComponent
         search.Click();
     }
 
+    [AllureStep("Change language to '{langCode}'")]
     public HeaderComponent ChangeLanguage(string langCode)
     {
         var dropdown = RootElement.FindElement(LanguageDropdown);
@@ -75,6 +77,7 @@ public class HeaderComponent : BaseComponent
         return this;
     }
 
+    [AllureStep("Check if user is logged in")]
     public bool IsUserLoggedIn()
     {
         try
@@ -95,6 +98,7 @@ public class HeaderComponent : BaseComponent
             .Until(_ => IsUserLoggedIn());
     }
 
+    [AllureStep("Click Sign In button")]
     public SignInModalComponent ClickSignIn()
     {
         //var signInLink = RootElement.FindElement(SignInLink);

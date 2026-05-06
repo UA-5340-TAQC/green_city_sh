@@ -4,8 +4,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
-using Allure.Net.Commons.Attributes;
-
 namespace green_city_sh.Tests.Components;
 
 public class SignInModalComponent : BaseComponent
@@ -68,7 +66,7 @@ public class SignInModalComponent : BaseComponent
     /// Clears the email field and types the given email address.
     /// </summary>
     /// <param name="email">Email address to enter.</param>
-    [AllureStep("Enter email")]
+    [AllureStep("Enter email: '{email}'")]
     public SignInModalComponent EnterEmail(string email)
     {
         var input = RootElement.FindElement(EmailInputLocator);
@@ -194,6 +192,7 @@ public class SignInModalComponent : BaseComponent
     /// Returns true if the Sign In submit button is currently enabled.
     /// </summary>
     /// <returns></returns>
+    [AllureStep("Check if Sign In button is enabled")]
     public bool IsSignInButtonEnabled() => RootElement.FindElement(SignInButtonLocator).Enabled;
 
     /// <summary>
@@ -227,6 +226,7 @@ public class SignInModalComponent : BaseComponent
         return error.Text.Trim();
     }
 
+    [AllureStep("Get email error message")]
     public string GetEmailErrorMessage()
     {
         WaitUntilElementVisibleBy(EmailErrorLocator);

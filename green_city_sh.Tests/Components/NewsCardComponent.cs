@@ -1,4 +1,5 @@
 using OpenQA.Selenium;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Components
 {
@@ -17,6 +18,7 @@ namespace green_city_sh.Tests.Components
         /// <summary>
         /// Returns a list of tags for the current news card.
         /// </summary>
+        [AllureStep("Get tags from news card")]
         public List<string> GetTags()
         {
             var tagElements = RootElement.FindElements(TagsInCard);
@@ -37,6 +39,7 @@ namespace green_city_sh.Tests.Components
         /// <summary>
         /// Returns a title for the current news card.
         /// </summary>
+        [AllureStep("Get news card title")]
         public string GetTitle()
         {
             By titleLocator = By.CssSelector(".title-list h3");

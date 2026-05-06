@@ -9,6 +9,10 @@ namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
+[TestFixture]
+[AllureSubSuite("LoginPage")]
+[AllureTag("Smoke", "Regression")]
+[AllureFeature("Authentication")]
 public class LoginTests : BaseTest
 {
     private HomePage homePage = null!;
@@ -47,6 +51,8 @@ public class LoginTests : BaseTest
     // Attempt to login with invalid email format
     [Test]
     [AllureIssue("26")]
+    [AllureTag("NegativeTest", "Login")]
+    [AllureFeature("Invalid Email Validation")]
     [AllureDescription("Verify that login with invalid email format shows error and disables Sign In button")]
     [Category("Smoke")]
     [Category("Regression")]
