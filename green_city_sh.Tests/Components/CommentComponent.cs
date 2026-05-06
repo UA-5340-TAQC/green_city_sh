@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
@@ -82,8 +83,10 @@ public class CommentComponent : BaseComponent
         WaitAndClick(SubmitCommentButton);
 
     [AllureStep("Click 'delete' comment button")]
-    public void ClickDeleteCommentBtn() =>
+    public void ClickDeleteCommentBtn()
+    {
         WaitAndClick(DeleteCommentBtn);
+    }
 
     [AllureStep("Click 'view reply' button")]
     public void ClickViewRepliesBtn() =>

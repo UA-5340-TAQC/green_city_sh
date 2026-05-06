@@ -22,7 +22,7 @@ public class DeleteCommentModal : BaseModal
     public void ClickYesDeleteBtn()
     {
         WaitAndClick(YesBtn);
-        wait.Until(ExpectedConditions.InvisibilityOfElementLocated(YesBtn));
+        wait.Until(ExpectedConditions.StalenessOf(driver.FindElement(YesBtn)));
     }
 
     [AllureStep("Click 'cancel' button")]
