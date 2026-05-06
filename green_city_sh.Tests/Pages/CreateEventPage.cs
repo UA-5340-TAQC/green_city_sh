@@ -93,7 +93,6 @@ public class CreateEventPage : BasePage
     }
 
     [AllureStep("Select invite option")]
-    [AllureStep("Select invite option")]
     public CreateEventPage SelectInvite()
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -106,7 +105,6 @@ public class CreateEventPage : BasePage
         return this;
     }
 
-    [AllureStep("Click online checkbox")]
     [AllureStep("Click online checkbox")]
     public CreateEventPage ClickOnlineCheckbox()
     {
@@ -121,7 +119,6 @@ public class CreateEventPage : BasePage
         return this;
     }
 
-    [AllureStep("Enter online link")]
     [AllureStep("Enter online link")]
     public CreateEventPage EnterOnlineLink(string url)
     {
