@@ -4,7 +4,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
-
 namespace green_city_sh.Tests.Components;
 
 public class SignInModalComponent : BaseComponent
@@ -31,6 +30,7 @@ public class SignInModalComponent : BaseComponent
     /// <param name="driver">The active WebDriver session.</param>
     /// <returns>a <see cref="SignInModalComponent"/> bound to the visible modal.</returns>
     /// <exception cref="WebDriverTimeoutException">Thrown if no visible modal appears withing the timeout.</exception>
+    [AllureStep("Wait and Create")]
     public static SignInModalComponent WaitAndCreate(IWebDriver driver)
     {
         var modalRoot = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
@@ -66,6 +66,7 @@ public class SignInModalComponent : BaseComponent
     /// Clears the email field and types the given email address.
     /// </summary>
     /// <param name="email">Email address to enter.</param>
+    [AllureStep("Enter email: '{email}'")]
     public SignInModalComponent EnterEmail(string email)
     {
         var input = RootElement.FindElement(EmailInputLocator);
@@ -83,6 +84,7 @@ public class SignInModalComponent : BaseComponent
     /// <exception cref="NoSuchElementException">
     /// Thrown if neither password nor text input is found inside the modal
     /// </exception>
+    [AllureStep("Enter password")]
     public SignInModalComponent EnterPassword(string password)
     {
         var inputs = RootElement.FindElements(PasswordInputLocator);
@@ -115,6 +117,7 @@ public class SignInModalComponent : BaseComponent
     /// Waits until the Sign In button is enabled and visible, then clicks it.
     /// Satisfies the acceptance criterion: button must not be disabled before click.
     /// </summary>
+    [AllureStep("Click sign-in modal")]
     public void ClickSignIn()
     {
         wait
@@ -126,6 +129,7 @@ public class SignInModalComponent : BaseComponent
         RootElement.FindElement(SignInButtonLocator).Click();
     }
 
+    [AllureStep("Click sign-in and wait close")]
     public void ClickSignInAndWaitClose()
     {
         ClickSignIn();
@@ -188,6 +192,7 @@ public class SignInModalComponent : BaseComponent
     /// Returns true if the Sign In submit button is currently enabled.
     /// </summary>
     /// <returns></returns>
+    [AllureStep("Check if Sign In button is enabled")]
     public bool IsSignInButtonEnabled() => RootElement.FindElement(SignInButtonLocator).Enabled;
 
     /// <summary>
@@ -195,6 +200,7 @@ public class SignInModalComponent : BaseComponent
     /// Check all DOM matches to avoid false negatives from hidden duplicates.
     /// </summary>
     /// <returns></returns>
+    [AllureStep("Is modal visible")]
     public bool IsModalVisible()
     {
         return driver.FindElements(RootLocator).Any(e => e.Displayed);
@@ -220,6 +226,7 @@ public class SignInModalComponent : BaseComponent
         return error.Text.Trim();
     }
 
+    [AllureStep("Get email error message")]
     public string GetEmailErrorMessage()
     {
         WaitUntilElementVisibleBy(EmailErrorLocator);

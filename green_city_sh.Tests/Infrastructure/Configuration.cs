@@ -35,5 +35,24 @@ public static class Configuration
     public static string TestEmail => GetRequiredEnv("TEST_EMAIL");
     public static string TestPassword => GetRequiredEnv("TEST_PASSWORD");
     public static string SmokeSearchKeyword => GetRequiredEnv("SMOKE_SEARCH_KEYWORD");
+    public static int TestUserId
+    {
+        get
+        {
+            var raw = Environment.GetEnvironmentVariable("TEST_USER_ID");
+            if (!int.TryParse(raw, out var id) || id <= 0)
+            {
+                throw new InvalidOperationException(
+                    "TEST_USER_ID must be set to a positive integer.");
+            }
+            return id;
+        }
+    }
+
+    public static string ApiUserBaseUrl => GetRequiredEnv("API_USER_BASE_URL");
+    public static string ApiGreenCityBaseUrl => GetRequiredEnv("API_GREENCITY_BASE_URL");
+    public static int ApiTimeoutSeconds => int.TryParse(Environment.GetEnvironmentVariable("API_TIME_OUT"), out var timeout)
+        ? timeout
+        : 10;
 }
 

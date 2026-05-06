@@ -1,6 +1,8 @@
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Allure.Net.Commons.Attributes;
+
 using NUnit.Allure.Attributes;
 
 namespace green_city_sh.Tests.Pages;
@@ -28,7 +30,7 @@ public class CreateEventPage : BasePage
     {
     }
 
-    [AllureStep("Open Create Event page")]
+    [AllureStep("Open Create Event Page")]
     public void Open()
     {
         driver.Navigate().GoToUrl(Configuration.BaseUrl + PageUrl);
@@ -37,8 +39,7 @@ public class CreateEventPage : BasePage
                 drv.FindElements(TitleInput).Any(el => el.Displayed));
     }
 
-
-    [AllureStep("Enter event title")]
+    [AllureStep("Enter title: {0}")]
     public CreateEventPage EnterTitle(string title)
     {
         var input = driver.FindElement(TitleInput);
@@ -72,7 +73,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
-    [AllureStep("Enter start time")]
+    [AllureStep("Enter Start Time")]
     public CreateEventPage EnterStartTimeInput(string time)
     {
         var input = driver.FindElement(StartTimeInput);
@@ -82,7 +83,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
-    [AllureStep("Enter end time")]
+    [AllureStep("Enter Finish Time")]
     public CreateEventPage EnterEndTimeInput(string time)
     {
         var input = driver.FindElement(EndTimeInput);
@@ -93,6 +94,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Select invite option")]
     [AllureStep("Select invite option")]
     public CreateEventPage SelectInvite()
     {
@@ -107,6 +109,7 @@ public class CreateEventPage : BasePage
     }
 
     [AllureStep("Click online checkbox")]
+    [AllureStep("Click online checkbox")]
     public CreateEventPage ClickOnlineCheckbox()
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -120,6 +123,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter online link")]
     [AllureStep("Enter online link")]
     public CreateEventPage EnterOnlineLink(string url)
     {
@@ -137,10 +141,11 @@ public class CreateEventPage : BasePage
 
     [AllureStep("Check if title error is visible")]
     public bool IsTitleErrorVisible() => driver.FindElements(TitleError).Any(e => e.Displayed);
+
+    [AllureStep("Is description error visible")]
     public bool IsDescriptionErrorVisible() => driver.FindElements(DescriptionError).Any();
 
-
-    [AllureStep("Get title error text")]
+    [AllureStep("Get Title Error")]
     public string GetTitleErrorText()
     {
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))

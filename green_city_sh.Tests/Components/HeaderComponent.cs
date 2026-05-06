@@ -1,7 +1,8 @@
-using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Allure.NUnit.Attributes;
+
 
 namespace green_city_sh.Tests.Components;
 
@@ -59,6 +60,7 @@ public class HeaderComponent : BaseComponent
         search.Click();
     }
 
+    [AllureStep("Change language to '{langCode}'")]
     public HeaderComponent ChangeLanguage(string langCode)
     {
         var dropdown = RootElement.FindElement(LanguageDropdown);
@@ -75,6 +77,7 @@ public class HeaderComponent : BaseComponent
         return this;
     }
 
+    [AllureStep("Check if user is logged in")]
     public bool IsUserLoggedIn()
     {
         try
@@ -95,6 +98,7 @@ public class HeaderComponent : BaseComponent
             .Until(_ => IsUserLoggedIn());
     }
 
+    [AllureStep("Click Sign In button")]
     public SignInModalComponent ClickSignIn()
     {
         //var signInLink = RootElement.FindElement(SignInLink);
@@ -148,11 +152,55 @@ public class HeaderComponent : BaseComponent
         var cabinetBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(CabinetOption));
         cabinetBtn.Click();
     }
+    public bool WaitUntilUserLoggedIn()
+    {
+        try
+        {
+            return wait.Until(_ =>
+            {
+                var profileButtons = driver.FindElements(UserProfileButton);
+                return profileButtons.Any(button => button.Displayed);
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
+    }
+
+    public bool WaitUntilUserLoggedOut()
+    {
+        try
+        {
+            return wait.Until(_ =>
+            {
+                var signInLinks = driver.FindElements(SignInLink);
+                return signInLinks.Any(link => link.Displayed);
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
+    }
+
     public void SignOut()
     {
-        UserProfileButtonClick();
-        var signOutBtn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(SignOutOption));
-        signOutBtn.Click();
+        var profileButton = wait.Until(_ =>
+        {
+            var buttons = driver.FindElements(UserProfileButton);
+            return buttons.FirstOrDefault(button => button.Displayed && button.Enabled);
+        });
+
+        profileButton!.Click();
+
+        var signOutButton = wait.Until(_ =>
+        {
+            var buttons = driver.FindElements(SignOutOption);
+            return buttons.FirstOrDefault(button => button.Displayed && button.Enabled);
+        });
+
+        signOutButton!.Click();
     }
 
     public IWebElement GetSignOutOption()
