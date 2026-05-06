@@ -40,6 +40,7 @@ public class CommentComponent : BaseComponent
     private By CommentField => By.XPath(".//div[@class='comment-textarea']");
     private By FileInput => By.XPath(".//input[@type='file']");
     private By ImagePreview => By.XPath(".//img[@class='image-preview']");
+    private By CommentItem => By.XPath(".//*[contains(@class,'comment-body-wrapper')]");
 
     private By SubmitCommentButton =>
         By.XPath(".//button[contains(text(), 'Коментар') or contains(text(), 'Comment')]");
@@ -83,9 +84,23 @@ public class CommentComponent : BaseComponent
         WaitAndClick(SubmitCommentButton);
 
     [AllureStep("Click 'delete' comment button")]
-    public void ClickDeleteCommentBtn()
+    public void ClickDeleteCommentBtn(string text)
     {
-        WaitAndClick(DeleteCommentBtn);
+        wait.Until(driver =>
+        {
+            var comment = FindElements(CommentItem)
+                .FirstOrDefault(element =>
+                    element.Displayed &&
+                    element.FindElements(CommentText)
+                        .Any(t => t.Text.Trim().Equals(text, StringComparison.Ordinal)));
+
+            if (comment == null)
+                return false;
+
+            var deleteBtn = comment.FindElement(DeleteCommentBtn);
+            deleteBtn.Click();
+            return true;
+        });
     }
 
     [AllureStep("Click 'view reply' button")]

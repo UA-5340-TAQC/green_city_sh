@@ -5,7 +5,7 @@ using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
@@ -67,13 +67,13 @@ public class NewsDetailsPageTests : BaseTest
         var afterAdd = newsDetailsPage.WaitForCommentCounterToChange(initialCount);
 
         newsDetailsPage
-            .DeleteComment()
+            .DeleteComment(comment)
             .ClickCancelDelete();
         Assert.That(afterAdd, Is.EqualTo(initialCount + 1),
             "Counter should increase by 1 after adding comment");
 
         newsDetailsPage
-            .DeleteComment()
+            .DeleteComment(comment)
             .ClickYesDelete();
 
         newsDetailsPage.Refresh();
@@ -114,7 +114,7 @@ public class NewsDetailsPageTests : BaseTest
         Assert.That(newsDetailsPage.GetLastComment(), Is.EqualTo(editText), "The last comment should have the edited text");
         Assert.That(newsDetailsPage.IsEditedLabelDisplayed(), Is.True, "The label edited should be displayed after editing");
         newsDetailsPage
-            .DeleteComment()
+            .DeleteComment(editText)
             .ClickYesDelete();
     }
 
@@ -159,7 +159,7 @@ public class NewsDetailsPageTests : BaseTest
         finally
         {
             newsDetailsPage
-                .DeleteComment()
+                .DeleteComment(replyText)
                 .ClickYesDelete();
         }
     }
