@@ -3,13 +3,13 @@ using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
 public class SearchTypeAndDateRangeTest : BaseTest
 {
-    private EventsPage? eventsPage;
+    private EventsPage eventsPage = null!;
 
     protected override void OnSetup()
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using green_city_sh.Tests.Infrastructure;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
@@ -47,7 +43,7 @@ public class DropDownComponent : BaseComponent
         return selectedValueElement!.Text.Trim();
     }
 
-    private IList<IWebElement> GetOptionList() =>
+    public IList<IWebElement> GetOptionList() =>
         wait.Until(drv =>
         {
             try

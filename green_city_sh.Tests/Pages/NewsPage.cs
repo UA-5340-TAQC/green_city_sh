@@ -1,5 +1,6 @@
 using OpenQA.Selenium;
 using green_city_sh.Tests.Components;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -43,9 +44,17 @@ public class NewsPage : BasePage
     public bool IsFilterActive(string name)
         => Filters.IsFilterSelected(name);
 
-    public void ClearFilters()
-        => Filters.ClearAllFilters();
+    [AllureStep("Clear all active filters")]
+    /// <summary>
+    /// Clears all active filters.
+    /// </summary>
+    public void ClearAllFilters()
+    {
+        TagsFilter.ClearAllFilters();
+        List.WaitForCardsToLoad();
+    }
 
+    [AllureStep("Search news by keyword: '{text}'")]
     public void Search(string text)
         => TopBar.SearchNews(text);
 
@@ -61,6 +70,7 @@ public class NewsPage : BasePage
         return driver.FindElement(ItemsFoundCounter).Text.Trim();
     }
 
+    [AllureStep("Get items found count")]
     /// <summary>
     /// Returns a number for the items found counter.
     /// </summary>
@@ -75,10 +85,21 @@ public class NewsPage : BasePage
         return 0;
     }
 
+    [AllureStep("Wait for search results to update")]
     /// <summary>
     /// Waits until the items found counter updates to a different number than the provided previous count.
     /// </summary>
     public void WaitForSearchResultsToUpdate(int previousCount)
+    {
+        wait.Until(driver => GetItemsFoundCount() != previousCount);
+    }
+
+    /// <summary>
+    /// Waits for the items counter to change from the specified previous value.
+    /// </summary>
+    /// <param name="previousCount">Previous counter value</param>
+    [AllureStep("Wait for items counter to change from {previousCount}")]
+    public void WaitForItemsCountToChange(int previousCount)
     {
         wait.Until(driver => GetItemsFoundCount() != previousCount);
     }

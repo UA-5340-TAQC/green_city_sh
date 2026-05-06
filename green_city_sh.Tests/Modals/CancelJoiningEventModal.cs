@@ -1,5 +1,4 @@
 using Allure.Net.Commons.Attributes;
-using green_city_sh.Tests.Components;
 using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Modals;

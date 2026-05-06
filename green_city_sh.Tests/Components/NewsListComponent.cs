@@ -1,4 +1,5 @@
 using OpenQA.Selenium;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Components;
 
@@ -73,6 +74,7 @@ public class NewsListComponent : BaseComponent
 
     }
 
+    [AllureStep("Get all news cards as components")]
     /// <summary>
     /// Returns all news cards as a list of NewsCardComponent components.
     /// </summary>
@@ -92,8 +94,28 @@ public class NewsListComponent : BaseComponent
     /// <summary>
     /// Waits while news cards are loading.
     /// </summary>
+    [AllureStep("Wait for news cards to load")]
     public void WaitForCardsToLoad()
     {
         wait.Until(driver => GetNewsCards() > 0);
+    }
+
+    /// <summary>
+    /// Waits for the news cards to be refreshed by checking if the number of cards changes from the specified previous count.
+    /// </summary>
+    /// <param name="previousCount">The number of cards before the refresh action</param>
+    [AllureStep("Wait for news cards to refresh from {previousCount} cards")]
+    public void WaitForCardsToRefresh(int previousCount)
+    {
+        wait.Until(driver => GetNewsCards() != previousCount);
+    }
+
+    /// <summary>
+    /// Gets all news cards that contain a specific tag.
+    /// </summary>
+    public List<NewsCardComponent> GetNewsCardsWithTag(string tag)
+    {
+        var allCards = GetAllNewsCardsAsComponents();
+        return allCards.Where(card => card.GetTags().Contains(tag.ToUpper())).ToList();
     }
 }

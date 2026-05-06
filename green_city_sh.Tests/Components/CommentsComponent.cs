@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
+using Allure.Net.Commons.Attributes;
 
 namespace green_city_sh.Tests.Components;
 
@@ -49,6 +50,7 @@ public class CommentsComponent : BaseComponent
         return this;
     }
 
+    [AllureStep("Wait and scroll to comments")]
     public static CommentsComponent WaitAndCreate(IWebDriver driver)
     {
         new Actions(driver)
@@ -69,6 +71,7 @@ public class CommentsComponent : BaseComponent
         return new CommentsComponent(driver, root);
     }
 
+    [AllureStep("Create comment")]
     public static CommentsComponent? TryWaitAndCreate(IWebDriver driver)
     {
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
@@ -94,6 +97,7 @@ public class CommentsComponent : BaseComponent
         return new CommentsComponent(driver, root);
     }
 
+    [AllureStep("Wait for comment visible")]
     public CommentsComponent WaitForCommentVisible(string text)
     {
         new WebDriverWait(driver, TimeSpan.FromSeconds(Configuration.DefaultTimeout))
@@ -101,18 +105,22 @@ public class CommentsComponent : BaseComponent
         return this;
     }
 
+    [AllureStep("Is comment field focus")]
     public bool IsCommentFieldFocus()
     {
         var commentField = RootElement.FindElement(CommentInputLocator);
         var activeElement = driver.SwitchTo().ActiveElement();
         return commentField.Equals(activeElement);
     }
+
+    [AllureStep("Click on comment field")]
     public CommentsComponent ClickCommentField()
     {
         RootElement.FindElement(CommentInputLocator).Click();
         return this;
     }
 
+    [AllureStep("Get selected comment field")]
     private static string GetSelectAllShortcut()
     {
         return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)
@@ -120,6 +128,7 @@ public class CommentsComponent : BaseComponent
             : Keys.Control + "a";
     }
 
+    [AllureStep("Enter comment")]
     public CommentsComponent EnterComment(string text)
     {
         var input = RootElement.FindElement(CommentInputLocator);
@@ -130,9 +139,11 @@ public class CommentsComponent : BaseComponent
         return this;
     }
 
+    [AllureStep("Get comment input text")]
     public string GetCommentInputText()
     => RootElement.FindElement(CommentInputLocator).Text;
 
+    [AllureStep("Submit comment")]
     public void SubmitComment()
     {
         var submitButton = new WebDriverWait(driver,
@@ -146,6 +157,7 @@ public class CommentsComponent : BaseComponent
         submitButton!.Click();
     }
 
+    [AllureStep("Get comment count")]
     public int GetCommentCount()
     {
         var elements = driver.FindElements(CommentCountLocator);
@@ -179,6 +191,7 @@ public class CommentsComponent : BaseComponent
         return firstComment.FindElement(CommentAuthorLocator).Text;
     }
 
+    [AllureStep("Is comment visible")]
     public bool IsCommentVisible(string text)
     {
         var comments = driver.FindElements(CommentItemLocator);
@@ -194,6 +207,7 @@ public class CommentsComponent : BaseComponent
                     .Any(t => t.Text.Contains(text)));
     }
 
+    [AllureStep("Delete comment")]
     public void DeleteComment(string text)
     {
         var comment = driver

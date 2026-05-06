@@ -3,7 +3,7 @@ using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
@@ -29,7 +29,7 @@ public class EventsSearchTests : BaseTest
     [AllureDescription("Verify that searching for events using a keyword returns cards contain the searched keyword in their title")]
     public void SearchByKeywordReturnsMatchingEvents()
     {
-        string searchKeyword = Configuration.SmokeSearchKeyword;
+        string searchKeyword = "testevent";
 
         eventsPage!.EventsTopBar.ClickSearchIcon();
         eventsPage.EventsTopBar.FillSearchInputField(searchKeyword);

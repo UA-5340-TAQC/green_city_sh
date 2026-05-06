@@ -1,13 +1,10 @@
 using Allure.Net.Commons;
 using Allure.NUnit.Attributes;
-using AngleSharp.Dom.Events;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
-using green_city_sh.Tests.Modals;
 using green_city_sh.Tests.Pages;
-using OpenQA.Selenium;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]

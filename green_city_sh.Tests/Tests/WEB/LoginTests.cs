@@ -4,10 +4,14 @@ using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using Allure.NUnit.Attributes;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
+[TestFixture]
+[AllureSubSuite("LoginPage")]
+[AllureTag("Smoke", "Regression")]
+[AllureFeature("Authentication")]
 public class LoginTests : BaseTest
 {
     private HomePage homePage = null!;
@@ -32,9 +36,7 @@ public class LoginTests : BaseTest
         signInModal.Login(Configuration.TestEmail, Configuration.TestPassword);
         MySpacePage spacePage = new MySpacePage(Driver!);
 
-
-
-        string accessToken = spacePage.GetAccessTokenFromLocalStorage();
+        string? accessToken = spacePage.GetAccessTokenFromLocalStorage();
         Assert.IsFalse(string.IsNullOrEmpty(accessToken), "Session token was not created in LocalStorage.");
 
         spacePage.WaitUntilPageLoads();
@@ -48,6 +50,8 @@ public class LoginTests : BaseTest
     // Attempt to login with invalid email format
     [Test]
     [AllureIssue("26")]
+    [AllureTag("NegativeTest", "Login")]
+    [AllureFeature("Invalid Email Validation")]
     [AllureDescription("Verify that login with invalid email format shows error and disables Sign In button")]
     [Category("Smoke")]
     [Category("Regression")]
@@ -76,5 +80,38 @@ public class LoginTests : BaseTest
         signInModal.CloseModal();
         Assert.That(homePage.Header.IsUserLoggedIn(), Is.False,
             "User should not be logged in after attempting with invalid email");
+    }
+
+    // Attempt to login with invalid password
+    [Test]
+    [Order(3)]
+    [Description("TC-025: Attempt to login with invalid password")]
+    [Category("Smoke")]
+    [Category("Regression")]
+    public void AttemptToLoginWithInvalidPassword()
+    {
+        string invalidPassword = "WrongPassword123!";
+        string expectedErrorMessage = "Bad password";
+
+        homePage.Header.ChangeLanguage("En");
+        homePage.Header.ClickSignIn();
+
+        SignInModalComponent signInModal = SignInModalComponent.WaitAndCreate(Driver!);
+
+        signInModal.EnterEmail(Configuration.TestEmail);
+        signInModal.EnterPassword(invalidPassword);
+        signInModal.ClickSignIn();
+
+        string actualErrorMessage = signInModal.GetErrorMessage();
+
+        Assert.That(actualErrorMessage, Does.Contain(expectedErrorMessage),
+            $"Expected error message to contain '{expectedErrorMessage}', but was '{actualErrorMessage}'.");
+
+        Assert.That(signInModal.IsModalVisible(), Is.True,
+            "Sign in modal should remain visible after invalid password.");
+
+        Assert.That(homePage.Header.IsUserLoggedIn(), Is.False,
+            "User should not be logged in after attempting with invalid password.");
+
     }
 }

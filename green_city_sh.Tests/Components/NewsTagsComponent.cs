@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Components;
 
@@ -36,6 +37,7 @@ public class NewsTagsComponent : TagsComponent
             SelectTag(tag);
         }
     }
+    [AllureStep("Select tag filter: '{name}'")]
     public void SelectTagWithRealClick(string name)
     {
         var allTagButtons = RootElement.FindElements(TagButtons);
@@ -63,6 +65,7 @@ public class NewsTagsComponent : TagsComponent
                .Perform();
     }
 
+    [AllureStep("Check if tag '{name}' is selected")]
     public bool IsTagSelected(string name)
     {
         var elements = RootElement.FindElements(SelectedTagByName(name));
@@ -74,6 +77,7 @@ public class NewsTagsComponent : TagsComponent
         return RootElement.FindElements(SelectedTags).Count;
     }
 
+    [AllureStep("Clear all active filters")]
     public void ClearAllFilters()
     {
         while (true)
@@ -87,6 +91,7 @@ public class NewsTagsComponent : TagsComponent
         }
     }
 
+    [AllureStep("Get all available tags")]
     /// <summary>
     /// Returns a list of the names of all available tags on the page.
     /// </summary>
@@ -102,5 +107,22 @@ public class NewsTagsComponent : TagsComponent
         }
 
         return tags;
+    }
+
+    /// <summary>
+    /// Gets the list of currently selected tags.
+    /// </summary>
+    public List<string> GetSelectedTags()
+    {
+        var selectedTagElements = RootElement.FindElements(SelectedTags);
+        var selectedTags = new List<string>();
+
+        foreach (var tag in selectedTagElements)
+        {
+            var tagText = tag.FindElement(By.CssSelector(".text")).Text.Trim();
+            selectedTags.Add(tagText);
+        }
+
+        return selectedTags;
     }
 }

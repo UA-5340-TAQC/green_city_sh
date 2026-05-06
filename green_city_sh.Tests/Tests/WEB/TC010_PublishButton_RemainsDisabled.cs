@@ -1,15 +1,19 @@
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
+using Allure.NUnit.Attributes;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
+[AllureOwner("Antonina Smetanina")]
+[AllureSuite("Create event")]
+[AllureFeature("Publish button validation")]
+[AllureIssue("11")]
+[AllureSuite("GreenCity")]
+[AllureTag("UI", "Smoke")]
 public class TC010_PublishButton_RemainsDisabled : BaseTest
 {
-    private string TestEmail = null!;
-    private string TestPassword = null!;
-
     private const string ValidTitle = "Test Event";
     private const string ValidDescription = "Test description for the event";
     private const string ShortDescription = "MyTesting";
@@ -51,6 +55,7 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
 
     [Test]
     [Category("Smoke")]
+    [AllureDescription("Valid title is accepted")]
     public void TC010_Step1_EnterValidTitle_TitleIsAccepted()
     {
         createEventPage!.EnterTitle(ValidTitle);
@@ -60,6 +65,7 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
 
     [Test]
     [Category("Smoke")]
+    [AllureDescription("Validation error for short description")]
     public void TC010_Step2_ValidErrorAppears()
     {
         createEventPage!.EnterTitle(ValidTitle);
@@ -74,6 +80,7 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
 
     [Test]
     [Category("Smoke")]
+    [AllureDescription("Publish button remains disabled for invalid description")]
     public void TC010_Step3_PublishButton_RemainsDisabled()
     {
         createEventPage!.EnterTitle(ValidTitle);

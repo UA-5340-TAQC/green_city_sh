@@ -3,8 +3,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Interactions;
-using System;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
 
