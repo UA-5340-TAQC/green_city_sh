@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using SeleniumExtras.WaitHelpers;
 using green_city_sh.Tests.Components;
-using NUnit.Allure.Attributes;
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Pages;
 
