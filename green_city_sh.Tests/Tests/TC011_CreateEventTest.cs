@@ -8,7 +8,6 @@ using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
 
-
 namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
@@ -17,6 +16,8 @@ namespace green_city_sh.Tests.Tests;
 [AllureSuite("Create event")]
 [AllureFeature("Title validation")]
 [AllureIssue("12")]
+[AllureSuite("GreenCity")]
+[AllureTag("UI", "Smoke")]
 public class TC011_CreateEventTest : BaseTest
 {
     private const string WhitespaceTitle = "   ";
@@ -70,7 +71,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    // [AllureStory("Inability to save an event with a whitespace value in 'Title' field")]
+    [AllureDescription("Inability to save an event with a whitespace value in 'Title' field")]
     public void TC011_Step1_EnterWhitespaceInTitle_WhitespaceIsAccepted()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -83,7 +84,7 @@ public class TC011_CreateEventTest : BaseTest
     [Ignore("TEMP: Publish button is disabled due to ongoing feature improvements. " +
             "Enable after Publish becomes active.")]
 
-    // [AllureStory("Title validation")]
+    [AllureDescription("Title validation error, when other fields filled")]
     public void TC011_Step2_ValidationErrorAppears_WhenOtherFieldsFilled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
@@ -96,7 +97,7 @@ public class TC011_CreateEventTest : BaseTest
 
     [Test]
     [Category("Smoke")]
-    // [AllureStory("Title validation")]
+    [AllureDescription("Title validation")]
     public void TC011_Step3_PublishButton_RemainsDisabled()
     {
         createEventPage!.EnterTitle(WhitespaceTitle);
