@@ -49,5 +49,10 @@ public static class Configuration
         }
     }
 
+    public static string ApiUserBaseUrl => GetRequiredEnv("API_USER_BASE_URL");
+    public static string ApiGreenCityBaseUrl => GetRequiredEnv("API_GREENCITY_BASE_URL");
+    public static int ApiTimeoutSeconds => int.TryParse(Environment.GetEnvironmentVariable("API_TIME_OUT"), out var timeout)
+        ? timeout
+        : 10;
 }
 

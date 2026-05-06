@@ -5,7 +5,7 @@ using green_city_sh.Tests.Pages;
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [AllureOwner("Antonina Smetanina")]

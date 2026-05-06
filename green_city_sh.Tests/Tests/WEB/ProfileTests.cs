@@ -7,7 +7,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 public class ProfileTests : BaseTest

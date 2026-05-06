@@ -9,7 +9,7 @@ using OpenQA.Selenium.Support.UI;
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
