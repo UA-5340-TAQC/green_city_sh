@@ -49,7 +49,7 @@ namespace green_city_sh.Tests.Infrastructure
         protected virtual void OnTearDown() { }
 
         [AllureStep("Navigate to Base URL")]
-        protected void NavigateToBaseUrl() => Driver?.Navigate().GoToUrl(BaseUrl);
+        protected void NavigateToBaseUrl() => Driver.Navigate().GoToUrl(BaseUrl);
 
         protected void TakeScreenshot(string testName)
         {
