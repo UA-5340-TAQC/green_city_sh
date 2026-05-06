@@ -1,15 +1,9 @@
-using System.Reflection;
-using System.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
-using Allure.Net.Commons.Attributes;
+
 
 namespace green_city_sh.Tests.Pages;
 

@@ -1,10 +1,8 @@
 ﻿using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using NUnit.Framework;
 using OpenQA.Selenium;
 using Allure.NUnit.Attributes;
-using Allure.Net.Commons;
 
 namespace green_city_sh.Tests.Tests.WEB;
 

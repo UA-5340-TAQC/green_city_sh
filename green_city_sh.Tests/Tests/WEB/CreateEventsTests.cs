@@ -1,6 +1,4 @@
-using System;
 using System.Globalization;
-using NUnit.Framework;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using green_city_sh.Tests.Components;

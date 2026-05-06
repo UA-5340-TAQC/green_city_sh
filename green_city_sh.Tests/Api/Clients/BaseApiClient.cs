@@ -1,11 +1,5 @@
-﻿using AngleSharp.Html;
-using green_city_sh.Tests.Infrastructure;
+﻿using green_city_sh.Tests.Infrastructure;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace green_city_sh.Tests.Api.Clients
 {
@@ -15,7 +9,7 @@ namespace green_city_sh.Tests.Api.Clients
         protected readonly string _baseUrl;
         protected virtual string BaseUrl => _baseUrl;
         protected readonly RestClient Client;
-        protected readonly string AuthToken;
+        protected string? AuthToken;
         protected BaseApiClient(string baseUrl, string? authToken = null)
         {
             _baseUrl = baseUrl;

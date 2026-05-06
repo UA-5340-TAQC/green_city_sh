@@ -9,7 +9,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [Parallelizable(ParallelScope.Self)]
 public class SearchTypeAndDateRangeTest : BaseTest
 {
-    private EventsPage? eventsPage;
+    private EventsPage eventsPage = null!;
 
     protected override void OnSetup()
     {

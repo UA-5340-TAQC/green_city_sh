@@ -1,6 +1,5 @@
 using OpenQA.Selenium;
 using green_city_sh.Tests.Infrastructure;
-using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;

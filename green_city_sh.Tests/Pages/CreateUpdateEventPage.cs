@@ -1,4 +1,3 @@
-using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using SeleniumExtras.WaitHelpers;
@@ -137,7 +136,8 @@ public class CreateUpdateEventPage : BasePage
     {
         By locator = By.XPath(string.Format(InitiativeTypeXPathFormat, type));
         var element = wait.Until(ExpectedConditions.ElementIsVisible(locator));
-        return element.GetAttribute(ClassAttribute).Contains(ActiveInitiativeTypeClass);
+        string classes = element?.GetAttribute(ClassAttribute) ?? string.Empty;
+        return classes.Contains(ActiveInitiativeTypeClass);
     }
 
     public void SelectEventType(string type)
