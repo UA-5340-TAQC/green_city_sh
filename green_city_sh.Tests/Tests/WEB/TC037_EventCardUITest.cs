@@ -1,12 +1,7 @@
-using NUnit.Framework.Interfaces;
 using System.Text.RegularExpressions;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-
-using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Tests.WEB;

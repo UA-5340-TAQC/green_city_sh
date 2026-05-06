@@ -1,6 +1,4 @@
 using DotNetEnv;
-using NUnit.Framework;
-using System.IO;
 
 namespace green_city_sh.Tests;
 

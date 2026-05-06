@@ -1,15 +1,12 @@
 using green_city_sh.Tests.Infrastructure;
-using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
-using Allure.NUnit;
+
 
 namespace green_city_sh.Tests.Tests.API;
 
 [TestFixture]
-[AllureNUnit]
+[Allure.NUnit.AllureNUnit]
 [Parallelizable(ParallelScope.Self)]
-[AllureTag("API", "Smoke", "Regression")]
-[AllureFeature("Authentication")]
 public class LoginAPITests
 {
     private OwnSecurityClient _client;

@@ -1,10 +1,6 @@
-using NUnit.Framework;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using OpenQA.Selenium;
-
-using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
 

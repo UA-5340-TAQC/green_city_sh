@@ -3,7 +3,6 @@ using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 using green_city_sh.Tests.Modals;
 
 namespace green_city_sh.Tests.Pages;

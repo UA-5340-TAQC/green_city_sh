@@ -29,7 +29,7 @@ public class EventsSearchTests : BaseTest
     [AllureDescription("Verify that searching for events using a keyword returns cards contain the searched keyword in their title")]
     public void SearchByKeywordReturnsMatchingEvents()
     {
-        string searchKeyword = Configuration.SmokeSearchKeyword;
+        string searchKeyword = "testevent";
 
         eventsPage!.EventsTopBar.ClickSearchIcon();
         eventsPage.EventsTopBar.FillSearchInputField(searchKeyword);

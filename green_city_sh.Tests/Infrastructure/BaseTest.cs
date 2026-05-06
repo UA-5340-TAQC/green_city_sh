@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
 using green_city_sh.Tests.Drivers;
-using NUnit.Framework;
 using Allure.Net.Commons;
-using System.IO;
 using Allure.Net.Commons.Attributes;
 
 namespace green_city_sh.Tests.Infrastructure
@@ -49,7 +47,7 @@ namespace green_city_sh.Tests.Infrastructure
         protected virtual void OnTearDown() { }
 
         [AllureStep("Navigate to Base URL")]
-        protected void NavigateToBaseUrl() => Driver.Navigate().GoToUrl(BaseUrl);
+        protected void NavigateToBaseUrl() => Driver!.Navigate().GoToUrl(BaseUrl);
 
         protected void TakeScreenshot(string testName)
         {
@@ -59,7 +57,6 @@ namespace green_city_sh.Tests.Infrastructure
 
                 var screenshot = ((ITakesScreenshot)Driver).GetScreenshot().AsByteArray;
 
-                // Найбільш універсальний спосіб для Allure C# адаптера:
                 AllureApi.AddAttachment(
                     name: $"Screenshot_{testName}",
                     type: "image/png",
@@ -69,7 +66,7 @@ namespace green_city_sh.Tests.Infrastructure
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Не вдалося прикріпити скріншот до Allure: {ex.Message}");
+                TestContext.WriteLine($"Failed to take screenshot: {ex.Message}");
             }
         }
     }

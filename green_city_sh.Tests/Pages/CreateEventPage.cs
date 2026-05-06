@@ -37,7 +37,7 @@ public class CreateEventPage : BasePage
                 drv.FindElements(TitleInput).Any(el => el.Displayed));
     }
 
-    [AllureStep("Enter title: {0}")]
+    [AllureStep("Enter title: {title}")]
     public CreateEventPage EnterTitle(string title)
     {
         var input = driver.FindElement(TitleInput);

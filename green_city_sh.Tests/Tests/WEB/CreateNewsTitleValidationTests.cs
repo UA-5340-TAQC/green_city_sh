@@ -1,5 +1,3 @@
-using System;
-using NUnit.Framework;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
 using OpenQA.Selenium;
