@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
-
 
 namespace green_city_sh.Tests.Pages;
 
@@ -24,6 +26,7 @@ public class NewsDetailsPage : BasePage
     private By NewsTitle => By.CssSelector(".news-title-container .news-title");
     private By DeleteNewsButton => By.CssSelector(".edit-delete-block .delete-news-button");
     private By DeleteConfirmYesButton => By.CssSelector("app-dialog-pop-up .primary-global-button");
+    private By SourceLinkLocator => By.CssSelector(".source-text");
 
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
@@ -40,9 +43,7 @@ public class NewsDetailsPage : BasePage
         var currentUrl = driver.Url;
         var uri = new Uri(currentUrl);
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/{newsId}");
-    }
-
-    [AllureStep("Add comment with text: {text}")]
+    }[AllureStep("Add comment with text: {text}")]
     public NewsDetailsPage AddComment(string text)
     {
         CommentInput.EnterComment(text);
@@ -66,9 +67,7 @@ public class NewsDetailsPage : BasePage
     {
         Comment.ClickDeleteCommentBtn();
         return this;
-    }
-
-    [AllureStep("Click Cancel Delete")]
+    }[AllureStep("Click Cancel Delete")]
     public NewsDetailsPage ClickCancelDelete()
     {
         DeleteCommentModal.ClickCancelDeleteBtn();
@@ -104,9 +103,7 @@ public class NewsDetailsPage : BasePage
     {
         Comment.ClickHideRepliesBtn();
         return this;
-    }
-
-    [AllureStep("Get Comments")]
+    }[AllureStep("Get Comments")]
     public IList<CommentComponent> GetComments()
     {
         IList<IWebElement> commentsList = driver.FindElements(CommentsLocator);
@@ -157,9 +154,7 @@ public class NewsDetailsPage : BasePage
             allComments.AddRange(replies);
         }
         return allComments;
-    }
-
-    [AllureStep("Wait for comment counter visible")]
+    }[AllureStep("Wait for comment counter visible")]
     public int WaitForCommentCounterVisible()
     {
         var value = 0;
@@ -240,12 +235,8 @@ public class NewsDetailsPage : BasePage
     public string? GetLastReplyComment() => Comment.GetLastReplyComment();
 
     [AllureStep("Check if Edited Label Displayed")]
-    public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed();
-
-    [AllureStep("Get Date Text")]
-    public string GetDateText() => NewsInfo.GetDateText();
-
-    [AllureStep("Check if View Reply Button Displayed")]
+    public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed();[AllureStep("Get Date Text")]
+    public string GetDateText() => NewsInfo.GetDateText();[AllureStep("Check if View Reply Button Displayed")]
     public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed();
 
     [AllureStep("Check if Hide Reply Button Displayed")]
@@ -260,6 +251,12 @@ public class NewsDetailsPage : BasePage
     public string GetNewsTitleText()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitle)).Text.Trim();
+    }
+
+    [AllureStep("Check if Source Link is Displayed")]
+    public bool IsSourceLinkDisplayed()
+    {
+        return driver.FindElements(SourceLinkLocator).Count > 0;
     }
 
     [AllureStep("Click Delete News Button")]

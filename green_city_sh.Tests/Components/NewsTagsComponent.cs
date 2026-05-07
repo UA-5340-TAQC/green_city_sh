@@ -26,8 +26,12 @@ public class NewsTagsComponent : TagsComponent
     public void SelectTag(string name)
     {
         var tagButton = RootElement.FindElement(TagButtonByName(name));
-        tagButton.Click();
-        wait.Until(driver => tagButton.GetAttribute("class")?.Contains("global-tag-clicked") ?? false);
+        var tagLink = tagButton.FindElement(By.CssSelector("a.global-tag"));
+        if ((!tagLink.GetAttribute("class")?.Contains("global-tag-clicked")) ?? false)
+        {
+            tagButton.Click();
+            wait.Until(driver => tagLink.GetAttribute("class")?.Contains("global-tag-clicked") ?? false);
+        }
     }
 
     public void SelectTags(params string[] tags)

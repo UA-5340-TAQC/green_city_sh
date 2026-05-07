@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Infrastructure;
 
 namespace green_city_sh.Tests.Components;
 
@@ -77,9 +78,7 @@ public class NewsFormComponent : BaseComponent
         var element = wait.Until(ExpectedConditions.ElementToBeClickable(NewsTitleTextarea));
         element.Click();
         element.SendKeys(Keys.Tab);
-    }
-
-    [AllureStep("Select Tags")]
+    }[AllureStep("Select Tags")]
     public void SelectTags(params string[] tags)
     {
         Tags.SelectTags(tags);
@@ -88,18 +87,27 @@ public class NewsFormComponent : BaseComponent
     [AllureStep("Enter Source: '{url}'")]
     public void EnterSource(string url)
     {
-        var element = wait.Until(ExpectedConditions.ElementIsVisible(SourceInput));
-        element.Clear();
+        var element = wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput));
+        element.Click();
+        element.SendKeys(Keys.Control + "a");
+        element.SendKeys(Keys.Backspace);
         element.SendKeys(url);
+        element.SendKeys(Keys.Tab);
     }
 
     [AllureStep("Click Source Field")]
     public void ClickSourceField()
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput)).Click();
-    }
-
-    [AllureStep("Enter Content")]
+    }[AllureStep("Clear and Blur Source Field")]
+    public void ClearAndBlurSourceField()
+    {
+        var element = wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput));
+        element.Click();
+        element.SendKeys(Keys.Control + "a");
+        element.SendKeys(Keys.Backspace);
+        element.SendKeys(Keys.Tab);
+    }[AllureStep("Enter Content")]
     public void EnterContent(string text)
     {
         RichTextEditor.SetText(text);
@@ -109,9 +117,7 @@ public class NewsFormComponent : BaseComponent
     public void UploadImage(string filePath)
     {
         ImageUpload.Upload(filePath);
-    }
-
-    [AllureStep("Click Publish")]
+    }[AllureStep("Click Publish")]
     public void ClickPublish()
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(PublishButton)).Click();
@@ -128,14 +134,14 @@ public class NewsFormComponent : BaseComponent
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(CancelButton)).Click();
     }
-
+    
     [AllureStep("Check if Title Field is Invalid")]
     public bool IsTitleFieldInvalid()
     {
         var element = wait.Until(ExpectedConditions.ElementExists(NewsTitleTextarea));
         return element.GetAttribute("class")?.Contains("ng-invalid") ?? false;
     }
-
+    
     [AllureStep("Check if Title Field is Touched and Invalid")]
     public bool IsTitleFieldTouchedAndInvalid()
     {
@@ -144,19 +150,21 @@ public class NewsFormComponent : BaseComponent
 
         return (classAttr?.Contains("ng-invalid") ?? false) && (classAttr?.Contains("ng-touched") ?? false);
     }
+    
+    [AllureStep("Check if Source Field is Invalid")]
+    public bool IsSourceFieldInvalid()
+    {
+        var element = wait.Until(ExpectedConditions.ElementExists(SourceInput));
+        var classAttr = element.GetAttribute("class") ?? string.Empty;
+        return classAttr.Contains("ng-invalid") || classAttr.Contains("field-warning");
+    }
 
     [AllureStep("Check if Source Field is Valid")]
     public bool IsSourceFieldValid()
     {
         var element = wait.Until(ExpectedConditions.ElementExists(SourceInput));
-        return element.GetAttribute("class")?.Contains("ng-valid") ?? false;
-    }
-
-    [AllureStep("Check if Source Field is Invalid")]
-    public bool IsSourceFieldInvalid()
-    {
-        var element = wait.Until(ExpectedConditions.ElementExists(SourceInput));
-        return element.GetAttribute("class")?.Contains("ng-invalid") ?? false;
+        var classAttr = element.GetAttribute("class") ?? string.Empty;
+        return !classAttr.Contains("ng-invalid") && !classAttr.Contains("field-warning");
     }
 
     [AllureStep("Check if Publish Button is Enabled")]
@@ -188,9 +196,7 @@ public class NewsFormComponent : BaseComponent
     public string GetAuthor()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(AuthorLabel)).Text.Trim();
-    }
-
-    [AllureStep("Get Title Value")]
+    }[AllureStep("Get Title Value")]
     public string GetTitleValue()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitleTextarea)).GetAttribute("value") ?? string.Empty;
