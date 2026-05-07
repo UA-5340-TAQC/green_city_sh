@@ -43,7 +43,9 @@ public class NewsDetailsPage : BasePage
         var currentUrl = driver.Url;
         var uri = new Uri(currentUrl);
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/{newsId}");
-    }[AllureStep("Add comment with text: {text}")]
+    }
+    
+    [AllureStep("Add comment with text: {text}")]
     public NewsDetailsPage AddComment(string text)
     {
         CommentInput.EnterComment(text);
@@ -67,7 +69,9 @@ public class NewsDetailsPage : BasePage
     {
         Comment.ClickDeleteCommentBtn();
         return this;
-    }[AllureStep("Click Cancel Delete")]
+    }
+    
+    [AllureStep("Click Cancel Delete")]
     public NewsDetailsPage ClickCancelDelete()
     {
         DeleteCommentModal.ClickCancelDeleteBtn();
@@ -103,7 +107,9 @@ public class NewsDetailsPage : BasePage
     {
         Comment.ClickHideRepliesBtn();
         return this;
-    }[AllureStep("Get Comments")]
+    }
+    
+    [AllureStep("Get Comments")]
     public IList<CommentComponent> GetComments()
     {
         IList<IWebElement> commentsList = driver.FindElements(CommentsLocator);
@@ -154,7 +160,9 @@ public class NewsDetailsPage : BasePage
             allComments.AddRange(replies);
         }
         return allComments;
-    }[AllureStep("Wait for comment counter visible")]
+    }
+    
+    [AllureStep("Wait for comment counter visible")]
     public int WaitForCommentCounterVisible()
     {
         var value = 0;

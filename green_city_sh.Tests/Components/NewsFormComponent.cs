@@ -78,7 +78,9 @@ public class NewsFormComponent : BaseComponent
         var element = wait.Until(ExpectedConditions.ElementToBeClickable(NewsTitleTextarea));
         element.Click();
         element.SendKeys(Keys.Tab);
-    }[AllureStep("Select Tags")]
+    }
+    
+    [AllureStep("Select Tags")]
     public void SelectTags(params string[] tags)
     {
         Tags.SelectTags(tags);
@@ -99,7 +101,9 @@ public class NewsFormComponent : BaseComponent
     public void ClickSourceField()
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput)).Click();
-    }[AllureStep("Clear and Blur Source Field")]
+    }
+    
+    [AllureStep("Clear and Blur Source Field")]
     public void ClearAndBlurSourceField()
     {
         var element = wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput));
@@ -107,7 +111,9 @@ public class NewsFormComponent : BaseComponent
         element.SendKeys(Keys.Control + "a");
         element.SendKeys(Keys.Backspace);
         element.SendKeys(Keys.Tab);
-    }[AllureStep("Enter Content")]
+    }
+    
+    [AllureStep("Enter Content")]
     public void EnterContent(string text)
     {
         RichTextEditor.SetText(text);
@@ -117,7 +123,9 @@ public class NewsFormComponent : BaseComponent
     public void UploadImage(string filePath)
     {
         ImageUpload.Upload(filePath);
-    }[AllureStep("Click Publish")]
+    }
+    
+    [AllureStep("Click Publish")]
     public void ClickPublish()
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(PublishButton)).Click();
@@ -196,7 +204,9 @@ public class NewsFormComponent : BaseComponent
     public string GetAuthor()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(AuthorLabel)).Text.Trim();
-    }[AllureStep("Get Title Value")]
+    }
+    
+    [AllureStep("Get Title Value")]
     public string GetTitleValue()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitleTextarea)).GetAttribute("value") ?? string.Empty;

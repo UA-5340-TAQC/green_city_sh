@@ -37,7 +37,8 @@ public class CreateNewsSourceValidationTests : BaseTest
         NavigateToBaseUrl();
         
         var wait = new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
-        var signInBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[contains(@class, 'sign-in') or contains(text(), 'Sign in')]")));
+        var signInBtn = wait.Until(ExpectedConditions.ElementToBeClickable(
+            By.XPath("//*[contains(@class, 'sign-in') or contains(text(), 'Sign in')]")));
         signInBtn.Click();
 
         var signInModal = SignInModalComponent.WaitAndCreate(Driver!);
@@ -67,40 +68,51 @@ public class CreateNewsSourceValidationTests : BaseTest
 
         // --- Act & Assert 1 (No Protocol) ---
         createNewsPage.EnterSource(InvalidUrlNoProtocol);
-        //createNewsPage.ClickTitleField(); // trigger blur
 
         Assert.Multiple(() =>
         {
-            Assert.That(() => createNewsPage.IsSourceFieldInvalid(), Is.True.After(1000, 100), 
+            Assert.That(
+                () => createNewsPage.IsSourceFieldInvalid(), 
+                Is.True.After(1000, 100), 
                 "Source field should be invalid when URL lacks protocol.");
-            Assert.That(createNewsPage.GetSourceFieldInfoText(), Does.Contain(SourceValidationMessage), 
+            Assert.That(
+                createNewsPage.GetSourceFieldInfoText(), 
+                Does.Contain(SourceValidationMessage), 
                 "Validation message should indicate the correct protocol is required.");
-            Assert.That(() => createNewsPage.IsPublishButtonEnabled(), Is.False.After(1000, 100), 
+            Assert.That(
+                () => createNewsPage.IsPublishButtonEnabled(), 
+                Is.False.After(1000, 100), 
                 "Publish button should be disabled for invalid URL.");
         });
 
         // --- Act & Assert 2 (FTP Protocol) ---
         createNewsPage.ClearAndBlurSourceField();
         createNewsPage.EnterSource(InvalidUrlFtp);
-        //createNewsPage.ClickTitleField(); // trigger blur
 
         Assert.Multiple(() =>
         {
-            Assert.That(() => createNewsPage.IsSourceFieldInvalid(), Is.True.After(1000, 100),
+            Assert.That(
+                () => createNewsPage.IsSourceFieldInvalid(), 
+                Is.True.After(1000, 100),
                 "Source field should be invalid for FTP protocol.");
-            Assert.That(() => createNewsPage.IsPublishButtonEnabled(), Is.False.After(1000, 100),
+            Assert.That(
+                () => createNewsPage.IsPublishButtonEnabled(), 
+                Is.False.After(1000, 100),
                 "Publish button should be disabled for FTP protocol.");
         });
 
         // --- Act & Assert 3 (Empty Optional Field) ---
         createNewsPage.ClearAndBlurSourceField();
-        //createNewsPage.ClickTitleField(); // trigger blur
 
         Assert.Multiple(() =>
         {
-            Assert.That(() => createNewsPage.IsSourceFieldInvalid(), Is.False.After(1000, 100),
+            Assert.That(
+                () => createNewsPage.IsSourceFieldInvalid(), 
+                Is.False.After(1000, 100),
                 "Source field should not be invalid when empty (it is optional).");
-            Assert.That(() => createNewsPage.IsPublishButtonEnabled(), Is.True.After(1000, 100),
+            Assert.That(
+                () => createNewsPage.IsPublishButtonEnabled(), 
+                Is.True.After(1000, 100),
                 "Publish button should be enabled when optional field is empty and other fields are valid.");
         });
 
