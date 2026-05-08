@@ -44,7 +44,7 @@ public class NewsDetailsPage : BasePage
         var uri = new Uri(currentUrl);
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/{newsId}");
     }
-    
+
     [AllureStep("Add comment with text: {text}")]
     public NewsDetailsPage AddComment(string text)
     {
@@ -70,7 +70,7 @@ public class NewsDetailsPage : BasePage
         Comment.ClickDeleteCommentBtn(text);
         return this;
     }
-    
+
     [AllureStep("Click Cancel Delete")]
     public NewsDetailsPage ClickCancelDelete()
     {
@@ -108,7 +108,7 @@ public class NewsDetailsPage : BasePage
         Comment.ClickHideRepliesBtn();
         return this;
     }
-    
+
     [AllureStep("Get Comments")]
     public IList<CommentComponent> GetComments()
     {
@@ -161,7 +161,7 @@ public class NewsDetailsPage : BasePage
         }
         return allComments;
     }
-    
+
     [AllureStep("Wait for comment counter visible")]
     public int WaitForCommentCounterVisible()
     {
@@ -243,8 +243,8 @@ public class NewsDetailsPage : BasePage
     public string? GetLastReplyComment() => Comment.GetLastReplyComment();
 
     [AllureStep("Check if Edited Label Displayed")]
-    public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed();[AllureStep("Get Date Text")]
-    public string GetDateText() => NewsInfo.GetDateText();[AllureStep("Check if View Reply Button Displayed")]
+    public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed(); [AllureStep("Get Date Text")]
+    public string GetDateText() => NewsInfo.GetDateText(); [AllureStep("Check if View Reply Button Displayed")]
     public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed();
 
     [AllureStep("Check if Hide Reply Button Displayed")]

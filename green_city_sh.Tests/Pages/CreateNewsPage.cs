@@ -26,7 +26,7 @@ public class CreateNewsPage : BasePage
     {
         NewsForm.EnterTitle(title);
     }
-    
+
     public void ClearAndBlurTitleField()
     {
         NewsForm.ClearAndBlurTitleField();

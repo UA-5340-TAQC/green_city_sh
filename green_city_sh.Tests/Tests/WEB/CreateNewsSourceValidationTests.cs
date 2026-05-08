@@ -35,7 +35,7 @@ public class CreateNewsSourceValidationTests : BaseTest
     protected override void OnSetup()
     {
         NavigateToBaseUrl();
-        
+
         var wait = new WebDriverWait(Driver!, TimeSpan.FromSeconds(Configuration.DefaultTimeout));
         var signInBtn = wait.Until(ExpectedConditions.ElementToBeClickable(
             By.XPath("//*[contains(@class, 'sign-in') or contains(text(), 'Sign in')]")));
@@ -61,7 +61,7 @@ public class CreateNewsSourceValidationTests : BaseTest
         createNewsPage.OpenCreateNewsPage();
 
         string uniqueTitle = $"{TestTitleBase} {Guid.NewGuid()}";
-        
+
         createNewsPage.EnterTitle(uniqueTitle);
         createNewsPage.SelectTags(DefaultTag);
         createNewsPage.EnterContent(TestContent);
@@ -72,16 +72,16 @@ public class CreateNewsSourceValidationTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(
-                () => createNewsPage.IsSourceFieldInvalid(), 
-                Is.True.After(1000, 100), 
+                () => createNewsPage.IsSourceFieldInvalid(),
+                Is.True.After(1000, 100),
                 "Source field should be invalid when URL lacks protocol.");
             Assert.That(
-                createNewsPage.GetSourceFieldInfoText(), 
-                Does.Contain(SourceValidationMessage), 
+                createNewsPage.GetSourceFieldInfoText(),
+                Does.Contain(SourceValidationMessage),
                 "Validation message should indicate the correct protocol is required.");
             Assert.That(
-                () => createNewsPage.IsPublishButtonEnabled(), 
-                Is.False.After(1000, 100), 
+                () => createNewsPage.IsPublishButtonEnabled(),
+                Is.False.After(1000, 100),
                 "Publish button should be disabled for invalid URL.");
         });
 
@@ -92,11 +92,11 @@ public class CreateNewsSourceValidationTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(
-                () => createNewsPage.IsSourceFieldInvalid(), 
+                () => createNewsPage.IsSourceFieldInvalid(),
                 Is.True.After(1000, 100),
                 "Source field should be invalid for FTP protocol.");
             Assert.That(
-                () => createNewsPage.IsPublishButtonEnabled(), 
+                () => createNewsPage.IsPublishButtonEnabled(),
                 Is.False.After(1000, 100),
                 "Publish button should be disabled for FTP protocol.");
         });
@@ -107,11 +107,11 @@ public class CreateNewsSourceValidationTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(
-                () => createNewsPage.IsSourceFieldInvalid(), 
+                () => createNewsPage.IsSourceFieldInvalid(),
                 Is.False.After(1000, 100),
                 "Source field should not be invalid when empty (it is optional).");
             Assert.That(
-                () => createNewsPage.IsPublishButtonEnabled(), 
+                () => createNewsPage.IsPublishButtonEnabled(),
                 Is.True.After(1000, 100),
                 "Publish button should be enabled when optional field is empty and other fields are valid.");
         });
@@ -128,7 +128,7 @@ public class CreateNewsSourceValidationTests : BaseTest
 
         var newsDetailsPage = new NewsDetailsPage(Driver!);
 
-        Assert.That(newsDetailsPage.IsSourceLinkDisplayed(), Is.False, 
+        Assert.That(newsDetailsPage.IsSourceLinkDisplayed(), Is.False,
             "Source link should not be displayed when the source field was left empty.");
     }
 

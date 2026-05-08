@@ -79,7 +79,7 @@ public class NewsFormComponent : BaseComponent
         element.Click();
         element.SendKeys(Keys.Tab);
     }
-    
+
     [AllureStep("Select Tags")]
     public void SelectTags(params string[] tags)
     {
@@ -102,7 +102,7 @@ public class NewsFormComponent : BaseComponent
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput)).Click();
     }
-    
+
     [AllureStep("Clear and Blur Source Field")]
     public void ClearAndBlurSourceField()
     {
@@ -112,7 +112,7 @@ public class NewsFormComponent : BaseComponent
         element.SendKeys(Keys.Backspace);
         element.SendKeys(Keys.Tab);
     }
-    
+
     [AllureStep("Enter Content")]
     public void EnterContent(string text)
     {
@@ -124,7 +124,7 @@ public class NewsFormComponent : BaseComponent
     {
         ImageUpload.Upload(filePath);
     }
-    
+
     [AllureStep("Click Publish")]
     public void ClickPublish()
     {
@@ -142,14 +142,14 @@ public class NewsFormComponent : BaseComponent
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(CancelButton)).Click();
     }
-    
+
     [AllureStep("Check if Title Field is Invalid")]
     public bool IsTitleFieldInvalid()
     {
         var element = wait.Until(ExpectedConditions.ElementExists(NewsTitleTextarea));
         return element.GetAttribute("class")?.Contains("ng-invalid") ?? false;
     }
-    
+
     [AllureStep("Check if Title Field is Touched and Invalid")]
     public bool IsTitleFieldTouchedAndInvalid()
     {
@@ -158,7 +158,7 @@ public class NewsFormComponent : BaseComponent
 
         return (classAttr?.Contains("ng-invalid") ?? false) && (classAttr?.Contains("ng-touched") ?? false);
     }
-    
+
     [AllureStep("Check if Source Field is Invalid")]
     public bool IsSourceFieldInvalid()
     {
@@ -205,7 +205,7 @@ public class NewsFormComponent : BaseComponent
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(AuthorLabel)).Text.Trim();
     }
-    
+
     [AllureStep("Get Title Value")]
     public string GetTitleValue()
     {
