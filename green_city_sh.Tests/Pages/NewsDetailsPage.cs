@@ -29,7 +29,7 @@ public class NewsDetailsPage : BasePage
     {
     }
 
-    private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list/div"));
+    private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list"));
     private DeleteCommentModal DeleteCommentModal => deleteComment ??= new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
     private CommentComponent CommentInput => commentInput ??= new CommentComponent(driver, By.XPath("//app-add-comment"));
     private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
@@ -62,9 +62,9 @@ public class NewsDetailsPage : BasePage
     }
 
     [AllureStep("Delete Comment")]
-    public NewsDetailsPage DeleteComment()
+    public NewsDetailsPage DeleteComment(string text)
     {
-        Comment.ClickDeleteCommentBtn();
+        Comment.ClickDeleteCommentBtn(text);
         return this;
     }
 
