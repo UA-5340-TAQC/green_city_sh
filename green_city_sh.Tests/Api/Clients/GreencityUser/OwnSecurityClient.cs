@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using green_city_sh.Tests.Api.DTO;
+using RestSharp;
 
 namespace green_city_sh.Tests.Api.Clients.GreencityUser
 {
@@ -10,18 +11,18 @@ namespace green_city_sh.Tests.Api.Clients.GreencityUser
         {
         }
 
-        public RestResponse SignIn(string email, string password, string projectName = "GREENCITY")
+        public async Task<AuthResponce> SignIn(SignInModal signInModal)
         {
-
-
-            var body = new
+            var request = PrepareRequest("/signIn", Method.Post, signInModal);
+            var responce = await Client.ExecuteAsync<AuthResponce>(request);
+            if (responce.IsSuccessful)
             {
-                email,
-                password,
-                projectName
-            };
-            var request = PrepareRequest("/signIn", Method.Post, body);
-            return Client.Execute(request);
+                return responce.Data;
+            }
+            else
+            {
+                throw new Exception($"Failed to sign in: {responce.StatusCode} - {responce.Content}");
+            }
         }
     }
 }

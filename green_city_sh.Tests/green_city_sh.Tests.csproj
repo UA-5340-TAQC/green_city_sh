@@ -48,7 +48,6 @@
 
   <ItemGroup>
     <Folder Include="Api\Clients\Greencity\" />
-    <Folder Include="Api\DTO\" />
   </ItemGroup>
 
 </Project>
