@@ -11,18 +11,11 @@ namespace green_city_sh.Tests.Api.Clients.GreencityUser
         {
         }
 
-        public async Task<AuthResponce> SignIn(SignInModal signInModal)
+        public RestResponse SignIn(SignInModal signInModal)
         {
             var request = PrepareRequest("/signIn", Method.Post, signInModal);
-            var responce = await Client.ExecuteAsync<AuthResponce>(request);
-            if (responce.IsSuccessful)
-            {
-                return responce.Data;
-            }
-            else
-            {
-                throw new Exception($"Failed to sign in: {responce.StatusCode} - {responce.Content}");
-            }
+            var responce = Client.Execute(request);
+            return responce;
         }
     }
 }
