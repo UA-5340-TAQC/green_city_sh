@@ -109,43 +109,32 @@ public class EventsAPITests
     [AllureDescription("Create event - verify event can be created successfully")]
     public void CreateEvent_Success()
     {
-        var createData = CreateTestEventDto("Test Event for Creation", "This event will be created and verified");
+        var (eventId, _) = CreateTestEventAndGetStatus("Test Event for Creation", "This event will be created and verified");
+        var getResponse = _eventsClient.GetEventById(eventId);
 
-        var createResponse = _eventsClient.CreateEvent(createData);
-        Assert.That(createResponse.StatusCode, Is.EqualTo(HttpStatusCode.Created), "Failed to create event");
+        Assert.That(getResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Event should exist after creation");
 
-        var createdEvent = JsonSerializer.Deserialize<EventResponse>(createResponse.Content);
-        Assert.That(createdEvent.id, Is.GreaterThan(0), "Created event ID should be positive");
-        Assert.That(createdEvent.title, Is.EqualTo("Test Event for Creation"), "Event title mismatch");
-
-        // Cleanup
-        _eventsClient.DeleteEvent(createdEvent.id);
+        _eventsClient.DeleteEvent(eventId);
     }
 
-    // ========== TEST 2: UPDATE ONLY ==========
     [Test]
     [Order(4)]
     [AllureIssue("EVENTS-4")]
     [AllureDescription("Update event status - toggle between open and close")]
     public void UpdateEventStatus_Success()
     {
-        // Create test event first
-        var createData = CreateTestEventDto("Test Event for Update", "This event will be used to test update");
-
-        var createResponse = _eventsClient.CreateEvent(createData);
-        var createdEvent = JsonSerializer.Deserialize<EventResponse>(createResponse.Content);
-        int eventId = createdEvent.id;
-
-        // Update status
-        bool newStatus = !createdEvent.open;
+        var (eventId, currentStatus) = CreateTestEventAndGetStatus("Test Event for Update", "This event will be used to test update");
+        bool newStatus = !currentStatus;
+        var getResponse = _eventsClient.GetEventById(eventId);
+        var existingEvent = JsonSerializer.Deserialize<EventResponse>(getResponse.Content);
 
         var updateData = new UpdateEventDto
         {
             id = eventId,
-            title = createdEvent.title,
-            description = createdEvent.description,
+            title = existingEvent.title,
+            description = existingEvent.description,
             open = newStatus,
-            datesLocations = createdEvent.dates.Select(d => new DateLocationUpdateDto
+            datesLocations = existingEvent.dates.Select(d => new DateLocationUpdateDto
             {
                 startDate = d.startDate,
                 finishDate = d.finishDate,
@@ -156,40 +145,31 @@ public class EventsAPITests
                     longitude = d.coordinates.longitude
                 }
             }).ToList(),
-            titleImage = createdEvent.titleImage ?? "",
-            additionalImages = createdEvent.additionalImages ?? new List<string>(),
-            tags = createdEvent.tags.Select(t => t.nameEn).ToList()
+            titleImage = existingEvent.titleImage ?? "",
+            additionalImages = existingEvent.additionalImages ?? new List<string>(),
+            tags = existingEvent.tags.Select(t => t.nameEn).ToList()
         };
 
         var updateResponse = _eventsClient.UpdateEvent(eventId, updateData);
         Assert.That(updateResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Failed to update event");
 
         var updatedEvent = JsonSerializer.Deserialize<EventResponse>(updateResponse.Content);
-        Assert.That(updatedEvent.open, Is.EqualTo(newStatus), "Status should be toggled");
+        Assert.That(updatedEvent.open, Is.EqualTo(newStatus), $"Status should be toggled from {currentStatus} to {newStatus}");
 
-        // Cleanup
         _eventsClient.DeleteEvent(eventId);
     }
 
-    // ========== TEST 3: DELETE ONLY ==========
     [Test]
     [Order(5)]
     [AllureIssue("EVENTS-5")]
     [AllureDescription("Delete event - verify event can be deleted successfully")]
     public void DeleteEvent_Success()
     {
-        // Create test event first
-        var createData = CreateTestEventDto("Test Event for Deletion", "This event will be deleted");
+        var (eventId, _) = CreateTestEventAndGetStatus("Test Event for Deletion", "This event will be deleted");
 
-        var createResponse = _eventsClient.CreateEvent(createData);
-        var createdEvent = JsonSerializer.Deserialize<EventResponse>(createResponse.Content);
-        int eventId = createdEvent.id;
-
-        // Delete event
         var deleteResponse = _eventsClient.DeleteEvent(eventId);
         Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Failed to delete event");
 
-        // Verify deletion
         var getResponse = _eventsClient.GetEventById(eventId);
         Assert.That(getResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound), "Event should not exist after deletion");
     }
@@ -217,5 +197,19 @@ public class EventsAPITests
         },
             tags = new List<string> { "Social" }
         };
+    }
+
+    private (int eventId, bool isOpen) CreateTestEventAndGetStatus(string title, string description)
+    {
+        var createData = CreateTestEventDto(title, description);
+        var createResponse = _eventsClient.CreateEvent(createData);
+        Assert.That(createResponse.StatusCode, Is.EqualTo(HttpStatusCode.Created), $"Failed to create event: {title}");
+        Assert.That(createResponse.Content, Is.Not.Null, "Create response content should not be null");
+
+        var createdEvent = JsonSerializer.Deserialize<EventResponse>(createResponse.Content);
+        Assert.That(createdEvent, Is.Not.Null, "Failed to deserialize created event");
+        Assert.That(createdEvent.id, Is.GreaterThan(0), "Created event ID should be positive");
+
+        return (createdEvent.id, createdEvent.open);
     }
 }
