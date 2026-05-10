@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
 using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
-
 
 namespace green_city_sh.Tests.Pages;
 
@@ -24,17 +26,17 @@ public class NewsDetailsPage : BasePage
     private By NewsTitle => By.CssSelector(".news-title-container .news-title");
     private By DeleteNewsButton => By.CssSelector(".edit-delete-block .delete-news-button");
     private By DeleteConfirmYesButton => By.CssSelector("app-dialog-pop-up .primary-global-button");
+    private By SourceLinkLocator => By.CssSelector(".source-text");
+    private By ImageLocator => By.CssSelector("img.news-image-img");
 
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
     }
 
-    private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list"));
+    private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list/div"));
     private DeleteCommentModal DeleteCommentModal => deleteComment ??= new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
     private CommentComponent CommentInput => commentInput ??= new CommentComponent(driver, By.XPath("//app-add-comment"));
-    private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
-
-    [AllureStep("Open News Details Page by ID: {newsId}")]
+    private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']")); [AllureStep("Open News Details Page by ID: {newsId}")]
     public void OpenNewsDetailsPage(int newsId)
     {
         var currentUrl = driver.Url;
@@ -61,20 +63,18 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
-    [AllureStep("Delete Comment")]
+    [AllureStep("Delete Comment: '{text}'")]
     public NewsDetailsPage DeleteComment(string text)
     {
         Comment.ClickDeleteCommentBtn(text);
         return this;
     }
-
     [AllureStep("Click Cancel Delete")]
     public NewsDetailsPage ClickCancelDelete()
     {
         DeleteCommentModal.ClickCancelDeleteBtn();
         return this;
     }
-
     [AllureStep("Reply to Comment: '{text}'")]
     public NewsDetailsPage ReplyComment(string text)
     {
@@ -105,7 +105,6 @@ public class NewsDetailsPage : BasePage
         Comment.ClickHideRepliesBtn();
         return this;
     }
-
     [AllureStep("Get Comments")]
     public IList<CommentComponent> GetComments()
     {
@@ -119,7 +118,6 @@ public class NewsDetailsPage : BasePage
 
         return comments;
     }
-
     [AllureStep("Get Replies")]
     public IList<CommentComponent> GetReplies()
     {
@@ -146,7 +144,6 @@ public class NewsDetailsPage : BasePage
 
         return allReplies;
     }
-
     [AllureStep("Get All Comments With Replies")]
     public IList<CommentComponent> GetAllCommentsWithReplies()
     {
@@ -196,7 +193,6 @@ public class NewsDetailsPage : BasePage
 
         return value;
     }
-
     [AllureStep("Wait for comment counter to change from: {previousValue}")]
     public int WaitForCommentCounterToChange(int previousValue)
     {
@@ -234,32 +230,42 @@ public class NewsDetailsPage : BasePage
     }
 
     [AllureStep("Get Last Comment")]
-    public string? GetLastComment() => Comment.GetLastComment();
-
-    [AllureStep("Get Last Reply Comment")]
-    public string? GetLastReplyComment() => Comment.GetLastReplyComment();
-
-    [AllureStep("Check if Edited Label Displayed")]
+    public string? GetLastComment() => Comment.GetLastComment(); [AllureStep("Get Last Reply Comment")]
+    public string? GetLastReplyComment() => Comment.GetLastReplyComment(); [AllureStep("Check if Edited Label Displayed")]
     public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed();
 
     [AllureStep("Get Date Text")]
     public string GetDateText() => NewsInfo.GetDateText();
 
     [AllureStep("Check if View Reply Button Displayed")]
-    public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed();
-
-    [AllureStep("Check if Hide Reply Button Displayed")]
+    public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed(); [AllureStep("Check if Hide Reply Button Displayed")]
     public bool IsHideReplyBtnDisplayed() => Comment.IsHideBtnDisplayed();
 
     [AllureStep("Get Reply Button Attribute")]
     public string GetAttributeReplyButton() => Comment.GetReplyButtonAttribute();
 
-    // --- News Postcondition & Extraction Methods ---
-
-    [AllureStep("Get News Title Text")]
+    // --- News Postcondition & Extraction Methods ---[AllureStep("Get News Title Text")]
     public string GetNewsTitleText()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitle)).Text.Trim();
+    }
+    [AllureStep("Check if Source Link is Displayed")]
+    public bool IsSourceLinkDisplayed()
+    {
+        return driver.FindElements(SourceLinkLocator).Count > 0;
+    }
+    [AllureStep("Check if Image is Displayed")]
+    public bool IsImageDisplayed()
+    {
+        try
+        {
+            var image = wait.Until(ExpectedConditions.ElementIsVisible(ImageLocator));
+            return image.Displayed;
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
     }
 
     [AllureStep("Click Delete News Button")]
@@ -268,7 +274,6 @@ public class NewsDetailsPage : BasePage
         wait.Until(ExpectedConditions.ElementToBeClickable(DeleteNewsButton)).Click();
         return this;
     }
-
     [AllureStep("Confirm Deletion")]
     public void ConfirmDeletion()
     {
