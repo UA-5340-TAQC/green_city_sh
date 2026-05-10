@@ -6,8 +6,8 @@ namespace green_city_sh.Tests.Api.Clients;
 public class SearchEventsClient
 {
     private readonly RestClient _client;
-    
-    
+
+
     public SearchEventsClient(string baseUrl)
     {
         _client = new RestClient(baseUrl);

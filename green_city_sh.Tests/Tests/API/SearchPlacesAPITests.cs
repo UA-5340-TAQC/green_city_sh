@@ -17,7 +17,7 @@ public class SearchPlacesAPITests
     private OwnSecurityClient _authClient;
     private SearchClient _searchClient;
     private string accessToken;
-    
+
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -29,11 +29,11 @@ public class SearchPlacesAPITests
             email = Configuration.TestEmail,
             password = Configuration.TestPassword
         };
-        
+
         var response = _authClient.SignIn(signInModel);
         var authResponse = JsonSerializer.Deserialize<AuthResponce>(response.Content);
         accessToken = authResponse.accessToken;
-        
+
         Console.WriteLine(response.StatusCode);
         Console.WriteLine(response.Content);
         Console.WriteLine(accessToken);
@@ -52,7 +52,7 @@ public class SearchPlacesAPITests
     [Test]
     public void VerifySearchPlacesSuccess()
     {
-        RestResponse response = _searchClient.SearchPlaces(accessToken,  "event");
+        RestResponse response = _searchClient.SearchPlaces(accessToken, "event");
         Console.WriteLine(response.StatusCode);
         Console.WriteLine(response.Content);
         Console.WriteLine(accessToken);
@@ -60,13 +60,13 @@ public class SearchPlacesAPITests
         Assert.That(response.StatusCode,
             Is.EqualTo(System.Net.HttpStatusCode.OK),
             "Status code should be 200 for authorized search.");
-        
+
         var searchResponse = JsonSerializer.Deserialize<SearchPlacesResponseDto>
             (response.Content);
-        
+
         Assert.Multiple(() =>
         {
-            Assert.That(searchResponse,  Is.Not.Null);
+            Assert.That(searchResponse, Is.Not.Null);
             Assert.That(searchResponse.page, Is.Not.Null);
             Assert.That(searchResponse.currentPage, Is.GreaterThanOrEqualTo(0));
             Assert.That(searchResponse.totalElements, Is.GreaterThanOrEqualTo(0));
@@ -78,7 +78,7 @@ public class SearchPlacesAPITests
     {
         RestResponse response = _searchClient.SearchPlaces(accessToken, "qwertyuip123");
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-        
+
         var searchResponse = JsonSerializer.Deserialize<SearchPlacesResponseDto>(response.Content);
         Assert.That(searchResponse.page.Count, Is.EqualTo(0));
     }
@@ -86,7 +86,7 @@ public class SearchPlacesAPITests
     [Test]
     public void VerifySearchPlacesWithoutSearchQuery()
     {
-        
+
         RestResponse response =
             _searchClient.SearchPlaces(accessToken, "");
 

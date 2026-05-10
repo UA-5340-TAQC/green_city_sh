@@ -22,16 +22,16 @@ public class SearchEventsAPITests
     {
         _authClient = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
         _searchEventsClient = new SearchEventsClient(Configuration.ApiUserBaseUrl);
-        
+
         var signInModel = new SignInModal()
         {
             email = Configuration.TestEmail,
             password = Configuration.TestPassword
         };
-        
+
         var response = _authClient.SignIn(signInModel);
         var authResponse = JsonSerializer.Deserialize<AuthResponce>(response.Content);
-        accessToken = authResponse.accessToken;    
+        accessToken = authResponse.accessToken;
     }
 
     [Test]
@@ -39,7 +39,7 @@ public class SearchEventsAPITests
     {
         RestResponse response =
             _searchEventsClient.SearchEventsWithoutAuth("event");
-        
+
         Assert.That(
             response.StatusCode,
             Is.EqualTo(System.Net.HttpStatusCode.Unauthorized),
@@ -51,7 +51,7 @@ public class SearchEventsAPITests
     {
         RestResponse response =
             _searchEventsClient.SearchEvents(accessToken, "event");
-        
+
         Assert.That(
             response.StatusCode,
             Is.EqualTo(System.Net.HttpStatusCode.OK),
@@ -67,7 +67,7 @@ public class SearchEventsAPITests
             Assert.That(searchResponse.currentPage, Is.GreaterThanOrEqualTo(0));
             Assert.That(searchResponse.totalElements, Is.GreaterThanOrEqualTo(0));
         });
-        
+
     }
 
 }
