@@ -8,6 +8,7 @@ using green_city_sh.Tests.Infrastructure;
 using RestSharp;
 
 [TestFixture]
+[Allure.NUnit.AllureNUnit]
 [Parallelizable(ParallelScope.Fixtures)]
 [AllureOwner("Dmytro Syadro")]
 [AllureFeature("Eco News")]
