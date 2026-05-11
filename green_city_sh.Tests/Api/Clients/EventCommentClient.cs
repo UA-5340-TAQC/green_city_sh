@@ -22,9 +22,9 @@ namespace green_city_sh.Tests.Api.Clients
         {
             var request = new RestRequest($"/events/{eventId}/comments", Method.Post);
             request.AddHeader("Accept", "application/json");
-            
+
             request.AlwaysMultipartFormData = true;
-            
+
             string jsonString = JsonSerializer.Serialize(payload);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonString);
             request.AddFile("request", jsonBytes, "request.json", "application/json");
