@@ -30,11 +30,11 @@ public class HabitCommentClient : BaseApiClient
             .AddUrlSegment("habitId", habitId)
             .AddHeader("Accept", "application/json");
 
-        var options = new JsonSerializerOptions 
-        { 
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase 
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        
+
         var requestBody = new { text = text };
         var json = JsonSerializer.Serialize(requestBody, options);
 

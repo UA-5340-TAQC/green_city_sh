@@ -23,17 +23,17 @@ public class HabitsCommentAPITests
     public void OneTimeSetUp()
     {
         var securityClient = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
-        
+
         var signInModel = new SignInModal
         {
             email = Configuration.TestEmail,
             password = Configuration.TestPassword
         };
-        
+
         var authResponse = securityClient.SignIn(signInModel);
-        
+
         Assert.That(authResponse.IsSuccessful, Is.True, $"Login failed in Setup! Status: {authResponse.StatusCode}");
-        
+
         var authData = JsonSerializer.Deserialize<AuthResponce>(authResponse.Content);
 
         _commentClient = new HabitCommentClient(Configuration.ApiGreenCityBaseUrl, authData.accessToken);
@@ -69,7 +69,7 @@ public class HabitsCommentAPITests
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created), "Failed to create comment");
             Assert.That(response.Data, Is.Not.Null, "Response data should not be null");
             Assert.That(response.Data.text, Is.EqualTo(testCommentText), "Comment text does not match");
-            
+
             createdCommentId = response.Data.id;
             Assert.That(createdCommentId, Is.GreaterThan(0), "Created comment ID should be positive");
         }
@@ -90,7 +90,7 @@ public class HabitsCommentAPITests
     {
         var createResponse = _commentClient.AddComment(_testHabitId, "Comment for deletion test");
         Assert.That(createResponse.StatusCode, Is.EqualTo(HttpStatusCode.Created), "Precondition failed: Could not create comment");
-        
+
         int commentIdToDelete = createResponse.Data.id;
         var deleteResponse = _commentClient.DeleteComment(commentIdToDelete);
 
