@@ -79,6 +79,29 @@ namespace green_city_sh.Tests.Tests.API
         }
 
         [Test, Order(3)]
+        [AllureDescription("Verify that authorized user can't like their own comment")]
+        public void UnnableLikeCommentAuthorizedUser()
+        {
+            Assert.That(createdCommentId, Is.GreaterThan(0), "Cannot like: Comment ID was not captured in the POST test.");
+
+            var response = authorizedClient.LikeComment(createdCommentId);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest),
+            $"Expected server to reject the like, but got {response.StatusCode}. Content: {response.Content}");
+        }
+
+        [Test, Order(4)]
+        [AllureDescription("Verify that authorized user can update their comment")]
+        public void UpdateCommentAuthorizedUser()
+        {
+            Assert.That(createdCommentId, Is.GreaterThan(0), "Cannot update: Comment ID was not captured in the POST test.");
+
+            string updatedText = "This comment was updated by automated API test!";
+            var response = authorizedClient.UpdateComment(6678, updatedText);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
+                $"Server returned {response.StatusCode}. Details: {response.Content}");
+        }
+
+        [Test, Order(5)]
         [AllureDescription("Verify that authorized user can delete their comment")]
         public void DeleteCommentAuthorizedUser()
         {

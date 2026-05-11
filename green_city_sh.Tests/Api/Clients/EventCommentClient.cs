@@ -32,6 +32,18 @@ namespace green_city_sh.Tests.Api.Clients
             return Client.Execute(request);
         }
 
+        public RestResponse LikeComment(int commentId)
+        {
+            var request = PrepareRequest($"/events/comments/like/{commentId}", Method.Post);
+            return Client.Execute(request);
+        }
+
+        public RestResponse UpdateComment(int commentId, string newText)
+        {
+            var request = PrepareRequest($"/events/comments/{commentId}", Method.Patch, newText);
+            return Client.Execute(request);
+        }
+
         public RestResponse DeleteComment(int commentId)
         {
             var request = PrepareRequest($"/events/comments/{commentId}", Method.Delete);
