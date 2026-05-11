@@ -45,6 +45,7 @@ namespace green_city_sh.Tests.Tests.API
             }
 
             AuthResponce authData = JsonSerializer.Deserialize<AuthResponce>(loginResponse.Content);
+            Assert.That(authData, Is.Not.Null, "Failed to deserialize AuthResponce. Body might be empty.");
             string validToken = authData.accessToken;
 
             authorizedClient = new EventCommentClient(ApiBaseUrl, validToken);
@@ -75,12 +76,13 @@ namespace green_city_sh.Tests.Tests.API
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created), $"Server returned {response.StatusCode}");
 
             var responseData = JsonSerializer.Deserialize<AddCommentResponse>(response.Content);
+            Assert.That(responseData, Is.Not.Null, "Deserialized response data is null. Cannot extract comment ID.");
             createdCommentId = responseData.id;
         }
 
         [Test, Order(3)]
         [AllureDescription("Verify that authorized user can't like their own comment")]
-        public void UnnableLikeCommentAuthorizedUser()
+        public void UnableLikeCommentAuthorizedUser()
         {
             Assert.That(createdCommentId, Is.GreaterThan(0), "Cannot like: Comment ID was not captured in the POST test.");
 
@@ -96,7 +98,7 @@ namespace green_city_sh.Tests.Tests.API
             Assert.That(createdCommentId, Is.GreaterThan(0), "Cannot update: Comment ID was not captured in the POST test.");
 
             string updatedText = "This comment was updated by automated API test!";
-            var response = authorizedClient.UpdateComment(6678, updatedText);
+            var response = authorizedClient.UpdateComment(createdCommentId, updatedText);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
                 $"Server returned {response.StatusCode}. Details: {response.Content}");
         }
