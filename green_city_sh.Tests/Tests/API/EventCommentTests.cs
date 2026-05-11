@@ -20,9 +20,9 @@ namespace green_city_sh.Tests.Tests.API
         private EventCommentClient unauthorizedClient;
         private EventCommentClient authorizedClient;
         private int createdCommentId;
-        
+
         public static string ApiBaseUrl => Configuration.ApiGreenCityBaseUrl;
-        private const int TestEventId = 50; 
+        private const int TestEventId = 50;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -64,12 +64,12 @@ namespace green_city_sh.Tests.Tests.API
         [AllureDescription("Verify that authorized user can add comment to event")]
         public void AddCommentAuthorizedUser()
         {
-            var payload = new AddCommentRequest 
-            { 
+            var payload = new AddCommentRequest
+            {
                 text = "This is a test comment from API framework",
                 parentCommentId = 0
             };
-            
+
             var response = authorizedClient.AddComment(TestEventId, payload);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created), $"Server returned {response.StatusCode}");
