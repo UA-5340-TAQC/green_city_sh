@@ -10,12 +10,10 @@ using RestSharp;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[TestFixture]
-[Allure.NUnit.AllureNUnit]
-[Parallelizable(ParallelScope.Fixtures)]
+[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Dmytro Syadro")]
-[AllureFeature("Eco News")]
-public class EcoNewsApiTests
+[AllureSubSuite("Eco News")]
+public class EcoNewsApiTests : BaseAPITest
 {
     private OwnSecurityClient _client;
     private EcoNewsClient _ecoNewsClient;

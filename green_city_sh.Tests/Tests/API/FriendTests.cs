@@ -10,10 +10,8 @@ using RestSharp;
 
 namespace green_city_sh.Tests.Tests.API
 {
-    [TestFixture]
-    [Allure.NUnit.AllureNUnit]
-    [AllureFeature("Friend API Tests")]
-    public class FriendTests
+    [AllureSubSuite("Friend API Tests")]
+    public class FriendTests : BaseAPITest
     {
         private FriendClient authorizedClient;
 

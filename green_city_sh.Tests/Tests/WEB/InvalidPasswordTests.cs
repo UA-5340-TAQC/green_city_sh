@@ -6,7 +6,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
-public class InvalidPasswordTests : BaseTest
+public class InvalidPasswordTests : BaseUITest
 {
     private HomePage? _homePage;
 

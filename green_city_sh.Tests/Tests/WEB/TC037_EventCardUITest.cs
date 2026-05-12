@@ -14,7 +14,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [AllureIssue("37")]
 [AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
-public class TC037_EventCardUITest : BaseTest
+public class TC037_EventCardUITest : BaseUITest
 {
     private static readonly HashSet<string> AllowedCategories =
         new(StringComparer.OrdinalIgnoreCase) { "Environmental", "Social", "Economic" };
