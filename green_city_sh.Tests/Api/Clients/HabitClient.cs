@@ -73,7 +73,6 @@ public class HabitClient : BaseApiClient
     {
         var request = PrepareRequest($"{BaseUrl}/delete{UriId}", Method.Delete)
             .AddUrlSegment("id", id).AddHeader("Accept", "application/json");
-            .AddUrlSegment("id", id).AddHeader("Accept", "application/json");
         return Client.Execute(request);
     }
 }
