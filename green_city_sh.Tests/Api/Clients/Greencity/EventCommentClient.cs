@@ -21,7 +21,6 @@ namespace green_city_sh.Tests.Api.Clients.Greencity
         public RestResponse AddComment(int eventId, AddCommentRequest payload)
         {
             var request = new RestRequest($"/events/{eventId}/comments", Method.Post);
-            request.AddHeader("Accept", "application/json");
 
             request.AlwaysMultipartFormData = true;
 
