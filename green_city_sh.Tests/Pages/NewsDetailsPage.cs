@@ -36,7 +36,7 @@ public class NewsDetailsPage : BasePage
     private CommentComponent Comment => comment ??= new CommentComponent(driver, By.XPath("//app-comments-list"));
     private DeleteCommentModal DeleteCommentModal => deleteComment ??= new DeleteCommentModal(driver, By.XPath("//app-warning-pop-up"));
     private CommentComponent CommentInput => commentInput ??= new CommentComponent(driver, By.XPath("//app-add-comment"));
-    private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']")); 
+    private NewsInfoComponent NewsInfo => newsInfo ??= new NewsInfoComponent(driver, By.XPath("//*[@class='news-info']"));
 
     [AllureStep("Open News Details Page by ID: {newsId}")]
     public void OpenNewsDetailsPage(int newsId)
