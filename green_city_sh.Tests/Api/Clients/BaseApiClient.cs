@@ -1,4 +1,5 @@
-﻿using green_city_sh.Tests.Infrastructure;
+﻿using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Infrastructure;
 using RestSharp;
 
 namespace green_city_sh.Tests.Api.Clients
@@ -27,6 +28,7 @@ namespace green_city_sh.Tests.Api.Clients
             }
         }
 
+        [AllureStep("Prepare API request: {method} {resource}")]
         protected RestRequest PrepareRequest(string resource, Method method, object? body = null, string acceptHeader = "application/json")
         {
             var request = new RestRequest(resource, method);

@@ -61,6 +61,13 @@ public class HabitApiTests
         _habitClient = new HabitClient(Configuration.ApiGreenCityBaseUrl, authResponse.accessToken);
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        if (_newHabitId > 0)
+            _habitClient.DeleteHabit(_newHabitId);
+    }
+
     [Test]
     [AllureDescription("Add habit to favorites test")]
     public void AddHabitToFavoritesTest()
@@ -142,10 +149,5 @@ public class HabitApiTests
             "Status code should be 200");
     }
 
-    [OneTimeTearDown]
-    public void OneTimeTearDown()
-    {
-        if (_newHabitId > 0)
-            _habitClient.DeleteHabit(_newHabitId);
-    }
+
 }
