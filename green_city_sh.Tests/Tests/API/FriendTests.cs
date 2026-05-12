@@ -30,12 +30,7 @@ namespace green_city_sh.Tests.Tests.API
 
             RestResponse loginResponse = authClient.SignIn(credentials);
 
-            if (loginResponse.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception(
-                    $"Pre-condition failed: Could not log in to get JWT. " +
-                    $"Status Code: {loginResponse.StatusCode}. Message: {loginResponse.Content}");
-            }
+            Assert.That(loginResponse.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK), "Status code should be 200 for successful sign in.");
 
             AuthResponce authData =
                 JsonSerializer.Deserialize<AuthResponce>(loginResponse.Content!)!;
@@ -47,7 +42,8 @@ namespace green_city_sh.Tests.Tests.API
 
             authorizedClient = new FriendClient(
                 Configuration.ApiGreenCityBaseUrl,
-                validToken);
+                validToken
+                );
         }
 
         [Test]
@@ -68,11 +64,11 @@ namespace green_city_sh.Tests.Tests.API
 
             Assert.Multiple(() =>
             {
-                Assert.That(friendsResponse, Is.Not.Null);
-                Assert.That(friendsResponse.page, Is.Not.Null);
-                Assert.That(friendsResponse.totalElements, Is.GreaterThanOrEqualTo(0));
-                Assert.That(friendsResponse.currentPage, Is.EqualTo(0));
-                Assert.That(friendsResponse.totalPages, Is.GreaterThanOrEqualTo(0));
+                Assert.That(friendsResponse, Is.Not.Null, "Friends response should not be null");
+                Assert.That(friendsResponse.page, Is.Not.Null, "Page should not be null");
+                Assert.That(friendsResponse.totalElements, Is.GreaterThanOrEqualTo(0), "Total elements should be greater than or equal to 0");
+                Assert.That(friendsResponse.currentPage, Is.EqualTo(0), "Current page should be 0");
+                Assert.That(friendsResponse.totalPages, Is.GreaterThanOrEqualTo(0), "Total pages should be greater than or equal to 0");
             });
         }
 
