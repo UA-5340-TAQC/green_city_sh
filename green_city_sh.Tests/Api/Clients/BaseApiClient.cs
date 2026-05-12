@@ -27,13 +27,14 @@ namespace green_city_sh.Tests.Api.Clients
             }
         }
 
-        protected RestRequest PrepareRequest(string resource, Method method, object? body = null)
+        protected RestRequest PrepareRequest(string resource, Method method, object? body = null, string acceptHeader = "application/json")
         {
             var request = new RestRequest(resource, method);
             if (body != null)
             {
                 request.AddJsonBody(body);
             }
+            request.AddHeader("Accept", acceptHeader);
             return request;
         }
     }

@@ -2,7 +2,7 @@ using System.Text.Json;
 using green_city_sh.Tests.Api.DTO.Habits;
 using RestSharp;
 
-namespace green_city_sh.Tests.Api.Clients;
+namespace green_city_sh.Tests.Api.Clients.Greencity;
 
 public class HabitClient : BaseApiClient
 {
@@ -15,8 +15,10 @@ public class HabitClient : BaseApiClient
 
     public RestResponse<HabitFavorites> GetFavoriteHabits(int page = 0, int size = 20, string? lang = null)
     {
-        var request = PrepareRequest($"{BaseUrl}/favorites", Method.Get).AddParameter("lang", lang).AddParameter("page", page).AddParameter("size", size)
-            .AddHeader("Accept", "application/json");
+        var request = PrepareRequest($"{BaseUrl}/favorites", Method.Get)
+            .AddParameter("lang", lang)
+            .AddParameter("page", page)
+            .AddParameter("size", size);
         var response = Client.Execute<HabitFavorites>(request);
         return response;
     }
@@ -24,7 +26,7 @@ public class HabitClient : BaseApiClient
     public RestResponse AddHabitToFavorite(long id)
     {
         var request = PrepareRequest($"{BaseUrl}{UriId}/favorites", Method.Post)
-            .AddUrlSegment("id", id).AddHeader("Accept", "application/json");
+            .AddUrlSegment("id", id);
         return Client.Execute(request);
 
     }
@@ -32,23 +34,23 @@ public class HabitClient : BaseApiClient
     public RestResponse RemoveHabitFromFavorite(long id)
     {
         var request = PrepareRequest($"{BaseUrl}{UriId}/favorites", Method.Delete)
-            .AddUrlSegment("id", id).AddHeader("Accept", "application/json");
+            .AddUrlSegment("id", id);
         return Client.Execute(request);
     }
 
     public RestResponse<HabitFavorites> GetHabits(int page = 0, int size = 20, string? lang = null)
     {
         var request = PrepareRequest($"{BaseUrl}", Method.Get)
-            .AddParameter("lang", lang).AddParameter("page", page).AddParameter("size", size)
-            .AddHeader("Accept", "application/json");
+            .AddParameter("lang", lang)
+            .AddParameter("page", page)
+            .AddParameter("size", size);
         var response = Client.Execute<HabitFavorites>(request);
         return response;
     }
 
     public RestResponse<HabitModel> CreateCustomHabit(HabitModel habit, string? imagePath = null)
     {
-        var request = PrepareRequest($"{BaseUrl}/custom", Method.Post)
-            .AddHeader("Accept", "application/json");
+        var request = PrepareRequest($"{BaseUrl}/custom", Method.Post);
 
         var options = new JsonSerializerOptions
         {
@@ -72,7 +74,7 @@ public class HabitClient : BaseApiClient
     public RestResponse DeleteHabit(long id)
     {
         var request = PrepareRequest($"{BaseUrl}/delete{UriId}", Method.Delete)
-            .AddUrlSegment("id", id).AddHeader("Accept", "application/json");
+            .AddUrlSegment("id", id);
         return Client.Execute(request);
     }
 }
