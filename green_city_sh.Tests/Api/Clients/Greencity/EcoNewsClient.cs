@@ -2,7 +2,7 @@
 using green_city_sh.Tests.Api.DTO.EcoNews;
 using RestSharp;
 
-namespace green_city_sh.Tests.Api.Clients;
+namespace green_city_sh.Tests.Api.Clients.Greencity;
 
 public class EcoNewsClient : BaseApiClient
 {
@@ -17,8 +17,7 @@ public class EcoNewsClient : BaseApiClient
     {
         var request = PrepareRequest($"{BaseUrl}{UriId}", Method.Get)
             .AddQueryParameter("lang", lang)
-            .AddUrlSegment("id", id)
-            .AddHeader("Accept", "application/json");
+            .AddUrlSegment("id", id);
         return Client.Execute<EcoNewsModel>(request);
     }
 
@@ -30,8 +29,7 @@ public class EcoNewsClient : BaseApiClient
 
     public RestResponse<EcoNewsModel> CreateEcoNews(CreateEcoNewsRequest ecoNews, string? imagePath = null)
     {
-        var request = PrepareRequest(BaseUrl, Method.Post)
-            .AddHeader("Accept", "application/json");
+        var request = PrepareRequest(BaseUrl, Method.Post);
 
         var options = new JsonSerializerOptions
         {
@@ -62,24 +60,21 @@ public class EcoNewsClient : BaseApiClient
     {
         var request = PrepareRequest($"{BaseUrl}{UriId}", Method.Delete)
             .AddQueryParameter("lang", lang)
-            .AddUrlSegment("id", id)
-            .AddHeader("Accept", "application/json");
+            .AddUrlSegment("id", id);
         return Client.Execute(request);
     }
 
     public RestResponse AddEcoNewsToFavorites(long id)
     {
         var request = PrepareRequest($"{BaseUrl}{UriId}/favorites", Method.Post)
-            .AddUrlSegment("id", id)
-            .AddHeader("Accept", "application/json");
+            .AddUrlSegment("id", id);
         return Client.Execute(request);
     }
 
     public RestResponse DeleteEcoNewsFromFavorites(long id)
     {
         var request = PrepareRequest($"{BaseUrl}{UriId}/favorites", Method.Delete)
-            .AddUrlSegment("id", id)
-            .AddHeader("Accept", "application/json");
+            .AddUrlSegment("id", id);
         return Client.Execute(request);
     }
 
