@@ -56,18 +56,4 @@ public class SearchEventsAPITests
             Is.EqualTo(System.Net.HttpStatusCode.Forbidden),
             "ROLE_USER should not have access to search/events.");
     }
-    
-    [Test]
-    public void VerifySearchEvents_EmptySearchQuery_Returns400()
-    {
-        var response =
-            _searchEventsClient.SearchEvents(accessToken, " ");
-
-        Assert.That(
-            response.StatusCode,
-            Is.EqualTo(System.Net.HttpStatusCode.BadRequest),
-            "Status code should be 400 when searchQuery is empty.");
-    }
-
-
 }

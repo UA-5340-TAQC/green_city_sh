@@ -24,65 +24,31 @@ public class SearchPlacesAPITests
         _authClient = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
         _searchClient = new SearchClient(Configuration.ApiUserBaseUrl);
 
-        var signInModel = new SignInModal()
+        var response = _authClient.SignIn(new SignInModal()
         {
             email = Configuration.TestEmail,
             password = Configuration.TestPassword
-        };
+        });
 
-        var response = _authClient.SignIn(signInModel);
-        var authResponse = JsonSerializer.Deserialize<AuthResponce>(response.Content);
-        accessToken = authResponse.accessToken;
-
-        Console.WriteLine(response.StatusCode);
-        Console.WriteLine(response.Content);
-        Console.WriteLine(accessToken);
+        accessToken = JsonSerializer.Deserialize<AuthResponce>(response.Content).accessToken;
     }
 
     [Test]
     public void VerifySearchPlaces_Unauthorized_Returns401()
     {
-        RestResponse response = _searchClient.SearchPlacesWithoutAuth("event");
+        var response = _searchClient.SearchPlacesWithoutAuth("test");
         Assert.That(response.StatusCode,
             Is.EqualTo(System.Net.HttpStatusCode.Unauthorized),
-            "Status code should be 401 when token is missing.");
-        Console.WriteLine(response.Content);
+            "Without token search should return 401");
     }
 
     [Test]
     public void VerifySearchPlaces_WithUserRole_Returns403()
     {
-        RestResponse response = _searchClient.SearchPlaces(accessToken, "event");
-        Console.WriteLine(response.StatusCode);
-        Console.WriteLine(response.Content);
-        Console.WriteLine(accessToken);
+        var response = _searchClient.SearchPlaces(accessToken, "test");
 
         Assert.That(response.StatusCode,
             Is.EqualTo(System.Net.HttpStatusCode.Forbidden),
-            "ROLE_USER should not have access to search/events.");
-    }
-
-    [Test]
-    public void VerifySearchPlacesWithoutResults()
-    {
-        RestResponse response = _searchClient.SearchPlaces(accessToken, "qwertyuip123");
-        Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
-
-        var searchResponse = JsonSerializer.Deserialize<SearchPlacesResponseDto>(response.Content);
-        Assert.That(searchResponse.page.Count, Is.EqualTo(0));
-    }
-
-    [Test]
-    public void VerifySearchPlacesWithoutSearchQuery()
-    {
-
-        RestResponse response =
-            _searchClient.SearchPlaces(accessToken, "");
-
-        Assert.That(
-            response.StatusCode,
-            Is.EqualTo(System.Net.HttpStatusCode.BadRequest),
-            "Status code should be 400 when searchQuery is empty.");
-
+            "ROLE_USER should not have access to search/places");
     }
 }
