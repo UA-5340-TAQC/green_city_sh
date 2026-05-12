@@ -3,7 +3,7 @@ using System.Text.Json;
 using green_city_sh.Tests.Api.DTO.Habits;
 using RestSharp;
 
-namespace green_city_sh.Tests.Api.Clients;
+namespace green_city_sh.Tests.Api.Clients.Greencity;
 
 public class HabitCommentClient : BaseApiClient
 {
@@ -18,8 +18,7 @@ public class HabitCommentClient : BaseApiClient
         var request = PrepareRequest($"{BaseUrl}/comments/active", Method.Get)
             .AddQueryParameter("habitId", habitId)
             .AddQueryParameter("page", page)
-            .AddQueryParameter("size", size)
-            .AddHeader("Accept", "application/json");
+            .AddQueryParameter("size", size);
 
         return Client.Execute<HabitCommentPageResponse>(request);
     }
@@ -27,9 +26,8 @@ public class HabitCommentClient : BaseApiClient
     public RestResponse<HabitCommentResponse> AddComment(int habitId, string text)
     {
         var request = PrepareRequest($"{BaseUrl}/{{habitId}}/comments", Method.Post)
-            .AddUrlSegment("habitId", habitId)
-            .AddHeader("Accept", "application/json");
-
+            .AddUrlSegment("habitId", habitId);
+        Console.WriteLine(request);
         var options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
@@ -40,8 +38,23 @@ public class HabitCommentClient : BaseApiClient
 
         request.AlwaysMultipartFormData = true;
         request.AddFile("request", Encoding.UTF8.GetBytes(json), "request.json", "application/json");
+        Console.WriteLine($"[API Request] {Method.Post} {Client.BuildUri(request)}");
+        Console.WriteLine($"[Request Body] {json}");
+        //return Client.Execute<HabitCommentResponse>(request);
+        var response = Client.Execute<HabitCommentResponse>(request);
+        Console.WriteLine($"[API Response] Status: {response.StatusCode}");
+        if (!string.IsNullOrEmpty(response.Content))
+        {
+            Console.WriteLine($"[Response Content] {response.Content}");
+        }
 
-        return Client.Execute<HabitCommentResponse>(request);
+        if (response.ErrorException != null)
+        {
+            Console.WriteLine($"[Error] {response.ErrorException.Message}");
+        }
+
+        return response;
+
     }
 
     public RestResponse DeleteComment(int commentId)
