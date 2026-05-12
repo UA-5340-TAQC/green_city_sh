@@ -11,7 +11,6 @@ using RestSharp;
 namespace green_city_sh.Tests.Tests.API
 {
     [TestFixture]
-    [Parallelizable(ParallelScope.Self)]
     [Allure.NUnit.AllureNUnit]
     [AllureFeature("Friend API Tests")]
     public class FriendTests
@@ -51,7 +50,7 @@ namespace green_city_sh.Tests.Tests.API
                 validToken);
         }
 
-        [Test, Order(1)]
+        [Test]
         [AllureDescription("Verify that authorized user can get friends list")]
         public void VerifyGetFriends()
         {
@@ -77,7 +76,7 @@ namespace green_city_sh.Tests.Tests.API
             });
         }
 
-        [Test, Order(2)]
+        [Test]
         [AllureDescription("Verify that user cannot add already existing friend")]
         public void VerifyCannotAddAlreadyExistingFriend()
         {
@@ -95,19 +94,16 @@ namespace green_city_sh.Tests.Tests.API
                 Does.Contain("Friend with this id has already been added"));
         }
 
-        [Test, Order(3)]
+        [Test]
         [AllureDescription("Verify that authorized user can add friend")]
         public void VerifyAddFriend()
         {
             long friendId = 455;
 
-            // cleanup possible pending request
             authorizedClient.CancelFriendRequest(friendId);
 
-            // cleanup possible existing friend
             authorizedClient.DeleteFriend(friendId);
 
-            // add friend
             RestResponse addResponse =
                 authorizedClient.AddFriend(friendId);
 
@@ -116,7 +112,7 @@ namespace green_city_sh.Tests.Tests.API
                 Is.EqualTo(HttpStatusCode.OK),
                 $"Add friend failed. Server returned {addResponse.StatusCode}. Details: {addResponse.Content}");
 
-            // cleanup after test
+
             authorizedClient.CancelFriendRequest(friendId);
             authorizedClient.DeleteFriend(friendId);
         }
