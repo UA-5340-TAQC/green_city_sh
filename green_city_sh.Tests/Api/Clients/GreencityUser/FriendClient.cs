@@ -42,6 +42,14 @@ internal class FriendClient : BaseApiClient
 
         return Client.Execute(request);
     }
+    public RestResponse CancelFriendRequest(long friendId)
+    {
+        var request = PrepareRequest(
+            $"/{friendId}/cancelRequest",
+            Method.Delete);
+
+        return Client.Execute(request);
+    }
 }
 
 

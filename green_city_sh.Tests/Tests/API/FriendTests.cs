@@ -96,18 +96,29 @@ namespace green_city_sh.Tests.Tests.API
         }
 
         [Test, Order(3)]
-        [AllureDescription("Verify that authorized user can add new friend")]
+        [AllureDescription("Verify that authorized user can add friend")]
         public void VerifyAddFriend()
         {
-            long friendId = 565;
+            long friendId = 455;
 
-            RestResponse response =
-                            authorizedClient.AddFriend(friendId);
+            // cleanup possible pending request
+            authorizedClient.CancelFriendRequest(friendId);
+
+            // cleanup possible existing friend
+            authorizedClient.DeleteFriend(friendId);
+
+            // add friend
+            RestResponse addResponse =
+                authorizedClient.AddFriend(friendId);
 
             Assert.That(
-                            response.StatusCode,
-                            Is.EqualTo(HttpStatusCode.OK),
-                            $"Server returned {response.StatusCode}. Details: {response.Content}");
+                addResponse.StatusCode,
+                Is.EqualTo(HttpStatusCode.OK),
+                $"Add friend failed. Server returned {addResponse.StatusCode}. Details: {addResponse.Content}");
+
+            // cleanup after test
+            authorizedClient.CancelFriendRequest(friendId);
+            authorizedClient.DeleteFriend(friendId);
         }
 
     }

@@ -8,9 +8,10 @@ namespace green_city_sh.Tests.Api.DTO
 {
     public class FriendsPageResponse
     {
-        public List<FriendResponse> page { get; set; }
+        public List<FriendResponse> page { get; set; } = new();
         public int totalElements { get; set; }
         public int currentPage { get; set; }
         public int totalPages { get; set; }
     }
 }
+
