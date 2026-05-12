@@ -47,8 +47,8 @@ public class HabitClient : BaseApiClient
 
     public RestResponse<HabitModel> CreateCustomHabit(HabitModel habit, string? imagePath = null)
     {
-        var request = new RestRequest("/custom", Method.Post);
-        request.AddHeader("Accept", "application/json");
+        var request = PrepareRequest($"{BaseUrl}/custom", Method.Post)
+            .AddHeader("Accept", "application/json");
 
         var options = new JsonSerializerOptions
         {
