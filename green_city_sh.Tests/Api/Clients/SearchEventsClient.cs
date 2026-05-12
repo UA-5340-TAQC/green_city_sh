@@ -29,7 +29,7 @@ public class SearchEventsClient
         return _client.Execute(request);
     }
 
-    public RestResponse SearchEventsWithoutAuth(string searchQuery)
+    public RestResponse SearchEventsUnauthorized(string searchQuery)
     {
         var request = new RestRequest("/search/events", Method.Get);
         request.AddQueryParameter("searchQuery", searchQuery);

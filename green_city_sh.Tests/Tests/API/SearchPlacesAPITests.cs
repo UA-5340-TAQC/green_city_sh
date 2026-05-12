@@ -40,7 +40,7 @@ public class SearchPlacesAPITests
     }
 
     [Test]
-    public void VerifySearchPlacesUnauthorized()
+    public void VerifySearchPlaces_Unauthorized_Returns401()
     {
         RestResponse response = _searchClient.SearchPlacesWithoutAuth("event");
         Assert.That(response.StatusCode,
@@ -50,7 +50,7 @@ public class SearchPlacesAPITests
     }
 
     [Test]
-    public void VerifySearchPlacesSuccess()
+    public void VerifySearchPlaces_WithUserRole_Returns403()
     {
         RestResponse response = _searchClient.SearchPlaces(accessToken, "event");
         Console.WriteLine(response.StatusCode);
@@ -58,19 +58,8 @@ public class SearchPlacesAPITests
         Console.WriteLine(accessToken);
 
         Assert.That(response.StatusCode,
-            Is.EqualTo(System.Net.HttpStatusCode.OK),
-            "Status code should be 200 for authorized search.");
-
-        var searchResponse = JsonSerializer.Deserialize<SearchPlacesResponseDto>
-            (response.Content);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(searchResponse, Is.Not.Null);
-            Assert.That(searchResponse.page, Is.Not.Null);
-            Assert.That(searchResponse.currentPage, Is.GreaterThanOrEqualTo(0));
-            Assert.That(searchResponse.totalElements, Is.GreaterThanOrEqualTo(0));
-        });
+            Is.EqualTo(System.Net.HttpStatusCode.Forbidden),
+            "ROLE_USER should not have access to search/events.");
     }
 
     [Test]

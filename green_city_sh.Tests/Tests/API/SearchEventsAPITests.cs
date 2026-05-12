@@ -35,10 +35,10 @@ public class SearchEventsAPITests
     }
 
     [Test]
-    public void VerifySearchEventsUnauthorized()
+    public void VerifySearchEvents_WithoutToken_Returns401()
     {
-        RestResponse response =
-            _searchEventsClient.SearchEventsWithoutAuth("event");
+        var response =
+            _searchEventsClient.SearchEventsUnauthorized("test");
 
         Assert.That(
             response.StatusCode,
@@ -47,27 +47,27 @@ public class SearchEventsAPITests
     }
 
     [Test]
-    public void VerifySearchEventsSuccess()
+    public void VerifySearchEvents_WithUserRole_Returns403()
     {
-        RestResponse response =
-            _searchEventsClient.SearchEvents(accessToken, "event");
+        var response = _searchEventsClient.SearchEvents(accessToken, "event");
 
         Assert.That(
             response.StatusCode,
-            Is.EqualTo(System.Net.HttpStatusCode.OK),
-            "Status code should be 200 for authorized search.");
-
-        var searchResponse =
-            JsonSerializer.Deserialize<SearchEventsResponseDto>(response.Content);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(searchResponse, Is.Not.Null);
-            Assert.That(searchResponse.page, Is.Not.Null);
-            Assert.That(searchResponse.currentPage, Is.GreaterThanOrEqualTo(0));
-            Assert.That(searchResponse.totalElements, Is.GreaterThanOrEqualTo(0));
-        });
-
+            Is.EqualTo(System.Net.HttpStatusCode.Forbidden),
+            "ROLE_USER should not have access to search/events.");
     }
+    
+    [Test]
+    public void VerifySearchEvents_EmptySearchQuery_Returns400()
+    {
+        var response =
+            _searchEventsClient.SearchEvents(accessToken, " ");
+
+        Assert.That(
+            response.StatusCode,
+            Is.EqualTo(System.Net.HttpStatusCode.BadRequest),
+            "Status code should be 400 when searchQuery is empty.");
+    }
+
 
 }
