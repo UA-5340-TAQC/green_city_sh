@@ -19,7 +19,6 @@ namespace green_city_sh.Tests.Tests.API
     {
         private EventCommentClient unauthorizedClient;
         private EventCommentClient authorizedClient;
-        private int createdCommentId;
 
         public static string ApiBaseUrl => Configuration.ApiGreenCityBaseUrl;
         private const int TestEventId = 50;
@@ -28,7 +27,6 @@ namespace green_city_sh.Tests.Tests.API
         public void OneTimeSetup()
         {
             unauthorizedClient = new EventCommentClient(ApiBaseUrl);
-
             var authClient = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
 
             var credentials = new SignInModal
@@ -51,7 +49,7 @@ namespace green_city_sh.Tests.Tests.API
             authorizedClient = new EventCommentClient(ApiBaseUrl, validToken);
         }
 
-        [Test, Order(1)]
+        [Test]
         [AllureDescription("Verify that comments returns successfully")]
         public void GetEventComments()
         {
@@ -61,7 +59,7 @@ namespace green_city_sh.Tests.Tests.API
             Assert.That(response.Content, Is.Not.Null);
         }
 
-        [Test, Order(2)]
+        [Test]
         [AllureDescription("Verify that authorized user can add comment to event")]
         public void AddCommentAuthorizedUser()
         {
@@ -71,46 +69,90 @@ namespace green_city_sh.Tests.Tests.API
                 parentCommentId = 0
             };
 
-            var response = authorizedClient.AddComment(TestEventId, payload);
+            int newCommentId = 0;
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created), $"Server returned {response.StatusCode}");
+            try
+            {
+                var response = authorizedClient.AddComment(TestEventId, payload);
 
-            var responseData = JsonSerializer.Deserialize<AddCommentResponse>(response.Content);
-            Assert.That(responseData, Is.Not.Null, "Deserialized response data is null. Cannot extract comment ID.");
-            createdCommentId = responseData.id;
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created), $"Server returned {response.StatusCode}");
+
+                var responseData = JsonSerializer.Deserialize<AddCommentResponse>(response.Content);
+                Assert.That(responseData, Is.Not.Null, "Deserialized response data is null. Cannot extract comment ID.");
+
+                newCommentId = responseData.id;
+            }
+            finally
+            {
+
+                if (newCommentId > 0)
+                {
+                    authorizedClient.DeleteComment(newCommentId);
+                }
+            }
         }
 
-        [Test, Order(3)]
+        [Test]
         [AllureDescription("Verify that authorized user can't like their own comment")]
         public void UnableLikeCommentAuthorizedUser()
         {
-            Assert.That(createdCommentId, Is.GreaterThan(0), "Cannot like: Comment ID was not captured in the POST test.");
+            int commentId = CreateIsolatedTestComment("Comment for Like test");
 
-            var response = authorizedClient.LikeComment(createdCommentId);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest),
-            $"Expected server to reject the like, but got {response.StatusCode}. Content: {response.Content}");
+            try
+            {
+                var response = authorizedClient.LikeComment(commentId);
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest),
+                    $"Expected server to reject the like, but got {response.StatusCode}. Content: {response.Content}");
+            }
+            finally
+            {
+                authorizedClient.DeleteComment(commentId);
+            }
         }
 
-        [Test, Order(4)]
+        [Test]
         [AllureDescription("Verify that authorized user can update their comment")]
         public void UpdateCommentAuthorizedUser()
         {
-            Assert.That(createdCommentId, Is.GreaterThan(0), "Cannot update: Comment ID was not captured in the POST test.");
-
+            int commentId = CreateIsolatedTestComment("Original comment text");
             string updatedText = "This comment was updated by automated API test!";
-            var response = authorizedClient.UpdateComment(createdCommentId, updatedText);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
-                $"Server returned {response.StatusCode}. Details: {response.Content}");
+
+            try
+            {
+                var response = authorizedClient.UpdateComment(commentId, updatedText);
+
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),
+                    $"Server returned {response.StatusCode}. Details: {response.Content}");
+            }
+            finally
+            {
+                authorizedClient.DeleteComment(commentId);
+            }
         }
 
-        [Test, Order(5)]
+        [Test]
         [AllureDescription("Verify that authorized user can delete their comment")]
         public void DeleteCommentAuthorizedUser()
         {
-            Assert.That(createdCommentId, Is.GreaterThan(0), "Cannot delete: Comment ID was not captured in the POST test.");
+            int commentId = CreateIsolatedTestComment("Comment to be deleted");
 
-            var response = authorizedClient.DeleteComment(createdCommentId);
+            var response = authorizedClient.DeleteComment(commentId);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        }
+
+        private int CreateIsolatedTestComment(string text)
+        {
+            var payload = new AddCommentRequest { text = text, parentCommentId = 0 };
+            var response = authorizedClient.AddComment(TestEventId, payload);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created),
+                $"Pre-condition failed: Could not create test comment. Status: {response.StatusCode}");
+
+            var responseData = JsonSerializer.Deserialize<AddCommentResponse>(response.Content);
+            Assert.That(responseData, Is.Not.Null,
+                "Pre-condition failed: Deserialized response data is null.");
+
+            return responseData.id;
         }
     }
 }
