@@ -12,8 +12,8 @@ public class HabitClient : BaseApiClient
     public HabitClient(string baseUrl, string? authToken = null) : base(baseUrl, authToken)
     {
     }
-    
-    public RestResponse<HabitFavorites> GetFavoriteHabits( int page = 0 ,int size = 20, string? lang = null)
+
+    public RestResponse<HabitFavorites> GetFavoriteHabits(int page = 0, int size = 20, string? lang = null)
     {
         var request = PrepareRequest($"{BaseUrl}/favorites", Method.Get).AddParameter("lang", lang).AddParameter("page", page).AddParameter("size", size)
             .AddHeader("Accept", "application/json");
@@ -26,7 +26,7 @@ public class HabitClient : BaseApiClient
         var request = PrepareRequest($"{BaseUrl}{UriId}/favorites", Method.Post)
             .AddUrlSegment("id", id).AddHeader("Accept", "application/json");
         return Client.Execute(request);
-        
+
     }
 
     public RestResponse RemoveHabitFromFavorite(long id)
@@ -35,24 +35,24 @@ public class HabitClient : BaseApiClient
             .AddUrlSegment("id", id).AddHeader("Accept", "application/json");
         return Client.Execute(request);
     }
-    
-    public RestResponse<HabitFavorites> GetHabits (int page = 0 ,int size = 20, string? lang = null)
+
+    public RestResponse<HabitFavorites> GetHabits(int page = 0, int size = 20, string? lang = null)
     {
-        var request=PrepareRequest($"{BaseUrl}", Method.Get)
+        var request = PrepareRequest($"{BaseUrl}", Method.Get)
             .AddParameter("lang", lang).AddParameter("page", page).AddParameter("size", size)
             .AddHeader("Accept", "application/json");
         var response = Client.Execute<HabitFavorites>(request);
         return response;
     }
-    
+
     public RestResponse<HabitModel> CreateCustomHabit(HabitModel habit, string? imagePath = null)
     {
         var request = new RestRequest("/custom", Method.Post);
         request.AddHeader("Accept", "application/json");
 
-        var options = new JsonSerializerOptions 
-        { 
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase 
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
         string json = JsonSerializer.Serialize(habit, options);
         request.AddFile("request", System.Text.Encoding.UTF8.GetBytes(json), "data.json", "application/json");
@@ -68,7 +68,7 @@ public class HabitClient : BaseApiClient
 
         return Client.Execute<HabitModel>(request);
     }
-    
+
     public RestResponse DeleteHabit(long id)
     {
         var request = PrepareRequest($"{BaseUrl}/delete/{UriId}", Method.Delete)

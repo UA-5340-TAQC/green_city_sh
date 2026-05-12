@@ -10,12 +10,12 @@ public class HabitModel
     public List<CustomToDoListItem> CustomToDoListItemDto { get; set; } = new();
     public List<int> TagIds { get; set; } = new();
     public List<object> FriendsToInvite { get; set; } = new();
-    public string? Image { get; set; } = ""; 
+    public string? Image { get; set; } = "";
 }
 
 public class CustomToDoListItem
 {
-    public long? Id { get; set; } 
+    public long? Id { get; set; }
     public string Text { get; set; } = string.Empty;
     public string? Status { get; set; }
 }
