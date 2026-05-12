@@ -3,7 +3,7 @@ using green_city_sh.Tests.Api.DTO;
 using System.Text.Json;
 using System.Text;
 
-namespace green_city_sh.Tests.Api.Clients
+namespace green_city_sh.Tests.Api.Clients.Greencity
 {
     public class EventCommentClient : BaseApiClient
     {

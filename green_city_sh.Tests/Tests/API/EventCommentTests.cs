@@ -3,11 +3,11 @@ using RestSharp;
 using System.Net;
 using System.Text.Json;
 using System;
-using green_city_sh.Tests.Api.Clients;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Api.Clients.Greencity;
 
 namespace green_city_sh.Tests.Tests.API
 {
