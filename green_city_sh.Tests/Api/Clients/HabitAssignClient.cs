@@ -2,12 +2,11 @@
 
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
-using green_city_sh.Tests.Infrastructure;
 using RestSharp;
 using System.Net;
 using System.Text.Json;
 
-namespace green_city_sh.Tests.Api.Clients.GreencityUser
+namespace green_city_sh.Tests.Api.Clients
 {
     /// <summary>
     /// Client for HabitAssign API endpoints
