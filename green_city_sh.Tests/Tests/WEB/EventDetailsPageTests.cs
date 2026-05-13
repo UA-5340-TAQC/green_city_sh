@@ -10,7 +10,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Petro Derlytsia")]
 [AllureFeature("Event Details")]
-public class EventDetailsPageTests : BaseTest
+public class EventDetailsPageTests : BaseUITest
 {
     protected override void OnSetup()
     {

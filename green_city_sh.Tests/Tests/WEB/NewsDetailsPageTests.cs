@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
@@ -11,7 +11,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Dmytro Syadro")]
 [AllureFeature("News Details")]
-public class NewsDetailsPageTests : BaseTest
+public class NewsDetailsPageTests : BaseUITest
 {
     private NewsDetailsPage? newsDetailsPage;
     private HomePage? homePage;

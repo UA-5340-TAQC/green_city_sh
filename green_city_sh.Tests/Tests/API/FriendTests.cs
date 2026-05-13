@@ -1,0 +1,115 @@
+using System;
+using System.Net;
+using System.Text.Json;
+using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Api.Clients.GreencityUser;
+using green_city_sh.Tests.Api.DTO;
+using green_city_sh.Tests.Infrastructure;
+using NUnit.Framework;
+using RestSharp;
+
+namespace green_city_sh.Tests.Tests.API
+{
+    [AllureSubSuite("Friend API Tests")]
+    public class FriendTests : BaseAPITest
+    {
+        private FriendClient authorizedClient;
+
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+            var authClient = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
+
+            var credentials = new SignInModal
+            {
+                email = Configuration.TestEmail,
+                password = Configuration.TestPassword
+            };
+
+            RestResponse loginResponse = authClient.SignIn(credentials);
+
+            Assert.That(loginResponse.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK), "Status code should be 200 for successful sign in.");
+
+            AuthResponce authData =
+                JsonSerializer.Deserialize<AuthResponce>(loginResponse.Content!)!;
+
+            Assert.That(authData, Is.Not.Null, "Failed to deserialize AuthResponce.");
+            Assert.That(authData.accessToken, Is.Not.Null.And.Not.Empty, "Access token is empty.");
+
+            string validToken = authData.accessToken;
+
+            authorizedClient = new FriendClient(
+                Configuration.ApiGreenCityBaseUrl,
+                validToken
+                );
+        }
+
+        [Test]
+        [AllureDescription("Verify that authorized user can get friends list")]
+        public void VerifyGetFriends()
+        {
+            RestResponse response = authorizedClient.GetFriends();
+
+            Assert.That(
+                response.StatusCode,
+                Is.EqualTo(HttpStatusCode.OK),
+                $"Server returned {response.StatusCode}. Details: {response.Content}");
+
+            Assert.That(response.Content, Is.Not.Null.And.Not.Empty);
+
+            FriendsPageResponse friendsResponse =
+                JsonSerializer.Deserialize<FriendsPageResponse>(response.Content!)!;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(friendsResponse, Is.Not.Null, "Friends response should not be null");
+                Assert.That(friendsResponse.page, Is.Not.Null, "Page should not be null");
+                Assert.That(friendsResponse.totalElements, Is.GreaterThanOrEqualTo(0), "Total elements should be greater than or equal to 0");
+                Assert.That(friendsResponse.currentPage, Is.EqualTo(0), "Current page should be 0");
+                Assert.That(friendsResponse.totalPages, Is.GreaterThanOrEqualTo(0), "Total pages should be greater than or equal to 0");
+            });
+        }
+
+        [Test]
+        [AllureDescription("Verify that user cannot add already existing friend")]
+        public void VerifyCannotAddAlreadyExistingFriend()
+        {
+            long existingFriendId = 1713;
+
+            RestResponse response = authorizedClient.AddFriend(existingFriendId);
+
+            Assert.That(
+                response.StatusCode,
+                Is.EqualTo(HttpStatusCode.BadRequest),
+                $"Server returned {response.StatusCode}. Details: {response.Content}");
+
+            Assert.That(
+                response.Content,
+                Does.Contain("Friend with this id has already been added"));
+        }
+
+        [Test]
+        [AllureDescription("Verify that authorized user can add friend")]
+        public void VerifyAddFriend()
+        {
+            long friendId = 455;
+
+            authorizedClient.CancelFriendRequest(friendId);
+
+            authorizedClient.DeleteFriend(friendId);
+
+            RestResponse addResponse =
+                authorizedClient.AddFriend(friendId);
+
+            Assert.That(
+                addResponse.StatusCode,
+                Is.EqualTo(HttpStatusCode.OK),
+                $"Add friend failed. Server returned {addResponse.StatusCode}. Details: {addResponse.Content}");
+
+
+            authorizedClient.CancelFriendRequest(friendId);
+            authorizedClient.DeleteFriend(friendId);
+        }
+
+    }
+}
