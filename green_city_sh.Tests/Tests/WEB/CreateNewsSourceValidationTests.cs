@@ -1,21 +1,19 @@
-using System;
-using NUnit.Framework;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Components;
+using green_city_sh.Tests.Infrastructure;
+using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
-using green_city_sh.Tests.Infrastructure;
-using green_city_sh.Tests.Pages;
-using green_city_sh.Tests.Components;
 
-namespace green_city_sh.Tests.Tests;
+namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
-[AllureFeature("Create News")]
-public class CreateNewsSourceValidationTests : BaseTest
+[AllureSubSuite("Create News")]
+public class CreateNewsSourceValidationTests : BaseUITest
 {
     // --- Test Data ---
     private const string TestTitleBase = "TC-043 Unique News Title";

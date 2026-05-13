@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
@@ -239,7 +236,9 @@ public class NewsDetailsPage : BasePage
 
     [AllureStep("Check if Edited Label Displayed")]
     public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed(); [AllureStep("Get Date Text")]
+
     public string GetDateText() => NewsInfo.GetDateText(); [AllureStep("Check if View Reply Button Displayed")]
+
     public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed();
 
     [AllureStep("Check if Hide Reply Button Displayed")]
@@ -253,11 +252,13 @@ public class NewsDetailsPage : BasePage
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitle)).Text.Trim();
     }
+
     [AllureStep("Check if Source Link is Displayed")]
     public bool IsSourceLinkDisplayed()
     {
         return driver.FindElements(SourceLinkLocator).Count > 0;
     }
+
     [AllureStep("Check if Image is Displayed")]
     public bool IsImageDisplayed()
     {
@@ -270,12 +271,6 @@ public class NewsDetailsPage : BasePage
         {
             return false;
         }
-    }
-
-    [AllureStep("Check if Source Link is Displayed")]
-    public bool IsSourceLinkDisplayed()
-    {
-        return driver.FindElements(SourceLinkLocator).Count > 0;
     }
 
     [AllureStep("Click Delete News Button")]
