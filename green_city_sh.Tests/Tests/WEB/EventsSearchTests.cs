@@ -7,7 +7,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
-public class EventsSearchTests : BaseTest
+public class EventsSearchTests : BaseUITest
 {
     private EventsPage? eventsPage;
 

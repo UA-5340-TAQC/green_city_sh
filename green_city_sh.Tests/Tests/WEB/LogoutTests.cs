@@ -7,7 +7,7 @@ using Allure.NUnit.Attributes;
 namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
-public class LogoutTests : BaseTest
+public class LogoutTests : BaseUITest
 {
     private HomePage? _homePage;
 

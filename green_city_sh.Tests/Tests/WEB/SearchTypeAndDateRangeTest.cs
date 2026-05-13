@@ -7,7 +7,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
-public class SearchTypeAndDateRangeTest : BaseTest
+public class SearchTypeAndDateRangeTest : BaseUITest
 {
     private EventsPage eventsPage = null!;
 

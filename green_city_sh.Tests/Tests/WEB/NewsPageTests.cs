@@ -11,7 +11,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [AllureSubSuite("NewsPage")]
 [AllureTag("Smoke")]
 [AllureFeature("News Filtering", "News Search")]
-public class NewsPageTests : BaseTest
+public class NewsPageTests : BaseUITest
 {
     private NewsPage? newsPage;
     private HeaderComponent? header;
