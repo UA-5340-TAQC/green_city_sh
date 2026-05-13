@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;

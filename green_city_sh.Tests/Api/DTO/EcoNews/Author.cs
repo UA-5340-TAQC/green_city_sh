@@ -1,4 +1,4 @@
-﻿namespace green_city_sh.Tests.Api.DTO.EcoNews;
+namespace green_city_sh.Tests.Api.DTO.EcoNews;
 
 public class Author
 {

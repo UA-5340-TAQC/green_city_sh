@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;

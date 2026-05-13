@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using green_city_sh.Tests.Api.DTO.EcoNews;
 using RestSharp;
 
