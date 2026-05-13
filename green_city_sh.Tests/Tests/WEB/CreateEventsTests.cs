@@ -7,7 +7,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
-public class CreateEventsTests : BaseTest
+public class CreateEventsTests : BaseUITest
 {
     // --- Auth Data ---
     private static string GetRequiredEnv(string key)

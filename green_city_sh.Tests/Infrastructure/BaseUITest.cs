@@ -7,7 +7,8 @@ namespace green_city_sh.Tests.Infrastructure
 {
     [TestFixture]
     [Allure.NUnit.AllureNUnit]
-    public abstract class BaseTest
+    [AllureSuite("UI Tests")]
+    public abstract class BaseUITest
     {
         protected IWebDriver? Driver { get; private set; }
         protected string BaseUrl { get; set; } = Configuration.BaseUrl;
