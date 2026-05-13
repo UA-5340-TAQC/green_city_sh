@@ -14,7 +14,7 @@ namespace green_city_sh.Tests.Tests;
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
 [AllureFeature("Create News")]
-public class CreateNewsImageUploadTests : BaseTest
+public class CreateNewsImageUploadTests : BaseUITest
 {
     private const string InvalidFileName = "invalidFile.pdf";
     private const string ValidFileName = "validImage.jpg";
