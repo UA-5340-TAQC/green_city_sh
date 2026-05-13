@@ -1,7 +1,9 @@
+using System;
+
 namespace green_city_sh.Tests.Api.DTO
 {
     public class AddCommentResponse
     {
-        public int id { get; set; }
+        public int id { get; set; } = default;
     }
 }
