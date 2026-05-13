@@ -1,4 +1,6 @@
-﻿using Allure.Net.Commons;
+﻿// Tests/API/HabitAssign/HabitAssignActivityTests.cs
+
+using Allure.Net.Commons;
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
@@ -10,6 +12,10 @@ using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API.HabitAssign
 {
+    /// <summary>
+    /// API tests for Habit Assign Activity controller
+    /// Verifies functionality of getting user activities between dates
+    /// </summary>
     [TestFixture]
     [AllureNUnit]
     [AllureSuite("HabitAssign Activity API Tests")]
@@ -23,6 +29,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
         private string _fromDate;
         private string _toDate;
 
+        /// <summary>Sets up test environment, authenticates user and retrieves activities for last 30 days</summary>
         [SetUp]
         [AllureBefore("Setup: Authenticate and get activities between dates")]
         public void SetUp()
@@ -48,6 +55,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
             (_responseStatusCode, _activities) = client.GetUserActivitiesWithData(_fromDate, _toDate);
         }
 
+        /// <summary>Verifies that authenticated user receives HTTP 200 OK response for activities endpoint</summary>
         [Test]
         [AllureStory("Get user activities between dates")]
         [AllureSeverity(SeverityLevel.critical)]
@@ -59,6 +67,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
                 $"API should return 200 OK. Actual: {_responseStatusCode}");
         }
 
+        /// <summary>Verifies that activities response contains non-empty list</summary>
         [Test]
         [AllureStory("Get user activities between dates")]
         [AllureSeverity(SeverityLevel.critical)]
@@ -73,6 +82,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
             });
         }
 
+        /// <summary>Verifies that all activities have valid dates within requested range</summary>
         [Test]
         [AllureStory("Validate activities date range")]
         [AllureSeverity(SeverityLevel.normal)]
@@ -94,6 +104,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
                 $"All enroll dates should be between {_fromDate} and {_toDate}. Invalid dates: {string.Join(", ", invalidDates.Select(i => i.EnrollDate))}");
         }
 
+        /// <summary>Verifies that activities are ordered by date ascending</summary>
         [Test]
         [AllureStory("Get user activities between dates")]
         [AllureSeverity(SeverityLevel.normal)]

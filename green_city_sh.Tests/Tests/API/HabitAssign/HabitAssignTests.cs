@@ -1,4 +1,6 @@
-﻿using Allure.Net.Commons;
+﻿// Tests/API/HabitAssign/HabitAssignTests.cs
+
+using Allure.Net.Commons;
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
@@ -10,6 +12,10 @@ using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API.HabitAssign
 {
+    /// <summary>
+    /// API tests for Habit Assign controller
+    /// Verifies functionality of getting assigned habits for current user
+    /// </summary>
     [TestFixture]
     [AllureNUnit]
     [AllureSuite("HabitAssign API Tests")]
@@ -21,6 +27,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
         private List<GetAllAssignedHabitsResponse> _habits;
         private HttpStatusCode _responseStatusCode;
 
+        /// <summary>Sets up test environment, authenticates user and retrieves assigned habits</summary>
         [SetUp]
         [AllureBefore("Setup: Authenticate and get assigned habits")]
         public void SetUp()
@@ -42,6 +49,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
             (_responseStatusCode, _habits) = client.GetAllAssignedHabitsWithData("En");
         }
 
+        /// <summary>Verifies that authenticated user receives HTTP 200 OK response</summary>
         [Test]
         [AllureStory("Get assigned habits for current user")]
         [AllureSeverity(SeverityLevel.critical)]
@@ -52,6 +60,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
             Assert.That(_responseStatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
+        /// <summary>Verifies that all assigned habits have status INPROGRESS or ACQUIRED</summary>
         [Test]
         [AllureStory("Validate habit statuses")]
         [AllureSeverity(SeverityLevel.normal)]
@@ -64,6 +73,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
                 Is.True, $"Found statuses: {string.Join(", ", _habits.Select(h => h.Status))}");
         }
 
+        /// <summary>Verifies that CreateDateTime and LastEnrollmentDate are not empty</summary>
         [Test]
         [AllureStory("Validate date fields")]
         [AllureSeverity(SeverityLevel.minor)]
@@ -75,6 +85,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
             Assert.That(_habits.All(h => !string.IsNullOrEmpty(h.LastEnrollmentDate)), Is.True, "LastEnrollmentDate should not be empty");
         }
 
+        /// <summary>Verifies that CreateDateTime is not greater than LastEnrollmentDate</summary>
         [Test]
         [AllureStory("Validate date fields")]
         [AllureSeverity(SeverityLevel.normal)]
