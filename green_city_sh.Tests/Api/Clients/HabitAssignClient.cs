@@ -1,6 +1,7 @@
 ﻿// Api/Clients/GreencityUser/HabitAssignClient.cs
 
 using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Api.Clients;
 using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
 using RestSharp;
 using System.Net;
