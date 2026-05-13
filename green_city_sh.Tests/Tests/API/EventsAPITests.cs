@@ -1,20 +1,17 @@
-using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Api.Clients;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.Events;
 using green_city_sh.Tests.Infrastructure;
-using RestSharp;
 using System.Net;
 using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
 [TestFixture]
-[Allure.NUnit.AllureNUnit]
 [Parallelizable(ParallelScope.Self)]
-public class EventsAPITests
+public class EventsAPITests : BaseAPITest
 {
     private OwnSecurityClient _authClient;
     private EventsClient _eventsClient;
