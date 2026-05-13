@@ -34,7 +34,6 @@ public class EventDetailsPageTests : BaseUITest
     [Category("Regression")]
     [AllureIssue("2")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "E2E")]
     public void VerifySavingEventAndViewingInBookmarks()
@@ -78,7 +77,6 @@ public class EventDetailsPageTests : BaseUITest
     [Category("Regression")]
     [AllureIssue("3")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "Comment")]
     public void VerifyCommentSubmissionWithImageOnly()
@@ -105,7 +103,6 @@ public class EventDetailsPageTests : BaseUITest
     [Category("Regression")]
     [AllureIssue("4")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "E2E")]
     public void VerifyCancelJoiningEvent()

@@ -11,7 +11,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
-[AllureFeature("Create News")]
+[AllureSubSuite("Create News")]
 public class CreateNewsImageUploadTests : BaseUITest
 {
     private const string InvalidFileName = "invalidFile.pdf";
@@ -43,8 +43,7 @@ public class CreateNewsImageUploadTests : BaseUITest
 
     [Test]
     [AllureDescription("Validate image upload format (only PNG/JPG allowed)")]
-    [AllureSuite("GreenCity")]
-    [AllureSubSuite("News")]
+    [AllureFeature("News")]
     [AllureTag("UI", "Functional", "Validation")]
     [AllureIssue("TC-044")]
     [AllureSeverity(SeverityLevel.critical)]

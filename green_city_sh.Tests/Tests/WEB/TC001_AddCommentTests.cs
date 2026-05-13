@@ -1,17 +1,16 @@
+using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Antonina Smetanina")]
-[AllureSuite("Comments")]
+[AllureSubSuite("Comments")]
 [AllureFeature("Add comment")]
 [AllureIssue("1")]
-[AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
 public class TC001_AddCommentTests : BaseUITest
 {

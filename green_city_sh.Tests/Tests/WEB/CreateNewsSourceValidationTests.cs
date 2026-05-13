@@ -47,7 +47,6 @@ public class CreateNewsSourceValidationTests : BaseUITest
     [Test]
     [Category("News")]
     [AllureDescription("Validate correct URL format (with http/https)")]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("News")]
     [AllureTag("UI", "Functional", "Validation")]
     [AllureIssue("TC-043")]
