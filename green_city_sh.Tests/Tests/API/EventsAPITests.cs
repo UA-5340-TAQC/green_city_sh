@@ -1,4 +1,4 @@
-﻿using Allure.NUnit;
+using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Api.Clients;
 using green_city_sh.Tests.Api.Clients.GreencityUser;

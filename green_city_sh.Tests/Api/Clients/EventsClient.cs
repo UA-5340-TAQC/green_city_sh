@@ -1,4 +1,4 @@
-﻿using green_city_sh.Tests.Api.DTO.Events;
+using green_city_sh.Tests.Api.DTO.Events;
 using green_city_sh.Tests.Infrastructure;
 using RestSharp;
 using System.Text;

@@ -1,4 +1,4 @@
-﻿namespace green_city_sh.Tests.Api.DTO.Events;
+namespace green_city_sh.Tests.Api.DTO.Events;
 
 public class EventItem
 {
