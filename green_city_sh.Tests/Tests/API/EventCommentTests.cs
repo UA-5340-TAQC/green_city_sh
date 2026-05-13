@@ -13,9 +13,8 @@ namespace green_city_sh.Tests.Tests.API
 {
     [TestFixture]
     [Parallelizable(ParallelScope.Self)]
-    [Allure.NUnit.AllureNUnit]
-    [AllureFeature("Event Comments API Tests")]
-    public class EventCommentApiTests
+    [AllureSubSuite("Event Comments API Tests")]
+    public class EventCommentApiTests: BaseAPITest
     {
         private EventCommentClient unauthorizedClient;
         private EventCommentClient authorizedClient;
