@@ -7,7 +7,6 @@ namespace green_city_sh.Tests.Api.Clients;
 public class EcoNewsCommentClient : BaseApiClient
 {
     protected override string BaseUrl => $"{base._baseUrl}/eco-news";
-    private const string UriId = "/{id}";
 
     public EcoNewsCommentClient(string baseUrl, string? authToken = null) : base(baseUrl, authToken)
     {
@@ -16,10 +15,10 @@ public class EcoNewsCommentClient : BaseApiClient
     public RestResponse AddComment(long ecoNewsId, AddCommentRequest commentDto, string imagePath = null)
     {
         var request = PrepareRequest($"{ecoNewsId}/comments", Method.Post);
-        
+
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var json = JsonSerializer.Serialize(commentDto, options);
-        
+
         request.AddFile("request", System.Text.Encoding.UTF8.GetBytes(json), "request.json", "application/json");
 
         if (imagePath != null)
@@ -39,9 +38,9 @@ public class EcoNewsCommentClient : BaseApiClient
     public RestResponse UpdateComment(long id, string newText)
     {
         var request = PrepareRequest($"comments?commentId={id}", Method.Patch);
-        
+
         request.AddStringBody(newText, DataFormat.None);
-        
+
         return Client.Execute(request);
     }
 
