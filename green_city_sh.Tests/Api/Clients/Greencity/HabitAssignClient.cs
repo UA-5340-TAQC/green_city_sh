@@ -6,7 +6,7 @@ using RestSharp;
 using System.Net;
 using System.Text.Json;
 
-namespace green_city_sh.Tests.Api.Clients
+namespace green_city_sh.Tests.Api.Clients.Greencity
 {
     /// <summary>
     /// Client for HabitAssign API endpoints

@@ -9,7 +9,7 @@ using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
 using green_city_sh.Tests.Infrastructure;
 using System.Net;
 using System.Text.Json;
-using green_city_sh.Tests.Api.Clients;
+using green_city_sh.Tests.Api.Clients.Greencity;
 
 namespace green_city_sh.Tests.Tests.API.HabitAssign
 {
