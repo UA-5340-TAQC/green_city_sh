@@ -27,6 +27,7 @@ public class NewsDetailsPage : BasePage
     private By DeleteNewsButton => By.CssSelector(".edit-delete-block .delete-news-button");
     private By DeleteConfirmYesButton => By.CssSelector("app-dialog-pop-up .primary-global-button");
     private By SourceLinkLocator => By.CssSelector(".source-text");
+    private By ImageLocator => By.CssSelector("img.news-image-img");
 
     public NewsDetailsPage(IWebDriver driver) : base(driver)
     {
@@ -64,20 +65,18 @@ public class NewsDetailsPage : BasePage
         return this;
     }
 
-    [AllureStep("Delete Comment")]
+    [AllureStep("Delete Comment: '{text}'")]
     public NewsDetailsPage DeleteComment(string text)
     {
         Comment.ClickDeleteCommentBtn(text);
         return this;
     }
-
     [AllureStep("Click Cancel Delete")]
     public NewsDetailsPage ClickCancelDelete()
     {
         DeleteCommentModal.ClickCancelDeleteBtn();
         return this;
     }
-
     [AllureStep("Reply to Comment: '{text}'")]
     public NewsDetailsPage ReplyComment(string text)
     {
@@ -108,7 +107,6 @@ public class NewsDetailsPage : BasePage
         Comment.ClickHideRepliesBtn();
         return this;
     }
-
     [AllureStep("Get Comments")]
     public IList<CommentComponent> GetComments()
     {
@@ -122,7 +120,6 @@ public class NewsDetailsPage : BasePage
 
         return comments;
     }
-
     [AllureStep("Get Replies")]
     public IList<CommentComponent> GetReplies()
     {
@@ -149,7 +146,6 @@ public class NewsDetailsPage : BasePage
 
         return allReplies;
     }
-
     [AllureStep("Get All Comments With Replies")]
     public IList<CommentComponent> GetAllCommentsWithReplies()
     {
@@ -199,7 +195,6 @@ public class NewsDetailsPage : BasePage
 
         return value;
     }
-
     [AllureStep("Wait for comment counter to change from: {previousValue}")]
     public int WaitForCommentCounterToChange(int previousValue)
     {
@@ -253,12 +248,28 @@ public class NewsDetailsPage : BasePage
     [AllureStep("Get Reply Button Attribute")]
     public string GetAttributeReplyButton() => Comment.GetReplyButtonAttribute();
 
-    // --- News Postcondition & Extraction Methods ---
-
-    [AllureStep("Get News Title Text")]
+    // --- News Postcondition & Extraction Methods ---[AllureStep("Get News Title Text")]
     public string GetNewsTitleText()
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitle)).Text.Trim();
+    }
+    [AllureStep("Check if Source Link is Displayed")]
+    public bool IsSourceLinkDisplayed()
+    {
+        return driver.FindElements(SourceLinkLocator).Count > 0;
+    }
+    [AllureStep("Check if Image is Displayed")]
+    public bool IsImageDisplayed()
+    {
+        try
+        {
+            var image = wait.Until(ExpectedConditions.ElementIsVisible(ImageLocator));
+            return image.Displayed;
+        }
+        catch (WebDriverTimeoutException)
+        {
+            return false;
+        }
     }
 
     [AllureStep("Check if Source Link is Displayed")]
@@ -273,7 +284,6 @@ public class NewsDetailsPage : BasePage
         wait.Until(ExpectedConditions.ElementToBeClickable(DeleteNewsButton)).Click();
         return this;
     }
-
     [AllureStep("Confirm Deletion")]
     public void ConfirmDeletion()
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenQA.Selenium;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
@@ -67,12 +67,17 @@ public class CreateNewsPage : BasePage
         NewsForm.ClearAndBlurSourceField();
     }
 
+    public void ClearAndBlurSourceField()
+    {
+        NewsForm.ClearAndBlurSourceField();
+    }
+
     public void EnterContent(string text)
     {
         NewsForm.EnterContent(text);
     }
 
-    public void UploadImage(string filePath)
+    public void UploadImage(string fileName)
     {
         NewsForm.UploadImage(filePath);
     }
@@ -135,5 +140,20 @@ public class CreateNewsPage : BasePage
     public string GetAuthor()
     {
         return NewsForm.GetAuthor();
+    }
+
+    public bool IsImagePreviewDisplayed()
+    {
+        return NewsForm.IsImagePreviewDisplayed();
+    }
+
+    public string GetImageUploadWarningMessage()
+    {
+        return NewsForm.GetImageUploadWarningMessage();
+    }
+
+    public void SubmitImageCrop()
+    {
+        NewsForm.ImageUpload.ClickSubmit();
     }
 }

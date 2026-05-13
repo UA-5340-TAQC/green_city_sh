@@ -13,7 +13,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [AllureIssue("1")]
 [AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
-public class TC001_AddCommentTests : BaseTest
+public class TC001_AddCommentTests : BaseUITest
 {
     private const string CommentText = "Cool!";
 

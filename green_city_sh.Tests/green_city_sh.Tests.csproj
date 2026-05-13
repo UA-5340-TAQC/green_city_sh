@@ -41,14 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestData\test_image.jpg">
+    <None Update="TestData\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Api\Clients\Greencity\" />
-    <Folder Include="Api\DTO\" />
   </ItemGroup>
 
 </Project>

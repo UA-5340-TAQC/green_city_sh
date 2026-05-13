@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using SeleniumExtras.WaitHelpers;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
@@ -79,7 +79,6 @@ public class NewsFormComponent : BaseComponent
         element.Click();
         element.SendKeys(Keys.Tab);
     }
-
     [AllureStep("Select Tags")]
     public void SelectTags(params string[] tags)
     {
@@ -102,7 +101,6 @@ public class NewsFormComponent : BaseComponent
     {
         wait.Until(ExpectedConditions.ElementToBeClickable(SourceInput)).Click();
     }
-
     [AllureStep("Clear and Blur Source Field")]
     public void ClearAndBlurSourceField()
     {
@@ -112,19 +110,17 @@ public class NewsFormComponent : BaseComponent
         element.SendKeys(Keys.Backspace);
         element.SendKeys(Keys.Tab);
     }
-
     [AllureStep("Enter Content")]
     public void EnterContent(string text)
     {
         RichTextEditor.SetText(text);
     }
 
-    [AllureStep("Upload Image")]
-    public void UploadImage(string filePath)
+    [AllureStep("Upload Image: '{fileName}'")]
+    public void UploadImage(string fileName)
     {
-        ImageUpload.Upload(filePath);
+        ImageUpload.UploadImage(fileName);
     }
-
     [AllureStep("Click Publish")]
     public void ClickPublish()
     {
@@ -174,7 +170,6 @@ public class NewsFormComponent : BaseComponent
         var classAttr = element.GetAttribute("class") ?? string.Empty;
         return !classAttr.Contains("ng-invalid") && !classAttr.Contains("field-warning");
     }
-
     [AllureStep("Check if Publish Button is Enabled")]
     public bool IsPublishButtonEnabled()
     {
@@ -211,10 +206,21 @@ public class NewsFormComponent : BaseComponent
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitleTextarea)).GetAttribute("value") ?? string.Empty;
     }
-
     [AllureStep("Wait For URL To Contain: '{substring}'")]
     public void WaitForUrlToContain(string substring)
     {
         wait.Until(ExpectedConditions.UrlContains(substring));
+    }
+
+    [AllureStep("Check if Image Preview is Displayed")]
+    public bool IsImagePreviewDisplayed()
+    {
+        return ImageUpload.IsImagePreviewDisplayed();
+    }
+
+    [AllureStep("Get Image Upload Warning Message")]
+    public string GetImageUploadWarningMessage()
+    {
+        return ImageUpload.GetWarningMessage();
     }
 }

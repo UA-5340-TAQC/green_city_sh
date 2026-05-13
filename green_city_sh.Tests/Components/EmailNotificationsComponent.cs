@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Components;

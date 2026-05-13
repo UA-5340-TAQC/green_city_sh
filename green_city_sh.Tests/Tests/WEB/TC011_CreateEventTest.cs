@@ -14,7 +14,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [AllureIssue("12")]
 [AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
-public class TC011_CreateEventTest : BaseTest
+public class TC011_CreateEventTest : BaseUITest
 {
     private const string WhitespaceTitle = "   ";
     private const string ValidDescription = "Test description for the event";

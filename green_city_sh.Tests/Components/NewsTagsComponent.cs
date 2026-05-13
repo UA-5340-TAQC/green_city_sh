@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using Allure.NUnit.Attributes;
 
@@ -10,10 +10,10 @@ public class NewsTagsComponent : TagsComponent
     private By SelectedTags => By.CssSelector("a.global-tag.global-tag-clicked");
 
     private By TagButtonByName(string tagName) =>
-        By.XPath($".//button[.//span[normalize-space()='{tagName}']]");
+      By.XPath($".//button[.//span[normalize-space()='{tagName}']]");
 
     private By SelectedTagByName(string tagName) =>
-        By.XPath($".//a[contains(@class,'global-tag-clicked')][.//span[normalize-space()='{tagName}']]");
+      By.XPath($".//a[contains(@class,'global-tag-clicked')][.//span[normalize-space()='{tagName}']]");
 
     public NewsTagsComponent(IWebDriver driver, By rootLocator) : base(driver, rootLocator)
     {
@@ -64,9 +64,9 @@ public class NewsTagsComponent : TagsComponent
 
         var actions = new Actions(driver);
         actions.MoveToElement(tagLink)
-               .ClickAndHold()
-               .Release()
-               .Perform();
+           .ClickAndHold()
+           .Release()
+           .Perform();
     }
 
     [AllureStep("Check if tag '{name}' is selected")]
@@ -91,14 +91,14 @@ public class NewsTagsComponent : TagsComponent
 
             selectedTags[0].Click();
             wait.Until(driver =>
-                RootElement.FindElements(SelectedTags).Count < selectedTags.Count);
+              RootElement.FindElements(SelectedTags).Count < selectedTags.Count);
         }
     }
 
     [AllureStep("Get all available tags")]
-    /// <summary>
-    /// Returns a list of the names of all available tags on the page.
-    /// </summary>
+    /// <summary> 
+        /// Returns a list of the names of all available tags on the page. 
+        /// </summary> 
     public List<string> GetAllAvailableTags()
     {
         var tagButtons = RootElement.FindElements(TagButtons);
@@ -113,9 +113,9 @@ public class NewsTagsComponent : TagsComponent
         return tags;
     }
 
-    /// <summary>
-    /// Gets the list of currently selected tags.
-    /// </summary>
+    /// <summary> 
+        /// Gets the list of currently selected tags. 
+        /// </summary> 
     public List<string> GetSelectedTags()
     {
         var selectedTagElements = RootElement.FindElements(SelectedTags);
@@ -130,3 +130,4 @@ public class NewsTagsComponent : TagsComponent
         return selectedTags;
     }
 }
+
