@@ -9,7 +9,7 @@ public class SearchEventsClient : BaseApiClient
 
 
     public SearchEventsClient(string baseUrl, string? token = null)
-        : base(baseUrl, token){}
+        : base(baseUrl, token) { }
 
     public RestResponse SearchEvents(
         string token,

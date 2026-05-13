@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Api.Clients;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
@@ -9,9 +10,9 @@ using System.Text.Json;
 namespace green_city_sh.Tests.Tests.API;
 
 [TestFixture]
-[Allure.NUnit.AllureNUnit]
+[AllureSubSuite("Search Events API Tests")]
 [Parallelizable(ParallelScope.Self)]
-public class SearchEventsAPITests
+public class SearchEventsAPITests : BaseAPITest
 {
     private OwnSecurityClient _authClient;
     private SearchEventsClient _searchEventsClient;

@@ -3,16 +3,13 @@ using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Infrastructure;
 
-using NuGet.Frameworks;
-using RestSharp;
 using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
 [TestFixture]
-[Allure.NUnit.AllureNUnit]
 [Parallelizable(ParallelScope.Self)]
-public class SearchPlacesAPITests
+public class SearchPlacesAPITests : BaseAPITest
 {
     private OwnSecurityClient _authClient;
     private SearchClient _searchClient;

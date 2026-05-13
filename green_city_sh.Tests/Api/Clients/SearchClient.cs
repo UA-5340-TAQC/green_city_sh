@@ -2,13 +2,11 @@ using RestSharp;
 
 namespace green_city_sh.Tests.Api.Clients;
 
-public class SearchClient
+public class SearchClient : BaseApiClient
 {
-    private readonly RestClient _client;
 
-    public SearchClient(string baseUrl)
+    public SearchClient(string baseUrl) : base(baseUrl)
     {
-        _client = new RestClient(baseUrl);
     }
 
     public RestResponse SearchPlaces(
@@ -18,19 +16,19 @@ public class SearchClient
         int size = 20,
         bool isFavorite = false)
     {
-        var request = new RestRequest("/search/places", Method.Get);
-        request.AddHeader("Authorization", $"Bearer {token}");
+
+        var request = PrepareRequest("/search/places", Method.Get);
         request.AddQueryParameter("searchQuery", searchQuery);
         request.AddParameter("page", page);
         request.AddParameter("size", size);
         request.AddParameter("isFavorite", isFavorite);
-        return _client.Execute(request);
+        return Client.Execute(request);
     }
 
     public RestResponse SearchPlacesWithoutAuth(string searchQuery)
     {
-        var request = new RestRequest("/search/places", Method.Get);
+        var request = PrepareRequest("/search/places", Method.Get);
         request.AddQueryParameter("searchQuery", searchQuery);
-        return _client.Execute(request);
+        return Client.Execute(request);
     }
 }
