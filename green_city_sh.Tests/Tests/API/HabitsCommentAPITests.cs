@@ -12,7 +12,6 @@ using System.Text.Json;
 namespace green_city_sh.Tests.Tests.API;
 
 
-[Parallelizable(ParallelScope.Self)]
 public class HabitsCommentAPITests : BaseAPITest
 {
     private HabitCommentClient _commentClient;

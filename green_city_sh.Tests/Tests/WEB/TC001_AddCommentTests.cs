@@ -5,8 +5,6 @@ using green_city_sh.Tests.Pages;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Antonina Smetanina")]
 [AllureSubSuite("Comments")]
 [AllureFeature("Add comment")]

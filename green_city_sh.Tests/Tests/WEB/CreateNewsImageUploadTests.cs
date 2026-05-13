@@ -8,8 +8,6 @@ using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
 [AllureSubSuite("Create News")]
 public class CreateNewsImageUploadTests : BaseUITest

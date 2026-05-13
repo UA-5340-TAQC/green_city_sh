@@ -9,8 +9,6 @@ using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
 [AllureFeature("Create News")]
 public class CreateNewsTitleValidationTests : BaseUITest

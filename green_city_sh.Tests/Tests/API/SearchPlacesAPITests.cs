@@ -7,8 +7,6 @@ using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 public class SearchPlacesAPITests : BaseAPITest
 {
     private OwnSecurityClient _authClient;

@@ -6,8 +6,6 @@ using green_city_sh.Tests.Pages;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Petro Derlytsia")]
 [AllureFeature("Event Details")]
 public class EventDetailsPageTests : BaseUITest

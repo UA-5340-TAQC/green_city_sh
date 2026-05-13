@@ -6,8 +6,6 @@ using System.Text.RegularExpressions;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Antonina Smetanina")]
 [AllureSubSuite("Events")]
 [AllureFeature("Event card UI")]

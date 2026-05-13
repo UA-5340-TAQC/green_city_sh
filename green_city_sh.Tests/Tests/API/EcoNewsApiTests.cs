@@ -10,7 +10,6 @@ using RestSharp;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Dmytro Syadro")]
 [AllureSubSuite("Eco News")]
 public class EcoNewsApiTests : BaseAPITest

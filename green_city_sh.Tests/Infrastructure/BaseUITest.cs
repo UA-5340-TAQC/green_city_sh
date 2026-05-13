@@ -1,11 +1,12 @@
-using OpenQA.Selenium;
-using green_city_sh.Tests.Drivers;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Drivers;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Infrastructure
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.Self)]
     [Allure.NUnit.AllureNUnit]
     [AllureSuite("UI Tests")]
     public abstract class BaseUITest

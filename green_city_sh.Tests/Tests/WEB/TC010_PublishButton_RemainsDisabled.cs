@@ -5,7 +5,6 @@ using green_city_sh.Tests.Pages;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
 [AllureOwner("Antonina Smetanina")]
 [AllureSubSuite("Create event")]
 [AllureFeature("Publish button validation")]

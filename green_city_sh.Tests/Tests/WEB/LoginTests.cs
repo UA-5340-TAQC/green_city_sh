@@ -6,9 +6,6 @@ using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
-[TestFixture]
 [AllureSubSuite("LoginPage")]
 [AllureTag("Smoke", "Regression")]
 [AllureFeature("Authentication")]

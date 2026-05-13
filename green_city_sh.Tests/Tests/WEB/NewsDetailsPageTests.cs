@@ -7,8 +7,6 @@ using System.Text.RegularExpressions;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Dmytro Syadro")]
 [AllureFeature("News Details")]
 public class NewsDetailsPageTests : BaseUITest
