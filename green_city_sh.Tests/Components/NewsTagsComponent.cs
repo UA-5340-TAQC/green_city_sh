@@ -130,3 +130,4 @@ public class NewsTagsComponent : TagsComponent
         return selectedTags;
     }
 }
+
