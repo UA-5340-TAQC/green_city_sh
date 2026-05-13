@@ -4,7 +4,7 @@ using RestSharp;
 using System.Text;
 using System.Text.Json;
 
-namespace green_city_sh.Tests.Api.Clients;
+namespace green_city_sh.Tests.Api.Clients.Greencity;
 
 internal class EventsClient : BaseApiClient
 {

@@ -1,4 +1,4 @@
-using green_city_sh.Tests.Api.Clients;
+using green_city_sh.Tests.Api.Clients.Greencity;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Infrastructure;

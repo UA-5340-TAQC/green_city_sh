@@ -3,7 +3,7 @@ using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.EcoNewsComment;
 using RestSharp;
 
-namespace green_city_sh.Tests.Api.Clients;
+namespace green_city_sh.Tests.Api.Clients.Greencity;
 
 public class EcoNewsCommentClient : BaseApiClient
 {

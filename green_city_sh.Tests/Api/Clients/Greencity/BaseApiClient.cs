@@ -2,7 +2,7 @@ using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
 using RestSharp;
 
-namespace green_city_sh.Tests.Api.Clients
+namespace green_city_sh.Tests.Api.Clients.Greencity
 {
     public abstract class BaseApiClient
     {

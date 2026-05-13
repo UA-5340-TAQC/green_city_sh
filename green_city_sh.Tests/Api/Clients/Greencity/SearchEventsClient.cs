@@ -1,7 +1,7 @@
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using RestSharp;
 
-namespace green_city_sh.Tests.Api.Clients;
+namespace green_city_sh.Tests.Api.Clients.Greencity;
 
 public class SearchEventsClient : BaseApiClient
 {
