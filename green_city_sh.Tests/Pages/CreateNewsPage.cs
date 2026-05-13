@@ -1,7 +1,5 @@
-using System;
-using OpenQA.Selenium;
 using green_city_sh.Tests.Components;
-using green_city_sh.Tests.Infrastructure;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -72,9 +70,9 @@ public class CreateNewsPage : BasePage
         NewsForm.EnterContent(text);
     }
 
-    public void UploadImage(string fileName)
+    public void UploadImage(string filePath)
     {
-        NewsForm.UploadImage(fileName);
+        NewsForm.UploadImage(filePath);
     }
 
     public void ClickPublish()

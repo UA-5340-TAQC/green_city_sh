@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Modals;
@@ -232,15 +229,19 @@ public class NewsDetailsPage : BasePage
     }
 
     [AllureStep("Get Last Comment")]
-    public string? GetLastComment() => Comment.GetLastComment(); [AllureStep("Get Last Reply Comment")]
-    public string? GetLastReplyComment() => Comment.GetLastReplyComment(); [AllureStep("Check if Edited Label Displayed")]
-    public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed();
+    public string? GetLastComment() => Comment.GetLastComment();
 
-    [AllureStep("Get Date Text")]
-    public string GetDateText() => NewsInfo.GetDateText();
+    [AllureStep("Get Last Reply Comment")]
+    public string? GetLastReplyComment() => Comment.GetLastReplyComment();
 
-    [AllureStep("Check if View Reply Button Displayed")]
-    public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed(); [AllureStep("Check if Hide Reply Button Displayed")]
+    [AllureStep("Check if Edited Label Displayed")]
+    public bool IsEditedLabelDisplayed() => Comment.IsEditedLabelDisplayed(); [AllureStep("Get Date Text")]
+
+    public string GetDateText() => NewsInfo.GetDateText(); [AllureStep("Check if View Reply Button Displayed")]
+
+    public bool IsViewReplyBtnDisplayed() => Comment.IsViewBtnDisplayed();
+
+    [AllureStep("Check if Hide Reply Button Displayed")]
     public bool IsHideReplyBtnDisplayed() => Comment.IsHideBtnDisplayed();
 
     [AllureStep("Get Reply Button Attribute")]
@@ -251,11 +252,13 @@ public class NewsDetailsPage : BasePage
     {
         return wait.Until(ExpectedConditions.ElementIsVisible(NewsTitle)).Text.Trim();
     }
+
     [AllureStep("Check if Source Link is Displayed")]
     public bool IsSourceLinkDisplayed()
     {
         return driver.FindElements(SourceLinkLocator).Count > 0;
     }
+
     [AllureStep("Check if Image is Displayed")]
     public bool IsImageDisplayed()
     {
