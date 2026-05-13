@@ -13,7 +13,7 @@ namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
-public class NewsBookmarkTests : BaseTest
+public class BookmarkNewsTests : BaseUITest
 {
     private NewsPage _newsPage = null!;
     private string _targetNewsTitle = string.Empty;

@@ -12,7 +12,7 @@ namespace green_city_sh.Tests.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Self)]
-public class EventPlannerButtonTests : BaseTest
+public class EventPlannerButtonTests : BaseUITest
 {
     private HomePage homePage = null!;
 
