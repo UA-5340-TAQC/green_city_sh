@@ -79,6 +79,7 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           TEST_USER_ID: ${{ secrets.TEST_USER_ID }}
+          TEST_USER_NAME: ${{ secrets.TEST_USER_NAME }}
           API_USER_BASE_URL: ${{ secrets.API_USER_BASE_URL }}
           API_GREENCITY_BASE_URL: ${{ secrets.API_GREENCITY_BASE_URL }}
           API_TIME_OUT: ${{ secrets.API_TIME_OUT }}
@@ -123,8 +124,12 @@ jobs:
 
       - name: Merge Allure results
         run: |
-          mkdir allure-results
-          find allure-results-merged -type f \( -name "*.json" -o -name "*.png" \) -exec cp {} allure-results \;
+          mkdir -p allure-results
+          if [ -d "allure-results-merged" ] && [ "$(find allure-results-merged -type f | wc -l)" -gt 0 ]; then
+            find allure-results-merged -type f \( -name "*.json" -o -name "*.png" \) -exec cp {} allure-results \;
+          else
+            echo "No Allure results found to merge"
+          fi
 
       - name: Get Allure history
         uses: actions/checkout@v4

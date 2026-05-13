@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
@@ -11,7 +11,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Dmytro Syadro")]
 [AllureFeature("News Details")]
-public class NewsDetailsPageTests : BaseTest
+public class NewsDetailsPageTests : BaseUITest
 {
     private NewsDetailsPage? newsDetailsPage;
     private HomePage? homePage;
@@ -67,13 +67,13 @@ public class NewsDetailsPageTests : BaseTest
         var afterAdd = newsDetailsPage.WaitForCommentCounterToChange(initialCount);
 
         newsDetailsPage
-            .DeleteComment()
+            .DeleteComment(comment)
             .ClickCancelDelete();
         Assert.That(afterAdd, Is.EqualTo(initialCount + 1),
             "Counter should increase by 1 after adding comment");
 
         newsDetailsPage
-            .DeleteComment()
+            .DeleteComment(comment)
             .ClickYesDelete();
 
         newsDetailsPage.Refresh();
@@ -114,7 +114,7 @@ public class NewsDetailsPageTests : BaseTest
         Assert.That(newsDetailsPage.GetLastComment(), Is.EqualTo(editText), "The last comment should have the edited text");
         Assert.That(newsDetailsPage.IsEditedLabelDisplayed(), Is.True, "The label edited should be displayed after editing");
         newsDetailsPage
-            .DeleteComment()
+            .DeleteComment(editText)
             .ClickYesDelete();
     }
 
@@ -159,7 +159,7 @@ public class NewsDetailsPageTests : BaseTest
         finally
         {
             newsDetailsPage
-                .DeleteComment()
+                .DeleteComment(addText)
                 .ClickYesDelete();
         }
     }

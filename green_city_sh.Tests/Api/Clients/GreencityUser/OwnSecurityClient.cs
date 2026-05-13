@@ -1,4 +1,6 @@
-﻿using RestSharp;
+using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Api.DTO;
+using RestSharp;
 
 namespace green_city_sh.Tests.Api.Clients.GreencityUser
 {
@@ -10,18 +12,12 @@ namespace green_city_sh.Tests.Api.Clients.GreencityUser
         {
         }
 
-        public RestResponse SignIn(string email, string password, string projectName = "GREENCITY")
+        [AllureStep("Sign in with email: {signInModal}")]
+        public RestResponse SignIn(SignInModal signInModal)
         {
-
-
-            var body = new
-            {
-                email,
-                password,
-                projectName
-            };
-            var request = PrepareRequest("/signIn", Method.Post, body);
-            return Client.Execute(request);
+            var request = PrepareRequest("/signIn", Method.Post, signInModal);
+            var responce = Client.Execute(request);
+            return responce;
         }
     }
 }
