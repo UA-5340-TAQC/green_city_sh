@@ -9,9 +9,7 @@ using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[TestFixture]
 [AllureSubSuite("Search Events API Tests")]
-[Parallelizable(ParallelScope.Self)]
 public class SearchEventsAPITests : BaseAPITest
 {
     private OwnSecurityClient _authClient;

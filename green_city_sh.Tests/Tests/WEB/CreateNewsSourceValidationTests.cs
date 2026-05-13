@@ -9,8 +9,6 @@ using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
 [AllureSubSuite("Create News")]
 public class CreateNewsSourceValidationTests : BaseUITest
@@ -47,7 +45,6 @@ public class CreateNewsSourceValidationTests : BaseUITest
     [Test]
     [Category("News")]
     [AllureDescription("Validate correct URL format (with http/https)")]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("News")]
     [AllureTag("UI", "Functional", "Validation")]
     [AllureIssue("TC-043")]

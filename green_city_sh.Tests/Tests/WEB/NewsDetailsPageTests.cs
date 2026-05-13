@@ -1,14 +1,12 @@
-using System.Text.RegularExpressions;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
+using System.Text.RegularExpressions;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Dmytro Syadro")]
 [AllureFeature("News Details")]
 public class NewsDetailsPageTests : BaseUITest
@@ -33,7 +31,6 @@ public class NewsDetailsPageTests : BaseUITest
     [Test]
     [Order(1)]
     [AllureDescription("Verify that the comments are displayed down the news page section")]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Comment")]
     [AllureTag("UI", "Smoke")]
     public void VerifyCommentsCount()
@@ -54,7 +51,6 @@ public class NewsDetailsPageTests : BaseUITest
     [Order(2)]
     [AllureIssue("19")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Comment")]
     [AllureDescription("Verify that the user can delete their comment and the counter updates")]
     [AllureTag("UI", "Sanity")]
@@ -98,7 +94,6 @@ public class NewsDetailsPageTests : BaseUITest
     [TestCaseSource(nameof(EditTestDataConfig))]
     [AllureIssue("19")]
     [AllureDescription("Verify that the user can successfully edit their own comment")]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Comment")]
     [AllureSeverity(SeverityLevel.critical)]
     [AllureTag("UI", "Sanity")]
@@ -127,7 +122,6 @@ public class NewsDetailsPageTests : BaseUITest
     [TestCaseSource(nameof(ReplyTestDataConfig))]
     [AllureDescription("Verify that the user can reply to another user's comment")]
     [AllureIssue("20")]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Comment")]
     [AllureSeverity(SeverityLevel.normal)]
     [AllureTag("UI", "Sanity")]
@@ -169,7 +163,6 @@ public class NewsDetailsPageTests : BaseUITest
     [AllureDescription("Verify publication date is displayed in American format")]
     [AllureIssue("18")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "Smoke")]
     public void VerifyPublicationDateIsDisplayedInAmericanFormat()
@@ -189,7 +182,6 @@ public class NewsDetailsPageTests : BaseUITest
     [AllureDescription("Verify publication date is displayed in Ukrainian format")]
     [AllureIssue("18")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "Smoke")]
     public void VerifyPublicationDateIsDisplayedInUkrainianFormat()

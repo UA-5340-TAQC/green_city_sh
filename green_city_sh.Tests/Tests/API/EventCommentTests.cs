@@ -11,8 +11,6 @@ using green_city_sh.Tests.Api.Clients.Greencity;
 
 namespace green_city_sh.Tests.Tests.API
 {
-    [TestFixture]
-    [Parallelizable(ParallelScope.Self)]
     [AllureSubSuite("Event Comments API Tests")]
     public class EventCommentApiTests : BaseAPITest
     {

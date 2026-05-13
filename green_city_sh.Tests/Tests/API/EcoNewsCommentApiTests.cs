@@ -9,8 +9,6 @@ using RestSharp;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Fixtures)]
 [AllureOwner("Petro Derlytsia")]
 [AllureSubSuite("Eco News Comment API")]
 public class EcoNewsCommentApiTests

@@ -10,7 +10,6 @@ using System.Text.Json;
 namespace green_city_sh.Tests.Tests.API;
 
 
-[Parallelizable(ParallelScope.Self)]
 [AllureSubSuite("Login API Tests")]
 public class LoginAPITests : BaseAPITest
 {

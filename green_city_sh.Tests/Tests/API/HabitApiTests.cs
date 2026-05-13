@@ -9,7 +9,6 @@ using RestSharp;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[Parallelizable(ParallelScope.Fixtures)]
 [AllureSubSuite("Habits")]
 public class HabitApiTests : BaseAPITest
 {
