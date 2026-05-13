@@ -98,8 +98,9 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
                 if (string.IsNullOrEmpty(h.CreateDateTime) || string.IsNullOrEmpty(h.LastEnrollmentDate))
                     return true;
 
-                var createDate = DateTime.Parse(h.CreateDateTime);
-                var lastEnrollDate = DateTime.Parse(h.LastEnrollmentDate);
+                if (!DateTime.TryParse(h.CreateDateTime, out var createDate) ||
+                    !DateTime.TryParse(h.LastEnrollmentDate, out var lastEnrollDate))
+                    return true;
 
                 return createDate > lastEnrollDate;
             }).ToList();
