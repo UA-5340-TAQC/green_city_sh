@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Net.Commons.Attributes;
+using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 
 namespace green_city_sh.Tests.Components;
 
@@ -24,9 +26,16 @@ public class NewsRichTextEditorComponent : RichTextEditorComponent
     {
     }
 
+    [AllureStep("Set content text: '{text}'")]
     public void SetText(string text)
     {
+        var editor = wait.Until(ExpectedConditions.ElementToBeClickable(EditorArea));
 
+        editor.Click();
+        editor.SendKeys(Keys.Control + "a");
+        editor.SendKeys(Keys.Backspace);
+
+        editor.SendKeys(text);
     }
 
     public string GetText()
