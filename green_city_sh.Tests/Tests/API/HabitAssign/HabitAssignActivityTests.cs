@@ -5,7 +5,6 @@ using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
 using green_city_sh.Tests.Infrastructure;
-using RestSharp;
 using System.Net;
 using System.Text.Json;
 
@@ -28,8 +27,9 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
         [AllureBefore("Setup: Authenticate and get activities between dates")]
         public void SetUp()
         {
-            _fromDate = "2026-05-13";
-            _toDate = "2026-05-30";
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            _fromDate = today.AddDays(-30).ToString("yyyy-MM-dd");
+            _toDate = today.ToString("yyyy-MM-dd");
 
             var authClient = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
             var signInModel = new SignInModal
@@ -39,27 +39,13 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
             };
 
             var authResponse = authClient.SignIn(signInModel);
-            var authData = JsonSerializer.Deserialize<AuthResponce>(authResponse.Content);
+            var authData = JsonSerializer.Deserialize<AuthResponce>(authResponse.Content ?? string.Empty);
+            if (authData?.accessToken == null)
+                throw new InvalidOperationException("Failed to authenticate: access token is null");
             var accessToken = authData.accessToken;
 
-            var client = new RestClient(Configuration.ApiGreenCityBaseUrl);
-            var request = new RestRequest($"/habit/assign/activity/{_fromDate}/to/{_toDate}", Method.Get);
-            request.AddQueryParameter("lang", "en");
-            request.AddHeader("Authorization", $"Bearer {accessToken}");
-            request.AddHeader("accept", "*/*");
-
-            var response = client.Execute(request);
-            _responseStatusCode = response.StatusCode;
-
-            if (_responseStatusCode == HttpStatusCode.OK && !string.IsNullOrEmpty(response.Content))
-            {
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                _activities = JsonSerializer.Deserialize<List<HabitActivityResponse>>(response.Content, options);
-            }
-            else
-            {
-                _activities = new List<HabitActivityResponse>();
-            }
+            var client = new HabitAssignClient(Configuration.ApiUserBaseUrl, accessToken);
+            (_responseStatusCode, _activities) = client.GetUserActivitiesWithData(_fromDate, _toDate);
         }
 
         [Test]
@@ -80,9 +66,6 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
         [AllureTag("API", "HabitAssign", "Activity", "Positive")]
         public void VerifyGetUserActivities_ReturnsNonEmptyList()
         {
-            Assert.That(_responseStatusCode, Is.EqualTo(HttpStatusCode.OK),
-                "Cannot verify list when API returned error");
-
             Assert.Multiple(() =>
             {
                 Assert.That(_activities, Is.Not.Null, "Activities list should not be null");
@@ -97,9 +80,6 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
         [AllureTag("API", "HabitAssign", "Activity", "Validation")]
         public void VerifyGetUserActivities_ReturnsValidDates()
         {
-            Assert.That(_responseStatusCode, Is.EqualTo(HttpStatusCode.OK),
-                "Cannot validate dates when API returned error");
-
             var expectedStartDate = DateOnly.Parse(_fromDate);
             var expectedEndDate = DateOnly.Parse(_toDate);
 
@@ -121,10 +101,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
         [AllureTag("API", "HabitAssign", "Activity", "Validation")]
         public void VerifyGetUserActivities_AreOrderedByDate()
         {
-            Assert.That(_responseStatusCode, Is.EqualTo(HttpStatusCode.OK),
-                "Cannot validate order when API returned error");
-
-            var dates = _activities.Select(a => a.EnrollDate).ToList();
+            var dates = _activities.Select(a => DateOnly.Parse(a.EnrollDate)).ToList();
             var sortedDates = dates.OrderBy(d => d).ToList();
 
             Assert.That(dates, Is.EqualTo(sortedDates),

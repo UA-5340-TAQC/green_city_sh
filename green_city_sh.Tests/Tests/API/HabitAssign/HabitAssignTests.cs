@@ -1,12 +1,10 @@
-﻿
-using Allure.Net.Commons;
+﻿using Allure.Net.Commons;
 using Allure.NUnit;
 using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
 using green_city_sh.Tests.Infrastructure;
-using RestSharp;
 using System.Net;
 using System.Text.Json;
 
@@ -35,20 +33,13 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
             };
 
             var authResponse = authClient.SignIn(signInModel);
-            var authData = JsonSerializer.Deserialize<AuthResponce>(authResponse.Content);
+            var authData = JsonSerializer.Deserialize<AuthResponce>(authResponse.Content ?? string.Empty);
+            if (authData?.accessToken == null)
+                throw new InvalidOperationException("Failed to authenticate: access token is null");
             var accessToken = authData.accessToken;
 
-            var client = new RestClient(Configuration.ApiGreenCityBaseUrl);
-            var request = new RestRequest("/habit/assign/allForCurrentUser", Method.Get);
-            request.AddQueryParameter("lang", "En");
-            request.AddHeader("Authorization", $"Bearer {accessToken}");
-            request.AddHeader("accept", "*/*");
-
-            var response = client.Execute(request);
-            _responseStatusCode = response.StatusCode;
-
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            _habits = JsonSerializer.Deserialize<List<GetAllAssignedHabitsResponse>>(response.Content, options);
+            var client = new HabitAssignClient(Configuration.ApiUserBaseUrl, accessToken);
+            (_responseStatusCode, _habits) = client.GetAllAssignedHabitsWithData("En");
         }
 
         [Test]
@@ -82,6 +73,28 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
         {
             Assert.That(_habits.All(h => !string.IsNullOrEmpty(h.CreateDateTime)), Is.True, "CreateDateTime should not be empty");
             Assert.That(_habits.All(h => !string.IsNullOrEmpty(h.LastEnrollmentDate)), Is.True, "LastEnrollmentDate should not be empty");
+        }
+
+        [Test]
+        [AllureStory("Validate date fields")]
+        [AllureSeverity(SeverityLevel.normal)]
+        [AllureDescription("Verify that CreateDateTime is not greater than LastEnrollmentDate")]
+        [AllureTag("API", "HabitAssign", "Validation")]
+        public void VerifyGetAllAssignedHabits_CreateDateNotGreaterThanLastEnrollmentDate()
+        {
+            var invalidDates = _habits.Where(h =>
+            {
+                if (string.IsNullOrEmpty(h.CreateDateTime) || string.IsNullOrEmpty(h.LastEnrollmentDate))
+                    return true;
+
+                var createDate = DateTime.Parse(h.CreateDateTime);
+                var lastEnrollDate = DateTime.Parse(h.LastEnrollmentDate);
+
+                return createDate > lastEnrollDate;
+            }).ToList();
+
+            Assert.That(invalidDates, Is.Empty,
+                $"CreateDateTime should not be greater than LastEnrollmentDate. Invalid habits: {string.Join(", ", invalidDates.Select(h => h.Id))}");
         }
     }
 }
