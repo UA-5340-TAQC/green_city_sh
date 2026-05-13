@@ -126,19 +126,6 @@ green_city_sh.Tests/
 │
 ├── 📁 Infrastructure/
 │   ├── Base.cs                           # Root class with WebDriver & Wait
-│   ├── BasePage.cs                       # Page base (in Pages/ folder)
-│   ├── BaseTest.cs                       # NUnit test lifecycle
-│   ├── Configuration.cs                  # Settings management
-│   └── WebElementExtensions.cs           # IWebElement utilities
-│
-```
-green_city_sh.Tests/
-│
-├── 📁 Drivers/
-│   └── DriverFactory.cs                  # Multi-browser WebDriver factory
-│
-├── 📁 Infrastructure/
-│   ├── Base.cs                           # Root class with WebDriver & Wait
 │   ├── BaseUITest.cs                     # NUnit UI test lifecycle
 │   ├── BaseAPITest.cs                    # NUnit API test lifecycle
 │   ├── Configuration.cs                  # Settings management (.env support)
