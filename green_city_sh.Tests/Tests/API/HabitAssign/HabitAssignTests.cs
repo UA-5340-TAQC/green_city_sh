@@ -45,7 +45,7 @@ namespace green_city_sh.Tests.Tests.API.HabitAssign
                 throw new InvalidOperationException("Failed to authenticate: access token is null");
             var accessToken = authData.accessToken;
 
-            var client = new HabitAssignClient(Configuration.ApiUserBaseUrl, accessToken);
+            var client = new HabitAssignClient(Configuration.ApiGreenCityBaseUrl, accessToken);
             (_responseStatusCode, _habits) = client.GetAllAssignedHabitsWithData("En");
         }
 

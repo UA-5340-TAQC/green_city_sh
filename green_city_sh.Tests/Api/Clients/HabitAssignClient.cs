@@ -1,12 +1,11 @@
 ﻿// Api/Clients/GreencityUser/HabitAssignClient.cs
 
 using Allure.Net.Commons.Attributes;
-using green_city_sh.Tests.Api.Clients;
 using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
+using green_city_sh.Tests.Infrastructure;
 using RestSharp;
 using System.Net;
 using System.Text.Json;
-using green_city_sh.Tests.Infrastructure;
 
 namespace green_city_sh.Tests.Api.Clients.GreencityUser
 {
@@ -27,8 +26,8 @@ namespace green_city_sh.Tests.Api.Clients.GreencityUser
         [AllureStep("Get all assigned habits for current user")]
         public (HttpStatusCode StatusCode, List<GetAllAssignedHabitsResponse> Habits) GetAllAssignedHabitsWithData(string lang = "en")
         {
-            var client = new RestClient(Configuration.ApiGreenCityBaseUrl);
-            var request = new RestRequest("/habit/assign/allForCurrentUser", Method.Get);
+            var client = new RestClient(BaseUrl);
+            var request = new RestRequest("/allForCurrentUser", Method.Get);
             request.AddQueryParameter("lang", lang);
             request.AddHeader("Authorization", $"Bearer {AuthToken}");
             request.AddHeader("accept", "*/*");
@@ -54,12 +53,12 @@ namespace green_city_sh.Tests.Api.Clients.GreencityUser
         /// <param name="fromDate">Start date in format YYYY-MM-DD</param>
         /// <param name="toDate">End date in format YYYY-MM-DD</param>
         /// <param name="lang">Language code (default: "en")</param>
-        /// <returns>Tuple containing HTTP status code and list of activities</returns
+        /// <returns>Tuple containing HTTP status code and list of activities</returns>
         [AllureStep("Get user activities between {fromDate} and {toDate}")]
         public (HttpStatusCode StatusCode, List<HabitActivityResponse> Activities) GetUserActivitiesWithData(string fromDate, string toDate, string lang = "en")
         {
-            var client = new RestClient(Configuration.ApiGreenCityBaseUrl);
-            var request = new RestRequest($"/habit/assign/activity/{fromDate}/to/{toDate}", Method.Get);
+            var client = new RestClient(BaseUrl);
+            var request = new RestRequest($"/activity/{fromDate}/to/{toDate}", Method.Get);
             request.AddQueryParameter("lang", lang);
             request.AddHeader("Authorization", $"Bearer {AuthToken}");
             request.AddHeader("accept", "*/*");
