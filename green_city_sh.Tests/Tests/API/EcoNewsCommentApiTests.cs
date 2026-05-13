@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Api.Clients;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
@@ -6,12 +5,13 @@ using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.EcoNewsComment;
 using green_city_sh.Tests.Infrastructure;
 using RestSharp;
+using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
 [AllureOwner("Petro Derlytsia")]
 [AllureSubSuite("Eco News Comment API")]
-public class EcoNewsCommentApiTests
+public class EcoNewsCommentApiTests : BaseAPITest
 {
     private OwnSecurityClient _client;
     private EcoNewsCommentClient _ecoNewsCommentClient;
