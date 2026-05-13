@@ -11,10 +11,9 @@ using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[TestFixture]
-[AllureNUnit]
+
 [Parallelizable(ParallelScope.Self)]
-public class HabitsCommentAPITests
+public class HabitsCommentAPITests : BaseAPITest
 {
     private HabitCommentClient _commentClient;
     private readonly int _testHabitId = 794;

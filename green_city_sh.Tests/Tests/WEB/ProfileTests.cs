@@ -7,7 +7,7 @@ using OpenQA.Selenium.Support.UI;
 namespace green_city_sh.Tests.Tests.WEB;
 
 [TestFixture]
-public class ProfileTests : BaseTest
+public class ProfileTests : BaseUITest
 {
     private HomePage? _homePage;
 

@@ -13,7 +13,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
 [AllureFeature("Create News")]
-public class CreateNewsTitleValidationTests : BaseTest
+public class CreateNewsTitleValidationTests : BaseUITest
 {
     private bool isNewsCreated = false;
     private CreateNewsPage? createNewsPage;

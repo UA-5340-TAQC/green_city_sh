@@ -12,7 +12,7 @@ namespace green_city_sh.Tests.Tests.WEB;
 [AllureIssue("11")]
 [AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
-public class TC010_PublishButton_RemainsDisabled : BaseTest
+public class TC010_PublishButton_RemainsDisabled : BaseUITest
 {
     private const string ValidTitle = "Test Event";
     private const string ValidDescription = "Test description for the event";
