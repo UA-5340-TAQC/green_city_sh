@@ -25,6 +25,7 @@ public class UserApiTests : BaseAPITest
 
     private long _createdUserId;
     private string _createdUserEmail = string.Empty;
+    private bool _isUserDeleted = false;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -38,8 +39,20 @@ public class UserApiTests : BaseAPITest
 
         RestResponse response = _securityClient.SignIn(signInModel);
 
+        if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
+        {
+            throw new Exception($"Auth failed. " +
+                $"Status: {response.StatusCode}, " +
+                $"Error: {response.ErrorMessage}, " +
+                $"Exception: {response.ErrorException?.Message}");
+        }
+
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var authResponse = JsonSerializer.Deserialize<AuthResponce>(response.Content!, options);
+        var authResponse = JsonSerializer.Deserialize<AuthResponce>(response.Content, options);
+        if (string.IsNullOrEmpty(authResponse?.accessToken))
+        {
+            throw new Exception("Access token is missing in the authentication response.");
+        }
 
         // Initialize authorized client
         _userClient = new UserClient(Configuration.ApiUserBaseUrl, authResponse!.accessToken);
@@ -53,7 +66,7 @@ public class UserApiTests : BaseAPITest
     [AllureTag("API", "Smoke")]
     public void VerifyCreateUserSuccessfully()
     {
-        _createdUserId = new Random().Next(1000000, 9999999);
+        _createdUserId = Random.Shared.Next(1000000, 9999999);
         _createdUserEmail = $"autotest_{_createdUserId}@greencity.cx.ua";
 
         var requestDto = new CreateUserRequestDto
@@ -80,6 +93,9 @@ public class UserApiTests : BaseAPITest
     {
         var response = _userClient.GetExternalProfiles(new[] { _createdUserEmail });
 
+        // Safe check before deserialization
+        Assert.That(response.IsSuccessful, Is.True, $"Failed to get profiles. Status: {response.StatusCode}, Content: {response.Content}");
+
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         var profiles = JsonSerializer.Deserialize<List<UserProfileExternalDto>>(response.Content!, options);
 
@@ -87,12 +103,8 @@ public class UserApiTests : BaseAPITest
         {
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status code should be 200 OK");
             Assert.That(profiles, Is.Not.Null.And.Not.Empty, "Profiles list should not be empty");
+            Assert.That(profiles![0].Email, Is.EqualTo(_createdUserEmail), "Returned profile email should match");
         });
-
-        if (profiles != null && profiles.Count > 0)
-        {
-            Assert.That(profiles[0].Email, Is.EqualTo(_createdUserEmail), "Returned profile email should match the requested email");
-        }
     }
 
     [Test, Order(3)]
@@ -126,16 +138,42 @@ public class UserApiTests : BaseAPITest
     }
 
     [Test, Order(5)]
+    [AllureDescription("Verify soft deleting a user successfully")]
+    [AllureTag("API", "Smoke")]
+    public void VerifySoftDeleteUser()
+    {
+        var response = _userClient.UpdateUserStatus(_createdUserId, "DELETED");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status code should be 200 OK after soft deleting user");
+        });
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            _isUserDeleted = true;
+        }
+    }
+
+    [Test, Order(6)]
     [AllureDescription("Verify deleting a user without authorization fails with 401")]
     [AllureTag("API", "Security")]
     public void VerifyDeleteUserUnauthorizedReturns401()
     {
-        // Strictly using the unauthorized client to satisfy the DELETE negative test constraint
         var response = _unauthorizedClient.DeleteUser();
 
         Assert.Multiple(() =>
         {
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized), "Expected 401 Unauthorized when attempting to delete without a valid token");
         });
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        if (_createdUserId > 0 && !_isUserDeleted)
+        {
+            _userClient?.UpdateUserStatus(_createdUserId, "DELETED");
+        }
     }
 }

@@ -13,13 +13,13 @@ public class UserClient : BaseApiClient
 
     public RestResponse CreateUser(CreateUserRequestDto requestBody)
     {
-        var request = PrepareRequest("/create", Method.Post, requestBody);
+        var request = PrepareRequest($"{BaseUrl}/create", Method.Post, requestBody);
         return Client.Execute(request);
     }
 
     public RestResponse GetExternalProfiles(string[] emails)
     {
-        var request = PrepareRequest("/profiles/external", Method.Get);
+        var request = PrepareRequest($"{BaseUrl}/profiles/external", Method.Get);
         foreach (var email in emails)
         {
             request.AddQueryParameter("emails", email);
@@ -29,7 +29,7 @@ public class UserClient : BaseApiClient
 
     public RestResponse UpdateUserName(string email, string userName)
     {
-        var request = PrepareRequest("/user/name", Method.Patch);
+        var request = PrepareRequest($"{BaseUrl}/user/name", Method.Patch);
         request.AddQueryParameter("email", email);
         request.AddQueryParameter("userName", userName);
         return Client.Execute(request);
@@ -37,14 +37,14 @@ public class UserClient : BaseApiClient
 
     public RestResponse UpdateUserStatus(long userId, string status)
     {
-        var request = PrepareRequest($"/status/{userId}", Method.Put);
+        var request = PrepareRequest($"{BaseUrl}/status/{userId}", Method.Put);
         request.AddQueryParameter("status", status);
         return Client.Execute(request);
     }
 
     public RestResponse DeleteUser()
     {
-        var request = PrepareRequest("/delete", Method.Delete);
+        var request = PrepareRequest($"{BaseUrl}/delete", Method.Delete);
         return Client.Execute(request);
     }
 }
