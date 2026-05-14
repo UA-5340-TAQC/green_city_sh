@@ -42,6 +42,13 @@ public class UserClient : BaseApiClient
         return Client.Execute(request);
     }
 
+    public RestResponse UpdateUserProfile(ProfileUpdateRequestDto requestBody)
+    {
+        // Swagger: PUT /user/profile
+        var request = PrepareRequest($"{base._baseUrl}/user/profile", Method.Put, requestBody);
+        return Client.Execute(request);
+    }
+
     public RestResponse DeleteUser()
     {
         var request = PrepareRequest($"{BaseUrl}/delete", Method.Delete);
