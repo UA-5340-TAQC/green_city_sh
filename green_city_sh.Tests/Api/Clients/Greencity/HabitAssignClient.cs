@@ -25,13 +25,10 @@ namespace green_city_sh.Tests.Api.Clients.Greencity
         [AllureStep("Get all assigned habits for current user")]
         public (HttpStatusCode StatusCode, List<GetAllAssignedHabitsResponse> Habits) GetAllAssignedHabitsWithData(string lang = "en")
         {
-            var client = new RestClient(BaseUrl);
-            var request = new RestRequest("/allForCurrentUser", Method.Get);
+            var request = PrepareRequest("/allForCurrentUser", Method.Get);
             request.AddQueryParameter("lang", lang);
-            request.AddHeader("Authorization", $"Bearer {AuthToken}");
-            request.AddHeader("accept", "*/*");
 
-            var response = client.Execute(request);
+            var response = Client.Execute(request);
             var statusCode = response.StatusCode;
 
             if (statusCode == HttpStatusCode.OK && !string.IsNullOrEmpty(response.Content))
@@ -57,12 +54,10 @@ namespace green_city_sh.Tests.Api.Clients.Greencity
         public (HttpStatusCode StatusCode, List<HabitActivityResponse> Activities) GetUserActivitiesWithData(string fromDate, string toDate, string lang = "en")
         {
             var client = new RestClient(BaseUrl);
-            var request = new RestRequest($"/activity/{fromDate}/to/{toDate}", Method.Get);
+            var request = PrepareRequest($"/activity/{fromDate}/to/{toDate}", Method.Get);
             request.AddQueryParameter("lang", lang);
-            request.AddHeader("Authorization", $"Bearer {AuthToken}");
-            request.AddHeader("accept", "*/*");
 
-            var response = client.Execute(request);
+            var response = Client.Execute(request);
             var statusCode = response.StatusCode;
 
             if (statusCode == HttpStatusCode.OK && !string.IsNullOrEmpty(response.Content))
