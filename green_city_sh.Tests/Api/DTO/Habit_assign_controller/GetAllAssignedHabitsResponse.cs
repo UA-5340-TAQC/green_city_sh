@@ -1,4 +1,4 @@
-﻿// DTO/Habit_assign_controller/GetAllAssignedHabitsResponse.cs
+// DTO/Habit_assign_controller/GetAllAssignedHabitsResponse.cs
 
 namespace green_city_sh.Tests.Api.DTO.Habit_assign_controller
 {

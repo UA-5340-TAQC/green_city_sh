@@ -1,4 +1,4 @@
-﻿// Tests/API/HabitAssign/HabitAssignActivityTests.cs
+// Tests/API/HabitAssign/HabitAssignActivityTests.cs
 
 using Allure.Net.Commons;
 using Allure.NUnit;
