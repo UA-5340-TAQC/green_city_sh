@@ -1,3 +1,4 @@
+using green_city_sh.Tests.Api.Clients.Greencity;
 using green_city_sh.Tests.Api.DTO.User;
 using RestSharp;
 

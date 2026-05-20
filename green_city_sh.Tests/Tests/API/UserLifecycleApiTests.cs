@@ -33,11 +33,11 @@ public class UserLifecycleApiTests : BaseAPITest
     {
         _securityClient = new OwnSecurityClient(Configuration.ApiUserBaseUrl);
         string uniqueId = Guid.NewGuid().ToString("N")[..8];
-        
+
         _dynamicName = "AutoUser";
         _dynamicEmail = $"qa.auto.{uniqueId}@greencity.cx.ua";
-        
-        _dynamicPassword = $"Pass1!{uniqueId}"; 
+
+        _dynamicPassword = $"Pass1!{uniqueId}";
     }
 
     [Test, Order(1)]
@@ -57,7 +57,7 @@ public class UserLifecycleApiTests : BaseAPITest
 
         Assert.Multiple(() =>
         {
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created), 
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created),
                 $"Status code should be 201 Created. Server response: {response.Content}");
             Assert.That(response.Content, Is.Not.Null.And.Not.Empty, "Response content should not be empty");
         });
