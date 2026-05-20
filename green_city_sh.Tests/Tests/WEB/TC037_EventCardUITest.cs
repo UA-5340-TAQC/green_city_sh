@@ -1,18 +1,15 @@
-using System.Text.RegularExpressions;
+using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using Allure.NUnit.Attributes;
+using System.Text.RegularExpressions;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Antonina Smetanina")]
-[AllureSuite("Events")]
+[AllureSubSuite("Events")]
 [AllureFeature("Event card UI")]
 [AllureIssue("37")]
-[AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
 public class TC037_EventCardUITest : BaseUITest
 {

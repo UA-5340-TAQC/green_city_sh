@@ -1,4 +1,4 @@
-﻿using Allure.Net.Commons.Attributes;
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Api.Clients.Greencity;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
@@ -6,10 +5,10 @@ using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.Habits;
 using green_city_sh.Tests.Infrastructure;
 using RestSharp;
+using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[Parallelizable(ParallelScope.Fixtures)]
 [AllureSubSuite("Habits")]
 public class HabitApiTests : BaseAPITest
 {
@@ -38,6 +37,7 @@ public class HabitApiTests : BaseAPITest
     };
 
     [OneTimeSetUp]
+    [AllureDescription("Authenticate and initialize HabitClient")]
     public void OneTimeSetUp()
     {
         _client = new OwnSecurityClient(Configuration.ApiUserBaseUrl);

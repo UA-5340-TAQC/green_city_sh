@@ -1,4 +1,4 @@
-﻿using green_city_sh.Tests.Components;
+using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
@@ -6,7 +6,6 @@ using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
 public class LogoutTests : BaseUITest
 {
     private HomePage? _homePage;

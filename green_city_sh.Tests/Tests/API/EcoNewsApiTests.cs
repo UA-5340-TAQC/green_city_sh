@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Api.Clients.Greencity;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
@@ -10,7 +10,6 @@ using RestSharp;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Dmytro Syadro")]
 [AllureSubSuite("Eco News")]
 public class EcoNewsApiTests : BaseAPITest

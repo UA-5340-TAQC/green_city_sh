@@ -1,4 +1,5 @@
-﻿using Allure.Net.Commons.Attributes;
+using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Api.Clients.Greencity;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.User;
 using RestSharp;

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using green_city_sh.Tests.Api.Clients.Greencity;
 using RestSharp;
 
 namespace green_city_sh.Tests.Api.Clients.GreencityUser;
