@@ -1,29 +1,26 @@
 // Tests/API/HabitAssign/HabitAssignActivityTests.cs
 
 using Allure.Net.Commons;
-using Allure.NUnit;
 using Allure.NUnit.Attributes;
+using green_city_sh.Tests.Api.Clients.Greencity;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
 using green_city_sh.Tests.Infrastructure;
 using System.Net;
 using System.Text.Json;
-using green_city_sh.Tests.Api.Clients.Greencity;
 
-namespace green_city_sh.Tests.Tests.API.HabitAssign
+namespace green_city_sh.Tests.Tests.API
 {
     /// <summary>
     /// API tests for Habit Assign Activity controller
     /// Verifies functionality of getting user activities between dates
     /// </summary>
-    [TestFixture]
-    [AllureNUnit]
-    [AllureSuite("HabitAssign Activity API Tests")]
+    [AllureSubSuite("HabitAssign Activity API Tests")]
     [AllureFeature("Habit Activities")]
     [AllureEpic("Habit Management")]
     [Parallelizable(ParallelScope.Self)]
-    public class HabitAssignActivityAPITests
+    public class HabitAssignActivityAPITests : BaseAPITest
     {
         private List<HabitActivityResponse>? _activities;
         private HttpStatusCode _responseStatusCode;

@@ -1,29 +1,26 @@
 // Tests/API/HabitAssign/HabitAssignTests.cs
 
 using Allure.Net.Commons;
-using Allure.NUnit;
 using Allure.NUnit.Attributes;
+using green_city_sh.Tests.Api.Clients.Greencity;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Api.DTO.Habit_assign_controller;
 using green_city_sh.Tests.Infrastructure;
 using System.Net;
 using System.Text.Json;
-using green_city_sh.Tests.Api.Clients.Greencity;
 
-namespace green_city_sh.Tests.Tests.API.HabitAssign
+namespace green_city_sh.Tests.Tests.API
 {
     /// <summary>
     /// API tests for Habit Assign controller
     /// Verifies functionality of getting assigned habits for current user
     /// </summary>
-    [TestFixture]
-    [AllureNUnit]
-    [AllureSuite("HabitAssign API Tests")]
+    [AllureSubSuite("HabitAssign API Tests")]
     [AllureFeature("Habit Assignments")]
     [AllureEpic("Habit Management")]
     [Parallelizable(ParallelScope.Self)]
-    public class HabitAssignAPITests
+    public class HabitAssignAPITests : BaseAPITest
     {
         private List<GetAllAssignedHabitsResponse> _habits;
         private HttpStatusCode _responseStatusCode;
