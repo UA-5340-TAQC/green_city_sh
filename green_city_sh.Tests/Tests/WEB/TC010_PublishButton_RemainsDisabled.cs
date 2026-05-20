@@ -1,18 +1,16 @@
+using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
 [AllureOwner("Antonina Smetanina")]
-[AllureSuite("Create event")]
+[AllureSubSuite("Create event")]
 [AllureFeature("Publish button validation")]
 [AllureIssue("11")]
-[AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
-public class TC010_PublishButton_RemainsDisabled : BaseTest
+public class TC010_PublishButton_RemainsDisabled : BaseUITest
 {
     private const string ValidTitle = "Test Event";
     private const string ValidDescription = "Test description for the event";
@@ -90,6 +88,6 @@ public class TC010_PublishButton_RemainsDisabled : BaseTest
         Assert.That(
             createEventPage.IsPublishButtonEnabled(),
             Is.False,
-            "blish button should remain disabled when description is less than 10 symbols.");
+            "Publish button should remain disabled when description is less than 10 symbols.");
     }
 }

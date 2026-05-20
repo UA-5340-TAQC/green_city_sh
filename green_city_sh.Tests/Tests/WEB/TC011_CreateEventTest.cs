@@ -1,20 +1,17 @@
+using Allure.NUnit.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using Allure.NUnit.Attributes;
 
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Antonina Smetanina")]
-[AllureSuite("Create event")]
+[AllureSubSuite("Create event")]
 [AllureFeature("Title validation")]
 [AllureIssue("12")]
-[AllureSuite("GreenCity")]
 [AllureTag("UI", "Smoke")]
-public class TC011_CreateEventTest : BaseTest
+public class TC011_CreateEventTest : BaseUITest
 {
     private const string WhitespaceTitle = "   ";
     private const string ValidDescription = "Test description for the event";

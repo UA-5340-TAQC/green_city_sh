@@ -1,18 +1,16 @@
+using Allure.Net.Commons;
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
-using Allure.Net.Commons.Attributes;
-using Allure.Net.Commons;
 
 
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Petro Derlytsia")]
 [AllureFeature("Event Page")]
-public class EventPageTests : BaseTest
+public class EventPageTests : BaseUITest
 {
     protected override void OnSetup()
     {
@@ -32,7 +30,6 @@ public class EventPageTests : BaseTest
     [Category("Negative")]
     [AllureIssue("17")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "Sanity")]
     public void VerifyGuestRestrictionsOnEventPage()

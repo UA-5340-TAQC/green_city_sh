@@ -1,19 +1,17 @@
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Components;
+using green_city_sh.Tests.Infrastructure;
+using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
-using green_city_sh.Tests.Infrastructure;
-using green_city_sh.Tests.Pages;
-using green_city_sh.Tests.Components;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Nikita Muntianov")]
 [AllureFeature("Create News")]
-public class CreateNewsTitleValidationTests : BaseTest
+public class CreateNewsTitleValidationTests : BaseUITest
 {
     private bool isNewsCreated = false;
     private CreateNewsPage? createNewsPage;
@@ -33,7 +31,6 @@ public class CreateNewsTitleValidationTests : BaseTest
 
     [Test]
     [AllureDescription("Validate Title field (required, max length 170, validation behavior)")]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("News")]
     [AllureTag("UI", "Functional")]
     [AllureIssue("TC-042")]

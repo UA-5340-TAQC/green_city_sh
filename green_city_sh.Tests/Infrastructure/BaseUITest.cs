@@ -1,13 +1,15 @@
-﻿using OpenQA.Selenium;
-using green_city_sh.Tests.Drivers;
 using Allure.Net.Commons;
 using Allure.Net.Commons.Attributes;
+using green_city_sh.Tests.Drivers;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Infrastructure
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.Self)]
     [Allure.NUnit.AllureNUnit]
-    public abstract class BaseTest
+    [AllureSuite("UI Tests")]
+    public abstract class BaseUITest
     {
         protected IWebDriver? Driver { get; private set; }
         protected string BaseUrl { get; set; } = Configuration.BaseUrl;

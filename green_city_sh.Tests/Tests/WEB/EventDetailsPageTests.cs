@@ -6,11 +6,9 @@ using green_city_sh.Tests.Pages;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureOwner("Petro Derlytsia")]
 [AllureFeature("Event Details")]
-public class EventDetailsPageTests : BaseTest
+public class EventDetailsPageTests : BaseUITest
 {
     protected override void OnSetup()
     {
@@ -34,7 +32,6 @@ public class EventDetailsPageTests : BaseTest
     [Category("Regression")]
     [AllureIssue("2")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "E2E")]
     public void VerifySavingEventAndViewingInBookmarks()
@@ -78,7 +75,6 @@ public class EventDetailsPageTests : BaseTest
     [Category("Regression")]
     [AllureIssue("3")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "Comment")]
     public void VerifyCommentSubmissionWithImageOnly()
@@ -105,7 +101,6 @@ public class EventDetailsPageTests : BaseTest
     [Category("Regression")]
     [AllureIssue("4")]
     [AllureSeverity(SeverityLevel.normal)]
-    [AllureSuite("GreenCity")]
     [AllureSubSuite("Format")]
     [AllureTag("UI", "E2E")]
     public void VerifyCancelJoiningEvent()

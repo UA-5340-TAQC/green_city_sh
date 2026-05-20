@@ -1,3 +1,4 @@
+using Allure.Net.Commons.Attributes;
 using green_city_sh.Tests.Api.Clients.GreencityUser;
 using green_city_sh.Tests.Api.DTO;
 using green_city_sh.Tests.Infrastructure;
@@ -8,10 +9,9 @@ using System.Text.Json;
 
 namespace green_city_sh.Tests.Tests.API;
 
-[TestFixture]
-[Allure.NUnit.AllureNUnit]
-[Parallelizable(ParallelScope.Self)]
-public class LoginAPITests
+
+[AllureSubSuite("Login API Tests")]
+public class LoginAPITests : BaseAPITest
 {
     private OwnSecurityClient _client;
 

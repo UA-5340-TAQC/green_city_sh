@@ -6,7 +6,7 @@ public static class Configuration
 {
     static Configuration()
     {
-        Env.Load();
+        Env.TraversePath().Load();
     }
     public static string BaseUrl => Environment.GetEnvironmentVariable("BASE_URL") ?? "https://www.greencity.cx.ua/#/greenCity";
 

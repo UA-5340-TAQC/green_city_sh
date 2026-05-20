@@ -1,4 +1,4 @@
-﻿using green_city_sh.Tests.Components;
+using green_city_sh.Tests.Components;
 using green_city_sh.Tests.Infrastructure;
 using green_city_sh.Tests.Pages;
 using OpenQA.Selenium;
@@ -6,12 +6,10 @@ using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Tests.WEB;
 
-[TestFixture]
-[Parallelizable(ParallelScope.Self)]
 [AllureSubSuite("NewsPage")]
 [AllureTag("Smoke")]
 [AllureFeature("News Filtering", "News Search")]
-public class NewsPageTests : BaseTest
+public class NewsPageTests : BaseUITest
 {
     private NewsPage? newsPage;
     private HeaderComponent? header;

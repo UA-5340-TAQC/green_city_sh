@@ -1,5 +1,5 @@
-﻿using OpenQA.Selenium;
 using green_city_sh.Tests.Components;
+using OpenQA.Selenium;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -7,14 +7,14 @@ public class CreateNewsPage : BasePage
 {
     private NewsFormComponent? newsForm;
 
-    public NewsFormComponent NewsForm => newsForm ??= new(driver, By.CssSelector("form"));//форма створення/редагування новини
+    public NewsFormComponent NewsForm => newsForm ??= new(driver, By.CssSelector("form"));
+
     public CreateNewsPage(IWebDriver driver) : base(driver)
     {
     }
 
     public void OpenCreateNewsPage()
     {
-
         string currentUrl = driver.Url;
         Uri uri = new Uri(currentUrl);
         driver.Navigate().GoToUrl($"{uri.Scheme}://{uri.Host}/#/greenCity/news/create-news");
@@ -22,9 +22,9 @@ public class CreateNewsPage : BasePage
 
     public void EnterTitle(string title)
     {
-
         NewsForm.EnterTitle(title);
     }
+
     public void ClearAndBlurTitleField()
     {
         NewsForm.ClearAndBlurTitleField();
@@ -37,55 +37,51 @@ public class CreateNewsPage : BasePage
 
     public void ClickTitleField()
     {
-
         NewsForm.ClickTitleField();
     }
 
     public void FocusAndBlurTitleField()
     {
-
         NewsForm.FocusAndBlurTitleField();
     }
 
     public void SelectTags(params string[] tags)
     {
-
         NewsForm.SelectTags(tags);
     }
 
     public void EnterSource(string url)
     {
-
         NewsForm.EnterSource(url);
     }
 
     public void ClickSourceField()
     {
-
         NewsForm.ClickSourceField();
+    }
+
+    public void ClearAndBlurSourceField()
+    {
+        NewsForm.ClearAndBlurSourceField();
     }
 
     public void EnterContent(string text)
     {
-
         NewsForm.EnterContent(text);
     }
 
     public void UploadImage(string filePath)
     {
-
         NewsForm.UploadImage(filePath);
     }
 
     public void ClickPublish()
     {
-
         NewsForm.ClickPublish();
     }
 
     public void ClickPreview()
     {
-
         NewsForm.ClickPreview();
     }
 
@@ -111,19 +107,16 @@ public class CreateNewsPage : BasePage
 
     public bool IsSourceFieldInvalid()
     {
-
         return NewsForm.IsSourceFieldInvalid();
     }
 
     public bool IsPublishButtonEnabled()
     {
-
         return NewsForm.IsPublishButtonEnabled();
     }
 
     public string GetTitleCharacterCount()
     {
-
         return NewsForm.GetTitleCharacterCount();
     }
 
@@ -140,5 +133,20 @@ public class CreateNewsPage : BasePage
     public string GetAuthor()
     {
         return NewsForm.GetAuthor();
+    }
+
+    public bool IsImagePreviewDisplayed()
+    {
+        return NewsForm.IsImagePreviewDisplayed();
+    }
+
+    public string GetImageUploadWarningMessage()
+    {
+        return NewsForm.GetImageUploadWarningMessage();
+    }
+
+    public void SubmitImageCrop()
+    {
+        NewsForm.ImageUpload.ClickSubmit();
     }
 }
