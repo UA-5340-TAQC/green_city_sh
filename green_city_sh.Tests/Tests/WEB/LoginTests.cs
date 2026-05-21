@@ -21,7 +21,8 @@ public class LoginTests : BaseUITest
 
     // Successful login with valid credentials
     [Test]
-    [Order(1)]
+    [AllureIssue("24")]
+    [AllureDescription("Verification of successful login to the system using valid credentials.")]
     [Description("TC-024: Successful login to the system with valid credentials")]
     [Category("Smoke")]
     public void VerifySuccessfulLoginWithValidCredentials()

@@ -1,8 +1,7 @@
 using green_city_sh.Tests.Infrastructure;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using Allure.Net.Commons.Attributes;
-
+using Allure.NUnit.Attributes;
 
 namespace green_city_sh.Tests.Pages;
 
@@ -47,13 +46,14 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Blur title field")]
     public CreateEventPage BlurTitleField()
     {
         driver.FindElement(By.CssSelector("body")).Click();
         return this;
     }
 
-    [AllureStep("Enter Description")]
+    [AllureStep("Enter event description")]
     public CreateEventPage EnterDescription(string text)
     {
         var field = driver.FindElement(DescriptionInput);
@@ -62,6 +62,7 @@ public class CreateEventPage : BasePage
         return this;
     }
 
+    [AllureStep("Enter event date")]
     public CreateEventPage EnterDate(string date)
     {
         var input = driver.FindElement(DateInput);
@@ -130,10 +131,10 @@ public class CreateEventPage : BasePage
         return this;
     }
 
-    [AllureStep("Is publish button clicked")]
+    [AllureStep("Check if 'Publish' button is enabled")]
     public bool IsPublishButtonEnabled() => driver.FindElement(PublishButton).Enabled;
 
-    [AllureStep("Is title error visible")]
+    [AllureStep("Check if title error is visible")]
     public bool IsTitleErrorVisible() => driver.FindElements(TitleError).Any(e => e.Displayed);
 
     [AllureStep("Is description error visible")]
